@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Reports & Analytics Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Modern Design Variables */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --primary-light: #e0e7ff;
+      --secondary: #7209b7;
+      --accent: #f72585;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #f94144;
+      --info: #3a0ca3;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #64748b;
+      --gray-800: #334155;
+      --sidebar-width: 280px;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 20px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --box-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+      --box-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body.dashboard-body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Dashboard Shell */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Enhanced Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--dark) 0%, #1a1f35 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 1000;
+      transition: var(--transition);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-image i {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-primary {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-secondary {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 2px;
+    }
+
+    .sidebar-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.5rem 0;
+      list-style: none;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+      margin: 4px 0;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(67, 97, 238, 0.15), transparent);
+      color: white;
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link i {
+      width: 24px;
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .dashboard-main {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Modern Topbar */
+    .topbar {
+      padding: 1.25rem 2rem;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .sidebar-toggle {
+      background: var(--primary);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      margin-right: 1rem;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .topbar-title {
+      flex: 1;
+    }
+
+    .topbar-title h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--dark), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar-title p {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+      border: none;
+    }
+
+    .btn-success:hover {
+      background: #06b6d4;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+      flex: 1;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    /* Report Cards */
+    .card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .card:hover {
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .card-header h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 20px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .badge-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    /* Dashboard Footer */
+    .dashboard-footer {
+      padding: 1.5rem 2rem;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--gray-600);
+      font-size: 0.875rem;
+    }
+
+    /* Modern Grid Layouts */
+    .panel-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .two-columns {
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+
+    .three-columns {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    /* Report Action Bar */
+    .report-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+    }
+
+    .period-selector {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .period-btn {
+      padding: 0.5rem 1rem;
+      background: var(--gray-100);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .period-btn:hover {
+      background: var(--gray-200);
+    }
+
+    .period-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .export-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* Charts Container */
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+
+    .chart-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Custom Chart Styles */
+    .chart-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: var(--border-radius);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-placeholder::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.5) 10px,
+        rgba(255, 255, 255, 0.5) 20px
+      );
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      height: 200px;
+      padding: 0 2rem;
+    }
+
+    .chart-bar {
+      width: 40px;
+      background: linear-gradient(to top, var(--primary), var(--secondary));
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .chart-bar:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    .chart-bar-label {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+
+    .chart-bar-value {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Feedback List */
+    .feedback-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feedback-item {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      transition: var(--transition);
+    }
+
+    .feedback-item:hover {
+      background: rgba(67, 97, 238, 0.03);
+    }
+
+    .feedback-item:last-child {
+      border-bottom: none;
+    }
+
+    .feedback-content {
+      flex: 1;
+    }
+
+    .feedback-title {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feedback-description {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+
+    .feedback-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: var(--gray-600);
+    }
+
+    .feedback-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-300);
+      background: white;
+      color: var(--gray-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Quality Score Card */
+    .quality-score {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .score-circle {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .score-circle-bg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 0deg, var(--gray-200) 0deg);
+      position: relative;
+    }
+
+    .score-circle-inner {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+
+    .score-comparison {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1.5rem;
+    }
+
+    .score-item {
+      text-align: center;
+    }
+
+    .score-item-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .score-item-label {
+      font-size: 0.75rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+
+    .score-item-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    .score-item-change.positive {
+      color: #16a34a;
+    }
+
+    .score-item-change.negative {
+      color: #ef4444;
+    }
+
+    /* Report Generator */
+    .report-generator {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      box-shadow: var(--box-shadow);
+      margin-top: 2rem;
+    }
+
+    .generator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .generator-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .option-group label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--gray-800);
+    }
+
+    .option-group select,
+    .option-group input {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .option-group select:focus,
+    .option-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .generator-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    /* Tag System */
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 20px;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tag-quality {
+      background: rgba(76, 201, 240, 0.15);
+      color: #06b6d4;
+    }
+
+    .tag-training {
+      background: rgba(248, 150, 30, 0.15);
+      color: #f8961e;
+    }
+
+    .tag-feedback {
+      background: rgba(67, 97, 238, 0.15);
+      color: var(--primary);
+    }
+
+    .tag-critical {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .dashboard-main {
+        margin-left: 0;
+      }
+      
+      .sidebar-toggle {
+        display: flex;
+      }
+
+      .dashboard-content {
+        padding: 1rem;
+      }
+
+      .report-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-card {
+        padding: 1rem;
+      }
+
+      .chart-container {
+        height: 250px;
+      }
+
+      .feedback-item {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .feedback-actions {
+        align-self: flex-end;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .slide-in {
+      animation: slideIn 0.4s ease-out forwards;
+    }
+
+    /* Utility Classes */
+    .text-muted {
+      color: var(--gray-600);
+    }
+
+    .text-success {
+      color: #16a34a;
+    }
+
+    .text-warning {
+      color: #f8961e;
+    }
+
+    .text-danger {
+      color: #ef4444;
+    }
+
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-image">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-primary">Equity Coffee</span>
+            <span class="logo-secondary">Educator / Evaluator</span>
+          </div>
+        </div>
+        <button class="sidebar-close" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-educator.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+        <li><a class="sidebar-link" href="educator-evaluations.html"><i class="fas fa-clipboard-check"></i><span>Cupping &amp; Evaluations</span></a></li>
+        <li><a class="sidebar-link" href="educator-training.html"><i class="fas fa-chalkboard-teacher"></i><span>Training Sessions</span></a></li>
+        <li><a class="sidebar-link active" href="educator-reports.html"><i class="fas fa-file-alt"></i><span>Reports &amp; Feedback</span><span class="notification-badge">5</span></a></li>
+        <li><a class="sidebar-link" href="../trader/trader-marketplace.html"><i class="fas fa-store"></i><span>Marketplace</span></a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">EC</div>
+          <div class="user-info">
+            <div class="user-name">Educator Demo</div>
+            <div class="user-email">educator@equitycoffee.com</div>
+          </div>
+        </div>
+        <a href="/profile.html" class="btn-logout" title="My Profile" style="margin-right: 0.5rem; text-decoration: none;">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <button class="btn-logout" id="logout-btn" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="topbar-title">
+          <h1>Reports & Analytics Dashboard</h1>
+          <p>Monitor quality trends, generate insights, and provide actionable feedback.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-success" id="generate-report">
+            <i class="fas fa-file-pdf"></i>
+            <span>Generate Report</span>
+          </button>
+          <button class="btn btn-ghost btn-logout" id="topbar-logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Report Period Selector -->
+        <div class="report-actions fade-in">
+          <div class="period-selector">
+            <span class="text-muted">Report Period:</span>
+            <button class="period-btn active" data-period="month">This Month</button>
+            <button class="period-btn" data-period="quarter">Last Quarter</button>
+            <button class="period-btn" data-period="year">Year to Date</button>
+            <button class="period-btn" data-period="custom">Custom Range</button>
+            <input type="date" id="custom-start" style="display: none; margin-left: 0.5rem;">
+            <input type="date" id="custom-end" style="display: none; margin-left: 0.5rem;">
+          </div>
+          <div class="export-actions">
+            <button class="btn btn-ghost">
+              <i class="fas fa-download"></i>
+              <span>Export CSV</span>
+            </button>
+            <button class="btn btn-ghost">
+              <i class="fas fa-print"></i>
+              <span>Print</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quality Overview Charts -->
+        <div class="charts-container fade-in" style="animation-delay: 0.1s">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Quality Score Trend</h3>
+              <span class="badge">Monthly Average</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder">
+                <div class="chart-bars" id="qualityTrendChart">
+                  <!-- Dynamic bars will be inserted here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Evaluation Distribution</h3>
+              <span class="badge">By Score Range</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder">
+                <div class="score-distribution" id="scoreDistribution">
+                  <!-- Distribution visualization -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Reports Grid -->
+        <div class="panel-grid two-columns mt-3">
+          <!-- Monthly Quality Summary -->
+          <div class="card slide-in" style="animation-delay: 0.2s">
+            <div class="card-header">
+              <h2>Monthly Quality Summary</h2>
+              <span class="badge badge-outline">March 2025</span>
+            </div>
+            <div class="card-body" style="padding: 1.5rem;">
+              <div class="quality-score mb-3">
+                <div class="score-circle">
+                  <div class="score-circle-bg" id="scoreCircle">
+                    <!-- Dynamic circle -->
+                  </div>
+                  <div class="score-circle-inner">
+                    <div class="score-value" id="avgScore">84.7</div>
+                    <div class="score-label">Average Score</div>
+                  </div>
+                </div>
+                <div class="score-comparison">
+                  <div class="score-item">
+                    <div class="score-item-value" id="totalEvaluations">24</div>
+                    <div class="score-item-label">Evaluations</div>
+                    <div class="score-item-change positive">+3 from last month</div>
+                  </div>
+                  <div class="score-item">
+                    <div class="score-item-value" id="avgImprovement">+1.2</div>
+                    <div class="score-item-label">Avg. Improvement</div>
+                    <div class="score-item-change positive">↑ 1.4%</div>
+                  </div>
+                  <div class="score-item">
+                    <div class="score-item-value" id="topScore">87.5</div>
+                    <div class="score-item-label">Top Score</div>
+                    <div class="score-item-change positive">Colombia Huila</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <h4>Key Insights</h4>
+                <ul style="padding-left: 1.5rem; margin-top: 0.75rem;">
+                  <li class="mb-1"><strong>Positive Trend:</strong> Overall quality improved by 1.4% compared to last month</li>
+                  <li class="mb-1"><strong>Standout Lots:</strong> Colombian coffees consistently scoring above 86 points</li>
+                  <li class="mb-1"><strong>Area for Improvement:</strong> Natural processed coffees showing inconsistency in drying</li>
+                  <li><strong>Training Impact:</strong> Barista calibration sessions showing positive correlation with quality scores</li>
+                </ul>
+              </div>
+
+              <div class="mt-3">
+                <h4>Common Attributes</h4>
+                <div class="mt-1">
+                  <span class="tag tag-quality">Stone Fruit</span>
+                  <span class="tag tag-quality">Floral</span>
+                  <span class="tag tag-quality">Chocolate</span>
+                  <span class="tag tag-quality">Balanced Acidity</span>
+                  <span class="tag tag-quality">Medium Body</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Items & Feedback -->
+          <div class="card slide-in" style="animation-delay: 0.3s">
+            <div class="card-header">
+              <h2>Action Items & Feedback</h2>
+              <span class="badge" style="background: var(--accent);">5 Pending</span>
+            </div>
+            <div class="card-body" style="padding: 1.5rem;">
+              <ul class="feedback-list">
+                <li class="feedback-item">
+                  <div class="feedback-content">
+                    <div class="feedback-title">
+                      <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
+                      Share feedback with farmer groups
+                    </div>
+                    <div class="feedback-description">
+                      Provide detailed feedback about drying protocols to 3 farmer groups in Uganda and Ethiopia.
+                    </div>
+                    <div class="feedback-meta">
+                      <span><i class="far fa-clock"></i> Due: 15 March</span>
+                      <span><i class="fas fa-users"></i> 3 recipients</span>
+                      <span class="text-warning"><i class="fas fa-circle"></i> Medium Priority</span>
+                    </div>
+                  </div>
+                  <div class="feedback-actions">
+                    <button class="action-btn" title="Mark Complete">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="action-btn" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </li>
+                <li class="feedback-item">
+                  <div class="feedback-content">
+                    <div class="feedback-title">
+                      <i class="fas fa-chalkboard-teacher" style="color: var(--primary);"></i>
+                      Schedule calibration cupping
+                    </div>
+                    <div class="feedback-description">
+                      Organize calibration session with trader team to align on quality standards.
+                    </div>
+                    <div class="feedback-meta">
+                      <span><i class="far fa-clock"></i> Due: 20 March</span>
+                      <span><i class="fas fa-users"></i> 8 attendees</span>
+                      <span class="text-warning"><i class="fas fa-circle"></i> Medium Priority</span>
+                    </div>
+                  </div>
+                  <div class="feedback-actions">
+                    <button class="action-btn" title="Mark Complete">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="action-btn" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </li>
+                <li class="feedback-item">
+                  <div class="feedback-content">
+                    <div class="feedback-title">
+                      <i class="fas fa-chart-line" style="color: var(--success);"></i>
+                      Quarterly quality report
+                    </div>
+                    <div class="feedback-description">
+                      Prepare comprehensive quarterly report for management with trends and recommendations.
+                    </div>
+                    <div class="feedback-meta">
+                      <span><i class="far fa-clock"></i> Due: 25 March</span>
+                      <span><i class="fas fa-file-alt"></i> Report</span>
+                      <span class="text-success"><i class="fas fa-circle"></i> Low Priority</span>
+                    </div>
+                  </div>
+                  <div class="feedback-actions">
+                    <button class="action-btn" title="Mark Complete">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="action-btn" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </li>
+                <li class="feedback-item">
+                  <div class="feedback-content">
+                    <div class="feedback-title">
+                      <i class="fas fa-tools" style="color: var(--danger);"></i>
+                      Update grading protocols
+                    </div>
+                    <div class="feedback-description">
+                      Revise green coffee grading protocols based on recent QC findings.
+                    </div>
+                    <div class="feedback-meta">
+                      <span><i class="far fa-clock"></i> Due: 30 March</span>
+                      <span><i class="fas fa-exclamation-triangle"></i> Protocol</span>
+                      <span class="text-danger"><i class="fas fa-circle"></i> High Priority</span>
+                    </div>
+                  </div>
+                  <div class="feedback-actions">
+                    <button class="action-btn" title="Mark Complete">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="action-btn" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="mt-3">
+                <button class="btn btn-ghost" style="width: 100%;">
+                  <i class="fas fa-plus"></i>
+                  Add New Action Item
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Generator -->
+        <div class="report-generator fade-in" style="animation-delay: 0.4s">
+          <div class="generator-header">
+            <h2>Generate Custom Report</h2>
+            <span class="badge">Beta</span>
+          </div>
+          
+          <div class="generator-options">
+            <div class="option-group">
+              <label for="report-type">Report Type</label>
+              <select id="report-type">
+                <option value="quality">Quality Analysis</option>
+                <option value="training">Training Impact</option>
+                <option value="farmer">Farmer Feedback</option>
+                <option value="trends">Trend Analysis</option>
+                <option value="comprehensive">Comprehensive Report</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="timeframe">Timeframe</label>
+              <select id="timeframe">
+                <option value="month">Last Month</option>
+                <option value="quarter">Last Quarter</option>
+                <option value="year">Last Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="regions">Regions Included</label>
+              <select id="regions" multiple>
+                <option value="east-africa" selected>East Africa</option>
+                <option value="south-america" selected>South America</option>
+                <option value="central-america">Central America</option>
+                <option value="asia">Asia</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="metrics">Key Metrics</label>
+              <select id="metrics" multiple>
+                <option value="scores" selected>Cup Scores</option>
+                <option value="defects" selected>Defect Analysis</option>
+                <option value="trends">Trend Lines</option>
+                <option value="comparisons">Regional Comparisons</option>
+                <option value="recommendations">Recommendations</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="generator-actions">
+            <button class="btn btn-ghost" id="preview-report">
+              <i class="fas fa-eye"></i>
+              Preview Report
+            </button>
+            <button class="btn btn-primary" id="generate-pdf">
+              <i class="fas fa-file-pdf"></i>
+              Generate PDF
+            </button>
+            <button class="btn btn-success" id="generate-dashboard">
+              <i class="fas fa-chart-bar"></i>
+              Create Dashboard
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Feedback History -->
+        <div class="card mt-3 fade-in" style="animation-delay: 0.5s">
+          <div class="card-header">
+            <h2>Recent Feedback History</h2>
+            <span class="badge badge-outline">Last 30 Days</span>
+          </div>
+          <div class="table-wrapper" style="padding: 0 1.5rem 1.5rem;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Recipient</th>
+                  <th>Type</th>
+                  <th>Feedback Summary</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2025-03-10</td>
+                  <td>
+                    <strong>Mt. Elgon Co-op</strong>
+                    <div class="text-muted">Uganda</div>
+                  </td>
+                  <td><span class="tag tag-feedback">Quality</span></td>
+                  <td>Improved drying protocols recommended for consistency</td>
+                  <td><span class="status-badge" style="background: rgba(34, 197, 94, 0.15); color: #16a34a;">Delivered</span></td>
+                  <td>
+                    <button class="action-btn" title="View">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2025-03-08</td>
+                  <td>
+                    <strong>Guji Family Farms</strong>
+                    <div class="text-muted">Ethiopia</div>
+                  </td>
+                  <td><span class="tag tag-training">Training</span></td>
+                  <td>Post-harvest processing workshop feedback</td>
+                  <td><span class="status-badge" style="background: rgba(248, 150, 30, 0.15); color: #f8961e;">In Progress</span></td>
+                  <td>
+                    <button class="action-btn" title="View">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2025-03-05</td>
+                  <td>
+                    <strong>Trader Team</strong>
+                    <div class="text-muted">Internal</div>
+                  </td>
+                  <td><span class="tag tag-critical">Protocol</span></td>
+                  <td>Updated grading standards based on recent findings</td>
+                  <td><span class="status-badge" style="background: rgba(67, 97, 238, 0.15); color: var(--primary);">Implemented</span></td>
+                  <td>
+                    <button class="action-btn" title="View">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <footer class="dashboard-footer">
+        <div class="footer-content">
+          <span>© 2024 Equity Coffee – Analytics & Reports v2.0</span>
+          <span>Last report generated: <span id="last-report">Today, 14:30</span></span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/common-auth.js"></script>
+  <script>
+    // Enhanced JavaScript for Reports & Feedback Dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebarClose = document.getElementById('sidebar-close');
+      const logoutBtns = document.querySelectorAll('#logout-btn, #topbar-logout');
+      const periodBtns = document.querySelectorAll('.period-btn');
+      const generateReportBtn = document.getElementById('generate-report');
+      const customStart = document.getElementById('custom-start');
+      const customEnd = document.getElementById('custom-end');
+      const qualityTrendChart = document.getElementById('qualityTrendChart');
+      const scoreCircle = document.getElementById('scoreCircle');
+      const avgScoreElement = document.getElementById('avgScore');
+      const totalEvaluationsElement = document.getElementById('totalEvaluations');
+      const avgImprovementElement = document.getElementById('avgImprovement');
+      const topScoreElement = document.getElementById('topScore');
+
+      // Sidebar Toggle
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      sidebarClose.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+      });
+
+      // Logout Functionality
+      logoutBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            window.location.href = '../index.html';
+          }
+        });
+      });
+
+      // Period Selector
+      periodBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active button
+          periodBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          const period = btn.dataset.period;
+          
+          // Show/hide custom date inputs
+          if (period === 'custom') {
+            customStart.style.display = 'block';
+            customEnd.style.display = 'block';
+            customStart.valueAsDate = new Date();
+            customEnd.valueAsDate = new Date();
+          } else {
+            customStart.style.display = 'none';
+            customEnd.style.display = 'none';
+          }
+          
+          // Update charts based on period
+          updateCharts(period);
+          updateReportData(period);
+        });
+      });
+
+      // Generate Report Button
+      generateReportBtn.addEventListener('click', () => {
+        // Show loading state
+        generateReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Generating...</span>';
+        generateReportBtn.disabled = true;
+        
+        // Simulate report generation
+        setTimeout(() => {
+          alert('Report generated successfully! Download will start shortly.');
+          generateReportBtn.innerHTML = '<i class="fas fa-file-pdf"></i><span>Generate Report</span>';
+          generateReportBtn.disabled = false;
+          
+          // Update last report timestamp
+          updateLastReport();
+        }, 2000);
+      });
+
+      // Update last report timestamp
+      function updateLastReport() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+        document.getElementById('last-report').textContent = `Today, ${timeString}`;
+      }
+
+      // Initialize Quality Trend Chart
+      function initQualityTrendChart() {
+        const months = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+        const scores = [82.5, 83.2, 83.8, 84.1, 84.3, 84.7];
+        
+        // Clear existing bars
+        qualityTrendChart.innerHTML = '';
+        
+        // Find max score for scaling
+        const maxScore = Math.max(...scores);
+        const minScore = Math.min(...scores);
+        
+        // Create bars
+        months.forEach((month, index) => {
+          const score = scores[index];
+          const heightPercentage = ((score - minScore) / (maxScore - minScore)) * 100 + 30;
+          
+          const bar = document.createElement('div');
+          bar.className = 'chart-bar';
+          bar.style.height = `${heightPercentage}px`;
+          bar.title = `${month}: ${score} points`;
+          
+          const value = document.createElement('div');
+          value.className = 'chart-bar-value';
+          value.textContent = score;
+          
+          const label = document.createElement('div');
+          label.className = 'chart-bar-label';
+          label.textContent = month;
+          
+          bar.appendChild(value);
+          bar.appendChild(label);
+          qualityTrendChart.appendChild(bar);
+          
+          // Add click event
+          bar.addEventListener('click', () => {
+            alert(`Viewing details for ${month} 2025\nAverage Score: ${score}`);
+          });
+        });
+      }
+
+      // Update Score Circle
+      function updateScoreCircle(score = 84.7) {
+        const percentage = ((score - 70) / (95 - 70)) * 100;
+        const degrees = (percentage / 100) * 360;
+        
+        scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-200) 0deg)`;
+        avgScoreElement.textContent = score.toFixed(1);
+        
+        // Update score color based on value
+        if (score >= 85) {
+          avgScoreElement.style.color = '#06b6d4';
+        } else if (score >= 80) {
+          avgScoreElement.style.color = var(--primary);
+        } else if (score >= 75) {
+          avgScoreElement.style.color = '#f8961e';
+        } else {
+          avgScoreElement.style.color = '#ef4444';
+        }
+      }
+
+      // Update report data based on period
+      function updateReportData(period) {
+        let evaluations, improvement, topScore, avgScore;
+        
+        switch(period) {
+          case 'month':
+            evaluations = 24;
+            improvement = '+1.2';
+            topScore = 87.5;
+            avgScore = 84.7;
+            break;
+          case 'quarter':
+            evaluations = 68;
+            improvement = '+0.8';
+            topScore = 88.0;
+            avgScore = 84.1;
+            break;
+          case 'year':
+            evaluations = 245;
+            improvement = '+1.5';
+            topScore = 89.2;
+            avgScore = 83.8;
+            break;
+          case 'custom':
+            evaluations = 15;
+            improvement = '+0.5';
+            topScore = 86.5;
+            avgScore = 83.9;
+            break;
+        }
+        
+        totalEvaluationsElement.textContent = evaluations;
+        avgImprovementElement.textContent = improvement;
+        topScoreElement.textContent = topScore;
+        updateScoreCircle(avgScore);
+      }
+
+      // Update charts based on period
+      function updateCharts(period) {
+        // In a real app, this would fetch new data and redraw charts
+        console.log(`Updating charts for period: ${period}`);
+        
+        // Simulate chart update with slight variation
+        const variation = Math.random() * 0.5 - 0.25;
+        const currentScore = parseFloat(avgScoreElement.textContent);
+        const newScore = Math.min(95, Math.max(70, currentScore + variation));
+        
+        updateScoreCircle(newScore);
+        initQualityTrendChart();
+      }
+
+      // Mark action items as complete
+      document.querySelectorAll('.action-btn .fa-check').forEach(btn => {
+        btn.closest('.action-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          const feedbackItem = this.closest('.feedback-item');
+          const title = feedbackItem.querySelector('.feedback-title').textContent.trim();
+          
+          if (confirm(`Mark "${title}" as complete?`)) {
+            feedbackItem.style.opacity = '0.6';
+            feedbackItem.querySelector('.feedback-meta').innerHTML += 
+              '<span class="text-success" style="margin-left: 1rem;"><i class="fas fa-check-circle"></i> Completed</span>';
+            
+            // Update pending count
+            const pendingBadge = document.querySelector('.badge[style*="background: var(--accent)"]');
+            let count = parseInt(pendingBadge.textContent);
+            if (count > 0) {
+              count--;
+              pendingBadge.textContent = `${count} Pending`;
+            }
+          }
+        });
+      });
+
+      // Report Generator Functions
+      document.getElementById('generate-pdf').addEventListener('click', function() {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-file-pdf"></i> Generate PDF';
+          alert('PDF report generated successfully!');
+          updateLastReport();
+        }, 1500);
+      });
+
+      document.getElementById('generate-dashboard').addEventListener('click', function() {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-chart-bar"></i> Create Dashboard';
+          alert('Interactive dashboard created! You can now access it from your dashboard list.');
+        }, 1500);
+      });
+
+      document.getElementById('preview-report').addEventListener('click', function() {
+        const reportType = document.getElementById('report-type').value;
+        const timeframe = document.getElementById('timeframe').value;
+        
+        alert(`Previewing ${reportType} report for ${timeframe}\n\nThis would open a preview modal in a real application.`);
+      });
+
+      // Initialize
+      initQualityTrendChart();
+      updateScoreCircle();
+      updateLastReport();
+
+      // Update data every 30 seconds (simulated real-time updates)
+      setInterval(() => {
+        const variation = Math.random() * 0.2 - 0.1;
+        const currentScore = parseFloat(avgScoreElement.textContent);
+        const newScore = Math.min(95, Math.max(70, currentScore + variation));
+        
+        // Only update if change is significant
+        if (Math.abs(newScore - currentScore) > 0.05) {
+          updateScoreCircle(newScore);
+        }
+      }, 30000);
+
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'r') {
+          e.preventDefault();
+          generateReportBtn.click();
+        }
+        
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

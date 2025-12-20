@@ -1,0 +1,1988 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Trader Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+        <div>
+          Equity Coffee
+          <div class="sidebar-role">Trader / Exporter</div>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-trader.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a class="sidebar-link active" href="trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+        <li><a class="sidebar-link" href="trader-negotiations.html"><i class="fas fa-handshake"></i> Negotiations</a></li>
+        <li><a class="sidebar-link" href="trader-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+        <li><a class="sidebar-link" href="trader-shipments.html"><i class="fas fa-shipping-fast"></i> Shipments</a></li>
+        <li><a class="sidebar-link" href="trader-partners.html"><i class="fas fa-users"></i> Partners</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <i class="fas fa-clock"></i> Last login: 2h ago
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1><i class="fas fa-store"></i> Coffee Marketplace</h1>
+          <p>Discover and source premium coffee lots from producers worldwide</p>
+        </div>
+        <div class="topbar-right">
+          <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+          <div class="user-info">
+            <div class="user-notification">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </div>
+            <span id="user-display-name">User</span>
+            <div class="avatar" id="user-avatar">U</div>
+            <button class="btn btn-ghost btn-logout" style="margin-left: 0.5rem;" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Marketplace Stats -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-coffee"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Available Lots</div>
+              <div class="kpi-value">1,247</div>
+              <div class="kpi-meta">From 42 origins</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-calendar-plus"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">New This Week</div>
+              <div class="kpi-value">48</div>
+              <div class="kpi-meta">12 premium lots</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Avg. Price / kg</div>
+              <div class="kpi-value">$4.35</div>
+              <div class="kpi-meta">+5.2% from last month</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Watched Lots</div>
+              <div class="kpi-value">24</div>
+              <div class="kpi-meta">3 with offers pending</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+          <div class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="action-content">
+              <h4>Advanced Search</h4>
+              <p>Find specific lots by origin, score, or price</p>
+            </div>
+            <button class="btn btn-ghost">Explore</button>
+          </div>
+          <div class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="action-content">
+              <h4>Premium Lots</h4>
+              <p>Exclusive lots scoring 88+ points</p>
+            </div>
+            <button class="btn btn-ghost">View</button>
+          </div>
+          <div class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="action-content">
+              <h4>Flash Offers</h4>
+              <p>Time-limited deals with special pricing</p>
+            </div>
+            <button class="btn btn-primary">See Offers</button>
+          </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="panel filter-panel">
+          <div class="panel-header">
+            <h2><i class="fas fa-filter"></i> Filter Coffee Lots</h2>
+            <div class="panel-actions">
+              <button class="btn btn-ghost-small" id="save-search">
+                <i class="fas fa-save"></i> Save Search
+              </button>
+              <button class="btn btn-ghost-small" id="export-results">
+                <i class="fas fa-download"></i> Export
+              </button>
+            </div>
+          </div>
+          <div class="filters-grid">
+            <div class="filter-group">
+              <label><i class="fas fa-globe-americas"></i> Country</label>
+              <select id="filter-country" class="modern-select">
+                <option value="">All Countries</option>
+                <option value="kenya">Kenya</option>
+                <option value="ethiopia">Ethiopia</option>
+                <option value="colombia">Colombia</option>
+                <option value="brazil">Brazil</option>
+                <option value="guatemala">Guatemala</option>
+                <option value="costa-rica">Costa Rica</option>
+                <option value="panama">Panama</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-industry"></i> Process</label>
+              <select id="filter-process" class="modern-select">
+                <option value="">All Processes</option>
+                <option value="washed">Washed</option>
+                <option value="natural">Natural</option>
+                <option value="honey">Honey</option>
+                <option value="anaerobic">Anaerobic</option>
+                <option value="wet-hulled">Wet Hulled</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-star"></i> Cup Score</label>
+              <div class="range-slider">
+                <input type="range" min="80" max="95" value="80" class="slider" id="score-slider">
+                <div class="range-values">
+                  <span id="min-score">80</span>
+                  <span>to</span>
+                  <span id="max-score">95</span>
+                </div>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-dollar-sign"></i> Price/kg ($)</label>
+              <div class="range-inputs">
+                <input type="number" id="min-price" placeholder="2.00" step="0.01" class="modern-input small">
+                <span>to</span>
+                <input type="number" id="max-price" placeholder="10.00" step="0.01" class="modern-input small">
+              </div>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-certificate"></i> Certifications</label>
+              <div class="certification-tags">
+                <button class="cert-tag" data-cert="organic">Organic</button>
+                <button class="cert-tag" data-cert="fairtrade">Fair Trade</button>
+                <button class="cert-tag" data-cert="rainforest">Rainforest</button>
+                <button class="cert-tag" data-cert="bird-friendly">Bird Friendly</button>
+              </div>
+            </div>
+            <div class="filter-group full-width">
+              <button class="btn btn-primary" id="apply-filters">
+                <i class="fas fa-check"></i> Apply Filters
+              </button>
+              <button class="btn btn-ghost" id="reset-filters">
+                <i class="fas fa-times"></i> Reset All
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Marketplace Header -->
+        <div class="marketplace-header">
+          <div class="marketplace-title">
+            <h2><i class="fas fa-coffee-bean"></i> Available Coffee Lots</h2>
+            <p>Showing 24 of 1,247 premium lots</p>
+          </div>
+          <div class="marketplace-controls">
+            <div class="sort-control">
+              <label>Sort by:</label>
+              <select id="sort-lots" class="modern-select">
+                <option value="newest">Newest First</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="score_desc">Score: High to Low</option>
+                <option value="popular">Most Watched</option>
+              </select>
+            </div>
+            <div class="view-controls">
+              <button class="view-btn active" data-view="grid">
+                <i class="fas fa-th-large"></i>
+              </button>
+              <button class="view-btn" data-view="list">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+            <button class="btn btn-ghost" id="refresh-lots">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Lots Grid -->
+        <section class="lots-grid" id="marketplace-lots">
+          <!-- Lot Card 1 -->
+          <div class="lot-card featured" data-lot-id="LOT-2024-KE-001">
+            <div class="lot-badge">Featured</div>
+            <div class="lot-image">
+              <div class="image-placeholder">
+                <i class="fas fa-mountain"></i>
+              </div>
+              <div class="origin-flag">
+                <img src="https://flagcdn.com/w20/ke.png" alt="Kenya">
+              </div>
+            </div>
+            <div class="lot-content">
+              <div class="lot-header">
+                <h3>Kirinyaga AB 12</h3>
+                <div class="lot-rating">
+                  <i class="fas fa-star"></i>
+                  <span>86.5</span>
+                </div>
+              </div>
+              <div class="lot-origin">
+                <i class="fas fa-map-marker-alt"></i>
+                Kenya • Kirinyaga • 1,800m
+              </div>
+              <div class="lot-details">
+                <div class="detail-row">
+                  <span class="label">Variety:</span>
+                  <span class="value">SL28, SL34</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Process:</span>
+                  <span class="value process-washed">Washed</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Quantity:</span>
+                  <span class="value">120 bags (60kg)</span>
+                </div>
+              </div>
+              <div class="lot-price">
+                <div class="price-main">
+                  <span class="currency">$</span>
+                  <span class="amount">4.20</span>
+                  <span class="unit">/kg</span>
+                </div>
+                <div class="price-total">Total: $30,240</div>
+              </div>
+              <div class="lot-actions">
+                <button class="btn btn-ghost watch-lot" data-lot-id="LOT-2024-KE-001">
+                  <i class="fas fa-eye"></i> Watch
+                </button>
+                <button class="btn btn-primary make-offer" data-lot-id="LOT-2024-KE-001">
+                  <i class="fas fa-handshake"></i> Make Offer
+                </button>
+              </div>
+            </div>
+            <div class="lot-footer">
+              <div class="certifications">
+                <span class="cert-badge traceable">
+                  <i class="fas fa-qrcode"></i> Traceable
+                </span>
+                <span class="cert-badge premium">
+                  <i class="fas fa-crown"></i> Premium
+                </span>
+              </div>
+              <div class="lot-meta">
+                <span><i class="far fa-clock"></i> Posted: 2 days ago</span>
+                <span><i class="fas fa-eye"></i> 42 watching</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lot Card 2 -->
+          <div class="lot-card" data-lot-id="LOT-2024-ET-001">
+            <div class="lot-badge organic">Organic</div>
+            <div class="lot-image">
+              <div class="image-placeholder" style="background: linear-gradient(135deg, #7b3f00, #d4a76a);">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div class="origin-flag">
+                <img src="https://flagcdn.com/w20/et.png" alt="Ethiopia">
+              </div>
+            </div>
+            <div class="lot-content">
+              <div class="lot-header">
+                <h3>Gedeo Natural Microlot</h3>
+                <div class="lot-rating">
+                  <i class="fas fa-star"></i>
+                  <span>87.0</span>
+                </div>
+              </div>
+              <div class="lot-origin">
+                <i class="fas fa-map-marker-alt"></i>
+                Ethiopia • Yirgacheffe • 2,100m
+              </div>
+              <div class="lot-details">
+                <div class="detail-row">
+                  <span class="label">Variety:</span>
+                  <span class="value">Heirloom</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Process:</span>
+                  <span class="value process-natural">Natural</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Quantity:</span>
+                  <span class="value">40 bags (60kg)</span>
+                </div>
+              </div>
+              <div class="lot-price">
+                <div class="price-main">
+                  <span class="currency">$</span>
+                  <span class="amount">5.10</span>
+                  <span class="unit">/kg</span>
+                </div>
+                <div class="price-total">Total: $12,240</div>
+              </div>
+              <div class="lot-actions">
+                <button class="btn btn-ghost watch-lot active" data-lot-id="LOT-2024-ET-001">
+                  <i class="fas fa-eye-slash"></i> Unwatch
+                </button>
+                <button class="btn btn-primary make-offer" data-lot-id="LOT-2024-ET-001">
+                  <i class="fas fa-handshake"></i> Make Offer
+                </button>
+              </div>
+            </div>
+            <div class="lot-footer">
+              <div class="certifications">
+                <span class="cert-badge organic">
+                  <i class="fas fa-leaf"></i> Organic
+                </span>
+                <span class="cert-badge traceable">
+                  <i class="fas fa-qrcode"></i> Traceable
+                </span>
+              </div>
+              <div class="lot-meta">
+                <span><i class="far fa-clock"></i> Posted: 1 week ago</span>
+                <span><i class="fas fa-eye"></i> 68 watching</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lot Card 3 -->
+          <div class="lot-card" data-lot-id="LOT-2024-CO-001">
+            <div class="lot-badge limited">Limited</div>
+            <div class="lot-image">
+              <div class="image-placeholder" style="background: linear-gradient(135deg, #2e7d32, #81c784);">
+                <i class="fas fa-mountain"></i>
+              </div>
+              <div class="origin-flag">
+                <img src="https://flagcdn.com/w20/co.png" alt="Colombia">
+              </div>
+            </div>
+            <div class="lot-content">
+              <div class="lot-header">
+                <h3>Huila Regional Blend</h3>
+                <div class="lot-rating">
+                  <i class="fas fa-star"></i>
+                  <span>84.5</span>
+                </div>
+              </div>
+              <div class="lot-origin">
+                <i class="fas fa-map-marker-alt"></i>
+                Colombia • Huila • 1,650m
+              </div>
+              <div class="lot-details">
+                <div class="detail-row">
+                  <span class="label">Variety:</span>
+                  <span class="value">Caturra, Castillo</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Process:</span>
+                  <span class="value process-washed">Washed</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Quantity:</span>
+                  <span class="value">80 bags (70kg)</span>
+                </div>
+              </div>
+              <div class="lot-price">
+                <div class="price-main">
+                  <span class="currency">$</span>
+                  <span class="amount">3.85</span>
+                  <span class="unit">/kg</span>
+                </div>
+                <div class="price-total">Total: $21,560</div>
+              </div>
+              <div class="lot-actions">
+                <button class="btn btn-ghost watch-lot" data-lot-id="LOT-2024-CO-001">
+                  <i class="fas fa-eye"></i> Watch
+                </button>
+                <button class="btn btn-primary make-offer" data-lot-id="LOT-2024-CO-001">
+                  <i class="fas fa-handshake"></i> Make Offer
+                </button>
+              </div>
+            </div>
+            <div class="lot-footer">
+              <div class="certifications">
+                <span class="cert-badge fairtrade">
+                  <i class="fas fa-hands-helping"></i> Fair Trade
+                </span>
+              </div>
+              <div class="lot-meta">
+                <span><i class="far fa-clock"></i> Posted: 3 days ago</span>
+                <span><i class="fas fa-eye"></i> 24 watching</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lot Card 4 -->
+          <div class="lot-card" data-lot-id="LOT-2024-BR-001">
+            <div class="lot-badge discount">-15%</div>
+            <div class="lot-image">
+              <div class="image-placeholder" style="background: linear-gradient(135deg, #ff6f00, #ffcc80);">
+                <i class="fas fa-sun"></i>
+              </div>
+              <div class="origin-flag">
+                <img src="https://flagcdn.com/w20/br.png" alt="Brazil">
+              </div>
+            </div>
+            <div class="lot-content">
+              <div class="lot-header">
+                <h3>Cerrado Estate Lot 21</h3>
+                <div class="lot-rating">
+                  <i class="fas fa-star"></i>
+                  <span>84.5</span>
+                </div>
+              </div>
+              <div class="lot-origin">
+                <i class="fas fa-map-marker-alt"></i>
+                Brazil • Cerrado • 950m
+              </div>
+              <div class="lot-details">
+                <div class="detail-row">
+                  <span class="label">Variety:</span>
+                  <span class="value">Bourbon, Mundo Novo</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Process:</span>
+                  <span class="value process-natural">Natural</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Quantity:</span>
+                  <span class="value">200 bags (60kg)</span>
+                </div>
+              </div>
+              <div class="lot-price">
+                <div class="price-main">
+                  <span class="currency">$</span>
+                  <span class="amount">3.45</span>
+                  <span class="unit">/kg</span>
+                  <span class="price-old">$4.05</span>
+                </div>
+                <div class="price-total">Total: $41,400</div>
+              </div>
+              <div class="lot-actions">
+                <button class="btn btn-ghost watch-lot" data-lot-id="LOT-2024-BR-001">
+                  <i class="fas fa-eye"></i> Watch
+                </button>
+                <button class="btn btn-primary make-offer" data-lot-id="LOT-2024-BR-001">
+                  <i class="fas fa-handshake"></i> Make Offer
+                </button>
+              </div>
+            </div>
+            <div class="lot-footer">
+              <div class="certifications">
+                <span class="cert-badge rainforest">
+                  <i class="fas fa-tree"></i> Rainforest
+                </span>
+              </div>
+              <div class="lot-meta">
+                <span><i class="far fa-clock"></i> Posted: 5 hours ago</span>
+                <span><i class="fas fa-eye"></i> 89 watching</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="btn btn-ghost" disabled>
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <div class="page-numbers">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span class="page-dots">...</span>
+            <button class="page-btn">24</button>
+          </div>
+          <button class="btn btn-ghost">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Make Offer Modal -->
+  <div id="offer-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-handshake"></i> Make an Offer</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="offer-form">
+          <div class="form-group">
+            <label>Selected Coffee Lot</label>
+            <div class="lot-summary" id="offer-lot-summary">
+              <div class="selected-lot">
+                <div class="lot-image-small">
+                  <i class="fas fa-coffee"></i>
+                </div>
+                <div class="lot-info">
+                  <h4>Kirinyaga AB 12</h4>
+                  <p>Kenya • Kirinyaga • 86.5 score</p>
+                  <p>120 bags • $4.20/kg</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="offer-price" class="form-label">
+                <i class="fas fa-dollar-sign"></i> Your Offer Price ($/kg) *
+              </label>
+              <div class="input-with-unit">
+                <input type="number" id="offer-price" step="0.01" min="0" class="modern-input" required>
+                <span class="input-unit">$/kg</span>
+              </div>
+              <div class="price-comparison">
+                <span class="price-current">Current: $4.20/kg</span>
+                <span class="price-difference" id="price-difference">+0.00%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="offer-quantity" class="form-label">
+                <i class="fas fa-weight-hanging"></i> Quantity (bags) *
+              </label>
+              <div class="input-with-unit">
+                <input type="number" id="offer-quantity" min="1" max="120" class="modern-input" required>
+                <span class="input-unit">bags</span>
+              </div>
+              <div class="quantity-info">
+                <span>Max available: 120 bags</span>
+                <span id="total-value">Total: $0.00</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="offer-message" class="form-label">
+              <i class="fas fa-comment"></i> Message to Seller
+            </label>
+            <textarea id="offer-message" class="modern-textarea" rows="4" 
+                      placeholder="Introduce yourself, explain your offer, or add any special requests..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="offer-terms" class="form-label">
+              <i class="fas fa-file-contract"></i> Special Terms (Optional)
+            </label>
+            <textarea id="offer-terms" class="modern-textarea" rows="2" 
+                      placeholder="Any special requirements or conditions for the transaction..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="agree-terms" required>
+              <span>I agree to the marketplace terms and conditions</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost close-modal">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button type="submit" form="offer-form" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Submit Offer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/dashboard.js"></script>
+  <script>
+    // Marketplace functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const marketplace = new Marketplace();
+      marketplace.init();
+    });
+
+    class Marketplace {
+      constructor() {
+        this.currentFilters = {};
+        this.watchedLots = new Set(['LOT-2024-ET-001']);
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+        this.setupRangeSlider();
+      }
+
+      setupEventListeners() {
+        // Filter application
+        document.getElementById('apply-filters').addEventListener('click', () => {
+          this.applyFilters();
+        });
+
+        document.getElementById('reset-filters').addEventListener('click', () => {
+          this.resetFilters();
+        });
+
+        // Sort functionality
+        document.getElementById('sort-lots').addEventListener('change', (e) => {
+          this.sortLots(e.target.value);
+        });
+
+        // Refresh data
+        document.getElementById('refresh-lots').addEventListener('click', () => {
+          this.refreshLots();
+        });
+
+        // View controls
+        document.querySelectorAll('.view-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            this.toggleView(e.target.closest('.view-btn').dataset.view);
+          });
+        });
+
+        // Watch lot functionality
+        document.getElementById('marketplace-lots').addEventListener('click', (e) => {
+          if (e.target.closest('.watch-lot')) {
+            const btn = e.target.closest('.watch-lot');
+            const lotId = btn.dataset.lotId;
+            this.toggleWatchLot(lotId, btn);
+          } else if (e.target.closest('.make-offer')) {
+            const btn = e.target.closest('.make-offer');
+            const lotId = btn.dataset.lotId;
+            this.openOfferModal(lotId);
+          }
+        });
+
+        // Certification tags
+        document.querySelectorAll('.cert-tag').forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            e.target.classList.toggle('active');
+            this.updateCertFilters();
+          });
+        });
+
+        // Modal
+        document.querySelectorAll('.close-modal').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.closeModal();
+          });
+        });
+
+        // Offer form
+        document.getElementById('offer-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.submitOffer();
+        });
+
+        // Real-time calculations
+        document.getElementById('offer-price')?.addEventListener('input', (e) => {
+          this.calculatePriceDifference();
+        });
+
+        document.getElementById('offer-quantity')?.addEventListener('input', (e) => {
+          this.calculateTotalValue();
+        });
+      }
+
+      setupRangeSlider() {
+        const slider = document.getElementById('score-slider');
+        const minScore = document.getElementById('min-score');
+        const maxScore = document.getElementById('max-score');
+
+        slider.addEventListener('input', (e) => {
+          const value = e.target.value;
+          minScore.textContent = '80';
+          maxScore.textContent = value;
+        });
+      }
+
+      applyFilters() {
+        // Collect filter values
+        this.currentFilters = {
+          country: document.getElementById('filter-country').value,
+          process: document.getElementById('filter-process').value,
+          minScore: 80,
+          maxScore: document.getElementById('score-slider').value,
+          minPrice: document.getElementById('min-price').value,
+          maxPrice: document.getElementById('max-price').value,
+          certifications: Array.from(document.querySelectorAll('.cert-tag.active'))
+                            .map(tag => tag.dataset.cert)
+        };
+
+        // Apply filter animation
+        const lots = document.querySelectorAll('.lot-card');
+        lots.forEach(lot => {
+          lot.style.opacity = '0.5';
+          lot.style.transform = 'scale(0.95)';
+        });
+
+        setTimeout(() => {
+          lots.forEach(lot => {
+            lot.style.opacity = '1';
+            lot.style.transform = 'scale(1)';
+          });
+        }, 300);
+
+        console.log('Filters applied:', this.currentFilters);
+      }
+
+      resetFilters() {
+        document.getElementById('filter-country').selectedIndex = 0;
+        document.getElementById('filter-process').selectedIndex = 0;
+        document.getElementById('score-slider').value = 95;
+        document.getElementById('min-score').textContent = '80';
+        document.getElementById('max-score').textContent = '95';
+        document.getElementById('min-price').value = '';
+        document.getElementById('max-price').value = '';
+        document.querySelectorAll('.cert-tag').forEach(tag => {
+          tag.classList.remove('active');
+        });
+
+        this.currentFilters = {};
+        this.applyFilters();
+      }
+
+      toggleView(view) {
+        const grid = document.getElementById('marketplace-lots');
+        const buttons = document.querySelectorAll('.view-btn');
+
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.closest('.view-btn').classList.add('active');
+
+        if (view === 'list') {
+          grid.classList.add('list-view');
+        } else {
+          grid.classList.remove('list-view');
+        }
+      }
+
+      async toggleWatchLot(lotId, button) {
+        const isWatched = this.watchedLots.has(lotId);
+        const icon = button.querySelector('i');
+        const text = button.querySelector('span') || button;
+
+        if (isWatched) {
+          this.watchedLots.delete(lotId);
+          icon.className = 'fas fa-eye';
+          text.textContent = 'Watch';
+          this.showNotification('Removed from watchlist', 'info');
+        } else {
+          this.watchedLots.add(lotId);
+          icon.className = 'fas fa-eye-slash';
+          text.textContent = 'Unwatch';
+          this.showNotification('Added to watchlist', 'success');
+        }
+
+        // Update button appearance
+        button.classList.toggle('active');
+      }
+
+      openOfferModal(lotId) {
+        const lotCard = document.querySelector(`.lot-card[data-lot-id="${lotId}"]`);
+        const lotName = lotCard.querySelector('h3').textContent;
+        const lotOrigin = lotCard.querySelector('.lot-origin').textContent;
+        const lotScore = lotCard.querySelector('.lot-rating span').textContent;
+        const lotPrice = lotCard.querySelector('.amount').textContent;
+        const lotQuantity = lotCard.querySelector('.detail-row .value').textContent.match(/\d+/)[0];
+
+        document.getElementById('offer-lot-summary').innerHTML = `
+          <div class="selected-lot">
+            <div class="lot-image-small">
+              <i class="fas fa-coffee"></i>
+            </div>
+            <div class="lot-info">
+              <h4>${lotName}</h4>
+              <p>${lotOrigin.replace('<i class="fas fa-map-marker-alt"></i>', '')} • ${lotScore} score</p>
+              <p>${lotQuantity} bags • $${lotPrice}/kg</p>
+            </div>
+          </div>
+        `;
+
+        // Set default values
+        document.getElementById('offer-price').value = lotPrice;
+        document.getElementById('offer-quantity').value = '1';
+        document.getElementById('offer-quantity').max = lotQuantity;
+
+        // Calculate initial values
+        this.calculatePriceDifference();
+        this.calculateTotalValue();
+
+        // Show modal
+        document.getElementById('offer-modal').style.display = 'block';
+      }
+
+      closeModal() {
+        document.getElementById('offer-modal').style.display = 'none';
+        document.getElementById('offer-form').reset();
+      }
+
+      calculatePriceDifference() {
+        const offerPrice = parseFloat(document.getElementById('offer-price').value) || 0;
+        const currentPrice = 4.20; // This would come from the lot data
+        const difference = ((offerPrice - currentPrice) / currentPrice * 100).toFixed(2);
+        const element = document.getElementById('price-difference');
+
+        element.textContent = `${difference >= 0 ? '+' : ''}${difference}%`;
+        element.className = 'price-difference ' + 
+          (difference > 0 ? 'positive' : difference < 0 ? 'negative' : 'neutral');
+      }
+
+      calculateTotalValue() {
+        const price = parseFloat(document.getElementById('offer-price').value) || 0;
+        const quantity = parseInt(document.getElementById('offer-quantity').value) || 0;
+        const bagsPerKg = 60; // Standard bag weight
+        const total = price * quantity * bagsPerKg;
+
+        document.getElementById('total-value').textContent = 
+          `Total: $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      async submitOffer() {
+        const formData = new FormData(document.getElementById('offer-form'));
+        const offerData = {
+          lotId: document.querySelector('.make-offer').dataset.lotId,
+          price: parseFloat(formData.get('offer-price')),
+          quantity: parseInt(formData.get('offer-quantity')),
+          message: formData.get('offer-message'),
+          terms: formData.get('offer-terms'),
+          totalValue: parseFloat(document.getElementById('total-value').textContent.replace('Total: $', '').replace(',', ''))
+        };
+
+        // Show loading state
+        const submitBtn = document.querySelector('[form="offer-form"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          this.showNotification('Offer submitted successfully! You will hear back soon.', 'success');
+          this.closeModal();
+        } catch (error) {
+          this.showNotification('Failed to submit offer. Please try again.', 'error');
+        } finally {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }
+      }
+
+      refreshLots() {
+        const refreshBtn = document.getElementById('refresh-lots');
+        const icon = refreshBtn.querySelector('i');
+        
+        icon.className = 'fas fa-spinner fa-spin';
+        refreshBtn.disabled = true;
+
+        // Simulate API refresh
+        setTimeout(() => {
+          icon.className = 'fas fa-sync-alt';
+          refreshBtn.disabled = false;
+          this.showNotification('Marketplace data refreshed', 'info');
+        }, 1000);
+      }
+
+      showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+          <button class="notification-close"><i class="fas fa-times"></i></button>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        // Close button
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+          notification.classList.remove('show');
+          setTimeout(() => notification.remove(), 300);
+        });
+
+        // Auto remove
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+          }
+        }, 5000);
+      }
+
+      sortLots(criteria) {
+        const grid = document.getElementById('marketplace-lots');
+        const cards = Array.from(grid.querySelectorAll('.lot-card'));
+        
+        cards.sort((a, b) => {
+          switch(criteria) {
+            case 'price_asc':
+              return this.getPrice(a) - this.getPrice(b);
+            case 'price_desc':
+              return this.getPrice(b) - this.getPrice(a);
+            case 'score_desc':
+              return this.getScore(b) - this.getScore(a);
+            case 'popular':
+              return this.getWatching(b) - this.getWatching(a);
+            default:
+              return 0;
+          }
+        });
+
+        // Reorder cards
+        cards.forEach(card => grid.appendChild(card));
+      }
+
+      getPrice(card) {
+        return parseFloat(card.querySelector('.amount').textContent);
+      }
+
+      getScore(card) {
+        return parseFloat(card.querySelector('.lot-rating span').textContent);
+      }
+
+      getWatching(card) {
+        const text = card.querySelector('.lot-meta span:last-child').textContent;
+        return parseInt(text.match(/\d+/)[0]) || 0;
+      }
+    }
+  </script>
+
+  <style>
+    .dashboard-content {
+      padding: 1.5rem;
+      background: #f8f9fa;
+    }
+    
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .kpi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .kpi-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8B4513, #D2691E);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .action-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4a6fa5, #6b9bff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    
+    .action-card:nth-child(2) .action-icon {
+      background: linear-gradient(135deg, #ff9800, #ffb74d);
+    }
+    
+    .action-card:nth-child(3) .action-icon {
+      background: linear-gradient(135deg, #4caf50, #81c784);
+    }
+    
+    .action-content {
+      flex: 1;
+    }
+    
+    .action-content h4 {
+      margin: 0 0 0.25rem 0;
+      color: #333;
+    }
+    
+    .action-content p {
+      margin: 0;
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    .filter-panel {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .filter-group.full-width {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    
+    .filter-group label {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+    
+    .filter-group label i {
+      margin-right: 0.5rem;
+      color: #8B4513;
+    }
+    
+    .range-slider {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .range-slider input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e0e0e0;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    .range-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #8B4513;
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .range-values {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: #666;
+    }
+    
+    .range-inputs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .range-inputs input {
+      flex: 1;
+      width: 0;
+    }
+    
+    .certification-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .cert-tag {
+      padding: 0.375rem 0.75rem;
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .cert-tag.active {
+      background: #e8f5e9;
+      border-color: #4caf50;
+      color: #2e7d32;
+    }
+    
+    .cert-tag:hover {
+      background: #e0e0e0;
+    }
+    
+    .modern-input.small {
+      padding: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .marketplace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 0.5rem;
+    }
+    
+    .marketplace-title h2 {
+      margin: 0 0 0.25rem 0;
+      color: #333;
+    }
+    
+    .marketplace-title p {
+      margin: 0;
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    .marketplace-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .view-controls {
+      display: flex;
+      gap: 0.25rem;
+      background: #f5f5f5;
+      padding: 0.25rem;
+      border-radius: 8px;
+    }
+    
+    .view-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: transparent;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .view-btn.active {
+      background: white;
+      color: #8B4513;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .lots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .lots-grid.list-view {
+      grid-template-columns: 1fr;
+    }
+    
+    .lot-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .lot-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    
+    .lot-card.featured {
+      border: 2px solid #ffd700;
+    }
+    
+    .lot-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+    
+    .lot-badge.featured {
+      background: #ffd700;
+      color: #333;
+    }
+    
+    .lot-badge.organic {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .lot-badge.limited {
+      background: #ff9800;
+      color: white;
+    }
+    
+    .lot-badge.discount {
+      background: #f44336;
+      color: white;
+    }
+    
+    .lot-image {
+      height: 160px;
+      background: linear-gradient(135deg, #8B4513, #D2691E);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .image-placeholder {
+      color: rgba(255,255,255,0.3);
+      font-size: 3rem;
+    }
+    
+    .origin-flag {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .origin-flag img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .lot-content {
+      padding: 1.5rem;
+    }
+    
+    .lot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    
+    .lot-header h3 {
+      margin: 0;
+      color: #333;
+      font-size: 1.25rem;
+    }
+    
+    .lot-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: #fff8e1;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      color: #ff8f00;
+    }
+    
+    .lot-origin {
+      color: #666;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .lot-origin i {
+      color: #8B4513;
+    }
+    
+    .lot-details {
+      margin-bottom: 1rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .detail-row .label {
+      color: #666;
+    }
+    
+    .detail-row .value {
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .process-washed {
+      color: #2196f3;
+    }
+    
+    .process-natural {
+      color: #ff9800;
+    }
+    
+    .lot-price {
+      background: #f8f4f0;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .price-main {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .currency {
+      font-size: 1.125rem;
+      color: #8B4513;
+      font-weight: 600;
+    }
+    
+    .amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .unit {
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    .price-old {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+    }
+    
+    .price-total {
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    .lot-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .lot-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+    
+    .certifications {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .cert-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .cert-badge.traceable {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    
+    .cert-badge.premium {
+      background: #fff8e1;
+      color: #ff8f00;
+    }
+    
+    .cert-badge.organic {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .cert-badge.fairtrade {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+    
+    .cert-badge.rainforest {
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+    
+    .lot-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #888;
+      font-size: 0.75rem;
+    }
+    
+    .lot-meta i {
+      margin-right: 0.25rem;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .page-numbers {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .page-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background: white;
+      color: #666;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .page-btn.active {
+      background: #8B4513;
+      color: white;
+      border-color: #8B4513;
+    }
+    
+    .page-btn:hover:not(.active) {
+      background: #f5f5f5;
+    }
+    
+    .page-dots {
+      color: #999;
+      padding: 0 0.5rem;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalSlideIn 0.3s ease;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      color: #333;
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #666;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .close-modal:hover {
+      background: #f5f5f5;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    
+    .selected-lot {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f8f4f0;
+      border-radius: 8px;
+    }
+    
+    .lot-image-small {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #8B4513, #D2691E);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .lot-info h4 {
+      margin: 0 0 0.25rem 0;
+      color: #333;
+    }
+    
+    .lot-info p {
+      margin: 0;
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .price-comparison, .quantity-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    
+    .price-current {
+      color: #666;
+    }
+    
+    .price-difference {
+      font-weight: 600;
+    }
+    
+    .price-difference.positive {
+      color: #4caf50;
+    }
+    
+    .price-difference.negative {
+      color: #f44336;
+    }
+    
+    .price-difference.neutral {
+      color: #666;
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #666;
+      cursor: pointer;
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+    
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 1001;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      border-left: 4px solid #4caf50;
+    }
+    
+    .notification.error {
+      border-left: 4px solid #f44336;
+    }
+    
+    .notification.info {
+      border-left: 4px solid #2196f3;
+    }
+    
+    .notification i {
+      font-size: 1.25rem;
+    }
+    
+    .notification.success i {
+      color: #4caf50;
+    }
+    
+    .notification.error i {
+      color: #f44336;
+    }
+    
+    .notification.info i {
+      color: #2196f3;
+    }
+    
+    .notification span {
+      flex: 1;
+      font-size: 0.875rem;
+    }
+    
+    .notification-close {
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+    
+    /* User notification bell */
+    .user-notification {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #f44336;
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .lots-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .marketplace-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .marketplace-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .lots-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+  </style>
+  <script src="../js/common-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!window.ECAuth || !ECAuth.requireAuth({ redirectTo: '/login.html' })) {
+        return;
+      }
+      
+      // Update user profile display
+      var user = ECAuth.getUser();
+      if (user) {
+        var displayName = user.companyName || user.company_name || 
+                          ((user.firstName || user.first_name || '') + ' ' + (user.lastName || user.last_name || '')).trim() ||
+                          user.username || user.email || 'User';
+        var initials = displayName.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().substring(0, 2) || 'U';
+        
+        var nameEl = document.getElementById('user-display-name');
+        var avatarEl = document.getElementById('user-avatar');
+        if (nameEl) nameEl.textContent = displayName;
+        if (avatarEl) avatarEl.textContent = initials;
+      }
+      
+      var container = document.getElementById('marketplace-lots');
+      if (!container) return;
+
+      function renderLots(lots) {
+        if (!lots.length) {
+          // Keep any static demo cards if no live lots are present
+          return;
+        }
+        container.innerHTML = '';
+        lots.forEach(function (lot) {
+          var card = document.createElement('div');
+          card.className = 'lot-card';
+          card.setAttribute('data-lot-id', lot.id || '');
+
+          var priceDisplay = '—';
+          if (typeof lot.price_per_kg === 'number') {
+            priceDisplay = lot.price_per_kg.toFixed(2);
+          } else if (lot.price_per_kg) {
+            priceDisplay = String(lot.price_per_kg);
+          }
+          var currency = lot.currency || 'USD';
+
+          card.innerHTML = `
+            <div class="lot-image">
+              <div class="image-placeholder">
+                <i class="fas fa-mountain"></i>
+              </div>
+            </div>
+            <div class="lot-content">
+              <div class="lot-header">
+                <h3>${lot.lot_name || 'Unnamed lot'}</h3>
+                <div class="lot-rating">
+                  <i class="fas fa-star"></i>
+                  <span>${lot.cup_score || ''}</span>
+                </div>
+              </div>
+              <div class="lot-origin">
+                <i class="fas fa-map-marker-alt"></i>
+                ${lot.country || ''}${lot.region ? ' • ' + lot.region : ''}
+              </div>
+              <div class="lot-details">
+                <div class="detail-row">
+                  <span class="label">Variety:</span>
+                  <span class="value">${lot.variety || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Process:</span>
+                  <span class="value">${lot.process || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Available:</span>
+                  <span class="value">${lot.bags_available || 0} bags × ${lot.bag_size_kg || 60}kg</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Producer:</span>
+                  <span class="value">
+                    ${(lot.company_name || '').trim()
+                      || ((lot.first_name || '') + ' ' + (lot.last_name || '')).trim()
+                      || 'Farmer / Coop'}
+                  </span>
+                </div>
+              </div>
+              <div class="lot-price">
+                <div class="price-main">
+                  <span class="currency">${currency === 'USD' ? '$' : currency}</span>
+                  <span class="amount">${priceDisplay}</span>
+                  <span class="unit">/kg</span>
+                </div>
+              </div>
+              <div class="lot-actions">
+                <button class="btn btn-ghost watch-lot" data-lot-id="${lot.id || ''}">
+                  <i class="fas fa-eye"></i> Watch
+                </button>
+                <button class="btn btn-primary make-offer" data-lot-id="${lot.id || ''}">
+                  <i class="fas fa-handshake"></i> Make Offer
+                </button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      function loadMarketplaceLots() {
+        ECAuth.apiFetch('/api/marketplace/lots')
+          .then(function (data) {
+            var lots = (data && data.lots) || [];
+            renderLots(lots);
+          })
+          .catch(function (err) {
+            console.error('Failed to load live marketplace lots:', err);
+          });
+      }
+
+      loadMarketplaceLots();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Logistics & Shipment Tracking</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Logistics Page Specific Styles - Enhanced */
+    :root {
+      --logistics-info: #3b82f6;
+      --logistics-info-light: #dbeafe;
+      --logistics-warning: #f59e0b;
+      --logistics-warning-light: #fef3c7;
+      --logistics-success: #10b981;
+      --logistics-success-light: #d1fae5;
+      --logistics-danger: #ef4444;
+      --logistics-danger-light: #fee2e2;
+      --logistics-primary: #059669;
+      --logistics-primary-light: #d1fae5;
+      
+      --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --info-gradient: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+      --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      --danger-gradient: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+      
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --transition-all: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Enhanced Main Content */
+    .dashboard-content {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 2rem;
+    }
+
+    /* Enhanced Header */
+    .logistics-header {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .header-content {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-title-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--primary-gradient);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .header-subtitle {
+      color: #6b7280;
+      font-size: 1.125rem;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .logistics-filters {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+      min-width: 300px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.875rem 1rem 0.875rem 3rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      background: white;
+      font-size: 0.9375rem;
+      transition: var(--transition-all);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--logistics-primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 1.125rem;
+    }
+
+    /* Enhanced Stats Cards */
+    .shipment-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--logistics-primary);
+    }
+
+    .stat-card.transit::before { background: var(--info-gradient); }
+    .stat-card.pending::before { background: var(--warning-gradient); }
+    .stat-card.delivered::before { background: var(--logistics-success); }
+    .stat-card.delayed::before { background: var(--danger-gradient); }
+
+    .stat-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.transit {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.2) 100%);
+      color: var(--logistics-info);
+    }
+
+    .stat-icon.pending {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.2) 100%);
+      color: var(--logistics-warning);
+    }
+
+    .stat-icon.delivered {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+      color: var(--logistics-success);
+    }
+
+    .stat-icon.delayed {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.2) 100%);
+      color: var(--logistics-danger);
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .stat-trend {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-trend.up {
+      background: var(--logistics-success-light);
+      color: var(--logistics-success);
+    }
+
+    .stat-trend.down {
+      background: var(--logistics-danger-light);
+      color: var(--logistics-danger);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-subtext {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      background: #f3f4f6;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* Enhanced Quick Actions */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      border: 2px solid #e5e7eb;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--logistics-primary);
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary-gradient);
+    }
+
+    .action-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--logistics-primary);
+      font-size: 1.75rem;
+      margin: 0 auto 1.5rem;
+      transition: var(--transition-all);
+    }
+
+    .action-card:hover .action-icon {
+      transform: scale(1.1);
+      background: var(--primary-gradient);
+      color: white;
+    }
+
+    .action-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-description {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    /* Enhanced Timeline View */
+    .timeline-view {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-view::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--logistics-primary), var(--logistics-info));
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .timeline-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .timeline-title-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .timeline-track {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline-track::before {
+      content: '';
+      position: absolute;
+      left: 0.5rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e5e7eb;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 1.75rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      transition: var(--transition-all);
+    }
+
+    .timeline-item:hover {
+      transform: translateX(4px);
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -2rem;
+      top: 2.25rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #e5e7eb;
+      z-index: 1;
+      transition: var(--transition-all);
+    }
+
+    .timeline-item.active .timeline-marker {
+      background: var(--logistics-primary);
+      border-color: var(--logistics-primary);
+      box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.2);
+    }
+
+    .timeline-item.completed .timeline-marker {
+      background: var(--logistics-success);
+      border-color: var(--logistics-success);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+    }
+
+    .timeline-content {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: var(--transition-all);
+    }
+
+    .timeline-item:hover .timeline-content {
+      background: white;
+      border-color: var(--logistics-primary);
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.1);
+    }
+
+    .timeline-info h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-meta {
+      color: #6b7280;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .timeline-status {
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-ontime {
+      background: var(--logistics-success-light);
+      color: var(--logistics-success);
+      border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-delayed {
+      background: var(--logistics-danger-light);
+      color: var(--logistics-danger);
+      border: 2px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Enhanced Map Container */
+    .map-container {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .map-header {
+      padding: 1.75rem;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 150, 105, 0.02);
+    }
+
+    .map-placeholder {
+      height: 400px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .map-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .map-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .map-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .map-description {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    /* Enhanced Table Container */
+    .logistics-table-container {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .table-toolbar {
+      padding: 1.75rem;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(5, 150, 105, 0.02);
+    }
+
+    .table-toolbar h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.25rem;
+    }
+
+    .table-toolbar .text-light {
+      color: #6b7280;
+      font-size: 0.9375rem;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.25rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 10px;
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-all);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--logistics-primary);
+      color: var(--logistics-primary);
+    }
+
+    .filter-btn.active {
+      background: var(--logistics-primary);
+      color: white;
+      border-color: var(--logistics-primary);
+    }
+
+    /* Enhanced Table */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .logistics-table {
+      width: 100%;
+      min-width: 1200px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .logistics-table th {
+      background: #f8fafc;
+      padding: 1.5rem;
+      font-weight: 600;
+      color: #374151;
+      text-align: left;
+      border-bottom: 2px solid #e5e7eb;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logistics-table td {
+      padding: 1.5rem;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+      transition: var(--transition-all);
+    }
+
+    .logistics-table tbody tr {
+      transition: var(--transition-all);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .logistics-table tbody tr::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      transition: var(--transition-all);
+    }
+
+    .logistics-table tbody tr:hover::before {
+      background: var(--logistics-primary);
+    }
+
+    .logistics-table tbody tr:hover {
+      background: rgba(5, 150, 105, 0.02);
+    }
+
+    .logistics-table tbody tr:hover td {
+      border-color: rgba(5, 150, 105, 0.1);
+    }
+
+    .logistics-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Enhanced Shipment ID */
+    .shipment-id {
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+      font-weight: 700;
+      color: #111827;
+      font-size: 1.125rem;
+      margin-bottom: 0.375rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .shipment-id-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    /* Enhanced Status Badges */
+    .shipment-status {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-all);
+    }
+
+    .shipment-status:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-preparing {
+      background: var(--logistics-info-light);
+      color: var(--logistics-info);
+      border: 2px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .status-in-transit {
+      background: var(--logistics-warning-light);
+      color: var(--logistics-warning);
+      border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-at-port {
+      background: var(--logistics-primary-light);
+      color: var(--logistics-primary);
+      border: 2px solid rgba(5, 150, 105, 0.2);
+    }
+
+    .status-delivered {
+      background: var(--logistics-success-light);
+      color: var(--logistics-success);
+      border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-delayed {
+      background: var(--logistics-danger-light);
+      color: var(--logistics-danger);
+      border: 2px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Enhanced Route Visualization */
+    .route-cell {
+      min-width: 250px;
+    }
+
+    .route-steps {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .route-step {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #6b7280;
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .route-step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: transparent;
+      transition: var(--transition-all);
+    }
+
+    .route-step.active {
+      background: var(--logistics-primary-light);
+      color: var(--logistics-primary);
+      border-color: var(--logistics-primary);
+    }
+
+    .route-step.active::before {
+      background: var(--logistics-primary);
+    }
+
+    .route-step.completed {
+      background: var(--logistics-success-light);
+      color: var(--logistics-success);
+      border-color: var(--logistics-success);
+    }
+
+    .route-step.completed::before {
+      background: var(--logistics-success);
+    }
+
+    .route-arrow {
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
+    /* Enhanced ETA Cell */
+    .eta-cell {
+      position: relative;
+      min-width: 140px;
+    }
+
+    .eta-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .eta-value {
+      font-weight: 700;
+      color: #111827;
+      font-size: 1.125rem;
+    }
+
+    .eta-days {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .eta-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .eta-indicator.on-time {
+      background: var(--logistics-success);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .eta-indicator.delayed {
+      background: var(--logistics-danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Enhanced Actions */
+    .logistics-actions {
+      display: flex;
+      gap: 0.5rem;
+      opacity: 0.8;
+      transition: var(--transition-all);
+    }
+
+    tr:hover .logistics-actions {
+      opacity: 1;
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      position: relative;
+    }
+
+    .action-btn:hover {
+      background: var(--logistics-primary);
+      color: white;
+      border-color: var(--logistics-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .action-btn-primary {
+      background: var(--logistics-primary);
+      color: white;
+      border-color: var(--logistics-primary);
+    }
+
+    .action-btn-primary:hover {
+      background: #047857;
+      border-color: #047857;
+    }
+
+    /* Enhanced Shipment Cards */
+    .shipment-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .shipment-card {
+      background: white;
+      border-radius: 16px;
+      border: 2px solid #e5e7eb;
+      overflow: hidden;
+      transition: var(--transition-all);
+      position: relative;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .shipment-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--logistics-primary);
+    }
+
+    .shipment-card.delayed::before {
+      background: var(--danger-gradient);
+    }
+
+    .shipment-card.completed::before {
+      background: var(--logistics-success);
+    }
+
+    .shipment-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--logistics-primary);
+    }
+
+    .shipment-header {
+      padding: 1.75rem;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shipment-route {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .shipment-body {
+      padding: 1.75rem;
+    }
+
+    .shipment-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .detail-label {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #111827;
+      font-size: 1.125rem;
+    }
+
+    .progress-container {
+      margin-bottom: 1.75rem;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #f3f4f6;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    .shipment-footer {
+      padding: 1.75rem;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 150, 105, 0.02);
+    }
+
+    /* Enhanced Buttons */
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: var(--transition-all);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-ghost:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--logistics-primary);
+      color: var(--logistics-primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--logistics-primary);
+      color: white;
+    }
+
+    /* Enhanced Table Pagination */
+    .table-pagination {
+      padding: 1.75rem;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: white;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .pagination-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: var(--logistics-primary);
+      color: white;
+      border-color: var(--logistics-primary);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .page-number {
+      min-width: 40px;
+      height: 40px;
+      padding: 0 0.75rem;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      font-weight: 500;
+    }
+
+    .page-number:hover,
+    .page-number.active {
+      background: var(--logistics-primary);
+      color: white;
+      border-color: var(--logistics-primary);
+    }
+
+    /* Enhanced Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 2px dashed #e5e7eb;
+    }
+
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: #9ca3af;
+    }
+
+    .empty-state-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state-description {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .shipment-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .logistics-header {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .logistics-filters {
+        width: 100%;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 1.5rem;
+      }
+      
+      .shipment-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .table-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .shipment-details {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .logistics-table {
+        min-width: 1000px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shipment-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .logistics-filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-group {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .timeline-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .table-pagination {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Loading Animation */
+    .loading-shimmer {
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <!-- Enhanced Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-container">
+          <div class="logo-icon" style="background: var(--primary-gradient);">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">Equity Coffee</span>
+            <span class="logo-subtitle">Farmer Dashboard</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard-farmer.html">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-link" href="farmer-lots.html">
+          <i class="fas fa-seedling"></i>
+          <span>My Farm / Lots</span>
+        </a>
+        <a class="nav-link" href="farmer-offers.html">
+          <i class="fas fa-handshake"></i>
+          <span>Offers</span>
+        </a>
+        <a class="nav-link" href="farmer-contracts.html">
+          <i class="fas fa-file-contract"></i>
+          <span>Contracts</span>
+        </a>
+        <a class="nav-link" href="farmer-payments.html">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Payments</span>
+        </a>
+        <a class="nav-link active" href="farmer-logistics.html">
+          <i class="fas fa-truck"></i>
+          <span>Logistics</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="support-info">
+          <i class="fas fa-headset"></i>
+          <div>
+            <div>Need help?</div>
+            <div class="support-email">support@equitycoffee.com</div>
+          </div>
+        </div>
+        <a href="/profile.html" class="btn btn-ghost" style="width: 100%; justify-content: flex-start; margin-bottom: 0.5rem;">
+          <i class="fas fa-user-circle"></i>
+          <span>My Profile</span>
+        </a>
+        <button class="btn btn-ghost logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+      <!-- Enhanced Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebar-toggle" class="btn btn-ghost sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-title">
+            <h1>Logistics & Shipment Tracking</h1>
+            <div class="page-subtitle">Track your coffee from farm to port in real-time</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="user-menu">
+            <div class="user-info">
+              <span class="user-name">Kirinyaga Coop</span>
+              <span class="user-role">Verified Farmer</span>
+            </div>
+            <div class="user-avatar" style="background: var(--primary-gradient);">KC</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <!-- Enhanced Header -->
+        <div class="logistics-header">
+          <div class="header-content">
+            <div class="header-title">
+              <div class="header-title-icon">
+                <i class="fas fa-truck"></i>
+              </div>
+              <div>
+                <h2 style="margin: 0; font-size: inherit;">Logistics Dashboard</h2>
+                <div class="header-subtitle">
+                  Monitor shipments, track progress, and manage logistics for your coffee exports
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="logistics-filters">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search shipments, contracts, or locations..." id="shipment-search">
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Shipment Stats -->
+        <div class="shipment-stats">
+          <div class="stat-card transit">
+            <div class="stat-icon transit">
+              <i class="fas fa-shipping-fast"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                3
+                <span class="stat-trend up">
+                  <i class="fas fa-arrow-up"></i>
+                  25%
+                </span>
+              </div>
+              <div class="stat-label">
+                In Transit
+                <span class="stat-subtext">Active shipments</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card pending">
+            <div class="stat-icon pending">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                2
+                <span class="stat-trend down">
+                  <i class="fas fa-arrow-down"></i>
+                  33%
+                </span>
+              </div>
+              <div class="stat-label">
+                Pending
+                <span class="stat-subtext">Awaiting pickup</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card delivered">
+            <div class="stat-icon delivered">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                1
+                <span class="stat-trend up">
+                  <i class="fas fa-arrow-up"></i>
+                  100%
+                </span>
+              </div>
+              <div class="stat-label">
+                Delivered
+                <span class="stat-subtext">Completed this month</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card delayed">
+            <div class="stat-icon delayed">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                1
+                <span class="stat-trend down">
+                  <i class="fas fa-arrow-down"></i>
+                  50%
+                </span>
+              </div>
+              <div class="stat-label">
+                Delayed
+                <span class="stat-subtext">Requires attention</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Quick Actions -->
+        <div class="quick-actions-grid">
+          <div class="action-card" id="track-shipment">
+            <div class="action-icon">
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h3 class="action-title">Track Shipment</h3>
+            <p class="action-description">Real-time location tracking and updates</p>
+          </div>
+          
+          <div class="action-card" id="add-document">
+            <div class="action-icon">
+              <i class="fas fa-file-upload"></i>
+            </div>
+            <h3 class="action-title">Upload Documents</h3>
+            <p class="action-description">Shipping and customs documentation</p>
+          </div>
+          
+          <div class="action-card" id="new-shipment">
+            <div class="action-icon">
+              <i class="fas fa-plus"></i>
+            </div>
+            <h3 class="action-title">New Shipment</h3>
+            <p class="action-description">Schedule transport for your coffee</p>
+          </div>
+          
+          <div class="action-card" id="contact-logistics">
+            <div class="action-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3 class="action-title">Contact Support</h3>
+            <p class="action-description">24/7 logistics assistance</p>
+          </div>
+        </div>
+
+        <!-- Enhanced Active Shipment Timeline -->
+        <div class="timeline-view">
+          <div class="timeline-header">
+            <div class="timeline-title">
+              <div class="timeline-title-icon">
+                <i class="fas fa-road"></i>
+              </div>
+              <div>
+                <h3 style="margin: 0;">Active Shipment: SH-9821</h3>
+                <div style="font-size: 0.9375rem; color: #6b7280;">Kirinyaga → Mombasa Port</div>
+              </div>
+            </div>
+            <span class="timeline-status status-ontime">
+              <i class="fas fa-check-circle"></i>
+              On Time
+            </span>
+          </div>
+          <div class="timeline-track">
+            <div class="timeline-item completed">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-info">
+                  <h4>Harvest Complete</h4>
+                  <div class="timeline-meta">
+                    <span><i class="far fa-calendar"></i> Feb 15, 2025</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Kirinyaga Farm</span>
+                  </div>
+                </div>
+                <span class="badge badge-success">Completed</span>
+              </div>
+            </div>
+            
+            <div class="timeline-item completed">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-info">
+                  <h4>Quality Control</h4>
+                  <div class="timeline-meta">
+                    <span><i class="far fa-calendar"></i> Feb 18, 2025</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Processing Center</span>
+                  </div>
+                </div>
+                <span class="badge badge-success">Completed</span>
+              </div>
+            </div>
+            
+            <div class="timeline-item active">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-info">
+                  <h4>On Truck to Mill</h4>
+                  <div class="timeline-meta">
+                    <span><i class="far fa-calendar"></i> Feb 20, 2025</span>
+                    <span><i class="fas fa-map-marker-alt"></i> En route to Nyeri Mill</span>
+                  </div>
+                </div>
+                <span class="badge badge-info">In Progress</span>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-info">
+                  <h4>Milling Process</h4>
+                  <div class="timeline-meta">
+                    <span><i class="far fa-calendar"></i> Feb 25, 2025</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Nyeri Coffee Mill</span>
+                  </div>
+                </div>
+                <span class="badge badge-light">Scheduled</span>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-info">
+                  <h4>Port Delivery</h4>
+                  <div class="timeline-meta">
+                    <span><i class="far fa-calendar"></i> ETA: Mar 08, 2025</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Mombasa Port</span>
+                  </div>
+                </div>
+                <span class="badge badge-light">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Shipment Map -->
+        <div class="map-container">
+          <div class="map-header">
+            <div>
+              <h3>Shipment Route Map</h3>
+              <div style="font-size: 0.9375rem; color: #6b7280;">Real-time tracking of active shipments</div>
+            </div>
+            <button class="btn btn-outline">
+              <i class="fas fa-expand"></i>
+              Full Screen
+            </button>
+          </div>
+          <div class="map-placeholder">
+            <div class="map-overlay"></div>
+            <div class="map-content">
+              <div class="map-icon">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+              <h3 class="map-title">Live Shipment Tracking</h3>
+              <p class="map-description">Interactive map showing route from Kirinyaga to Mombasa Port</p>
+              <button class="btn btn-primary">
+                <i class="fas fa-play"></i>
+                View Live Map
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced All Shipments Table -->
+        <div class="logistics-table-container">
+          <div class="table-toolbar">
+            <div>
+              <h3>All Shipments</h3>
+              <div class="text-light">6 total shipments • 3 active • 2 pending</div>
+            </div>
+            <div class="table-actions">
+              <div class="filter-group">
+                <button class="filter-btn active">
+                  <i class="fas fa-layer-group"></i>
+                  All
+                </button>
+                <button class="filter-btn">
+                  <i class="fas fa-shipping-fast"></i>
+                  Active
+                </button>
+                <button class="filter-btn">
+                  <i class="fas fa-clock"></i>
+                  Pending
+                </button>
+                <button class="filter-btn">
+                  <i class="fas fa-check-circle"></i>
+                  Completed
+                </button>
+              </div>
+              <button class="btn btn-ghost">
+                <i class="fas fa-download"></i>
+                Export
+              </button>
+              <button class="btn btn-primary" id="new-shipment-btn">
+                <i class="fas fa-plus"></i>
+                New Shipment
+              </button>
+            </div>
+          </div>
+          
+          <div class="table-wrapper">
+            <table class="logistics-table">
+              <thead>
+                <tr>
+                  <th>Shipment ID</th>
+                  <th>Contract</th>
+                  <th>Lot</th>
+                  <th>Route</th>
+                  <th>Current Location</th>
+                  <th>ETA</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Shipment 1 -->
+                <tr data-id="SH-9821" data-status="in-transit" data-priority="high">
+                  <td>
+                    <div class="shipment-id">
+                      SH-9821
+                      <span class="shipment-id-badge">Priority</span>
+                    </div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">AB Lot 12 • 120 bags</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">EC-2025-014</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Berlin Roasters</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">AB Lot 12</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Grade AA • Washed</div>
+                  </td>
+                  <td class="route-cell">
+                    <div class="route-steps">
+                      <span class="route-step completed">Farm</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step completed">QC</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step active">Mill</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step">Port</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Nyeri Highway</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                      <i class="far fa-clock"></i>
+                      Last updated: 2 hours ago
+                    </div>
+                  </td>
+                  <td class="eta-cell">
+                    <div class="eta-container">
+                      <div class="eta-value">Mar 08, 2025</div>
+                      <div class="eta-days">
+                        <span class="eta-indicator on-time"></span>
+                        In 16 days
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="shipment-status status-in-transit">
+                      <i class="fas fa-truck"></i>
+                      In Transit
+                    </span>
+                  </td>
+                  <td>
+                    <div class="logistics-actions">
+                      <button class="action-btn" title="Track Shipment" data-id="SH-9821">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </button>
+                      <button class="action-btn" title="View Details" data-id="SH-9821">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Documents" data-id="SH-9821">
+                        <i class="fas fa-file-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Shipment 2 -->
+                <tr data-id="SH-9775" data-status="delivered" data-priority="low">
+                  <td>
+                    <div class="shipment-id">SH-9775</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Microlot 7 • 20 bags</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">EC-2025-009</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">UK Coffee Co.</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Microlot 7</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Specialty Grade • Natural</div>
+                  </td>
+                  <td class="route-cell">
+                    <div class="route-steps">
+                      <span class="route-step completed">Farm</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step completed">Warehouse</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step completed">Port</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Mombasa Port</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                      <i class="fas fa-check-circle"></i>
+                      Delivered: Feb 10, 2025
+                    </div>
+                  </td>
+                  <td class="eta-cell">
+                    <div class="eta-container">
+                      <div class="eta-value">Completed</div>
+                      <div class="eta-days">
+                        <span class="eta-indicator on-time"></span>
+                        On time
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="shipment-status status-delivered">
+                      <i class="fas fa-check-circle"></i>
+                      Delivered
+                    </span>
+                  </td>
+                  <td>
+                    <div class="logistics-actions">
+                      <button class="action-btn" title="View Details" data-id="SH-9775">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Documents" data-id="SH-9775">
+                        <i class="fas fa-file-alt"></i>
+                      </button>
+                      <button class="action-btn" title="Review" data-id="SH-9775">
+                        <i class="fas fa-star"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Shipment 3 -->
+                <tr data-id="SH-9845" data-status="delayed" data-priority="high">
+                  <td>
+                    <div class="shipment-id">
+                      SH-9845
+                      <span class="shipment-id-badge">Delayed</span>
+                    </div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">PB Lot 3 • 60 bags</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">EC-2025-015</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Nordic Import</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">PB Lot 3</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Grade PB • Washed</div>
+                  </td>
+                  <td class="route-cell">
+                    <div class="route-steps">
+                      <span class="route-step completed">Farm</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step">Processing</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step">Mill</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Kirinyaga Farm</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                      <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
+                      Awaiting pickup
+                    </div>
+                  </td>
+                  <td class="eta-cell">
+                    <div class="eta-container">
+                      <div class="eta-value">Mar 15, 2025</div>
+                      <div class="eta-days">
+                        <span class="eta-indicator delayed"></span>
+                        Pending
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="shipment-status status-delayed">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      Delayed
+                    </span>
+                  </td>
+                  <td>
+                    <div class="logistics-actions">
+                      <button class="action-btn" title="Contact Support" data-id="SH-9845">
+                        <i class="fas fa-headset"></i>
+                      </button>
+                      <button class="action-btn" title="View Details" data-id="SH-9845">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Update" data-id="SH-9845">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Shipment 4 -->
+                <tr data-id="SH-9790" data-status="at-port" data-priority="medium">
+                  <td>
+                    <div class="shipment-id">SH-9790</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Microlot 4 • 30 bags</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">EC-2025-011</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Tokyo Coffee Lab</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Microlot 4</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Specialty Grade • Honey</div>
+                  </td>
+                  <td class="route-cell">
+                    <div class="route-steps">
+                      <span class="route-step completed">Farm</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step active">Port</span>
+                      <span class="route-arrow">→</span>
+                      <span class="route-step">Ship</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #111827;">Mombasa Port</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                      <i class="fas fa-anchor"></i>
+                      Clearing customs
+                    </div>
+                  </td>
+                  <td class="eta-cell">
+                    <div class="eta-container">
+                      <div class="eta-value">Mar 02, 2025</div>
+                      <div class="eta-days">
+                        <span class="eta-indicator on-time"></span>
+                        In 10 days
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="shipment-status status-at-port">
+                      <i class="fas fa-anchor"></i>
+                      At Port
+                    </span>
+                  </td>
+                  <td>
+                    <div class="logistics-actions">
+                      <button class="action-btn" title="Track Shipment" data-id="SH-9790">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </button>
+                      <button class="action-btn" title="Documents" data-id="SH-9790">
+                        <i class="fas fa-file-alt"></i>
+                      </button>
+                      <button class="action-btn" title="Notify" data-id="SH-9790">
+                        <i class="fas fa-bell"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Enhanced Table Pagination -->
+          <div class="table-pagination">
+            <div style="color: #6b7280; font-size: 0.875rem;">
+              Showing 1-4 of 6 shipments
+            </div>
+            <div class="pagination-controls">
+              <button class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="page-number active">1</button>
+              <button class="page-number">2</button>
+              <button class="pagination-btn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Shipment Cards View -->
+        <div class="shipment-cards">
+          <!-- Card for SH-9821 -->
+          <div class="shipment-card">
+            <div class="shipment-header">
+              <div>
+                <div class="shipment-id">SH-9821</div>
+                <div class="shipment-route">
+                  <i class="fas fa-route"></i>
+                  Farm → Mill → Mombasa
+                </div>
+              </div>
+              <span class="shipment-status status-in-transit">
+                <i class="fas fa-truck"></i>
+                In Transit
+              </span>
+            </div>
+            <div class="shipment-body">
+              <div class="shipment-details">
+                <div class="detail-item">
+                  <span class="detail-label">Contract</span>
+                  <span class="detail-value">EC-2025-014</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Lot</span>
+                  <span class="detail-value">AB Lot 12</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Bags</span>
+                  <span class="detail-value">120 bags</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">ETA</span>
+                  <span class="detail-value">Mar 08, 2025</span>
+                </div>
+              </div>
+              <div class="progress-container">
+                <div class="progress-label">
+                  <span>Progress</span>
+                  <span style="font-weight: 700; color: #111827;">65%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 65%; background: var(--info-gradient);"></div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.9375rem; color: #6b7280;">
+                <i class="fas fa-map-marker-alt" style="color: var(--logistics-info);"></i>
+                <span>Current: Nyeri Highway, en route to mill</span>
+              </div>
+            </div>
+            <div class="shipment-footer">
+              <button class="btn btn-outline" data-id="SH-9821">
+                <i class="fas fa-map-marker-alt"></i>
+                Track
+              </button>
+              <button class="btn btn-primary" data-id="SH-9821">
+                <i class="fas fa-eye"></i>
+                View Details
+              </button>
+            </div>
+          </div>
+          
+          <!-- Card for SH-9845 -->
+          <div class="shipment-card delayed">
+            <div class="shipment-header">
+              <div>
+                <div class="shipment-id">SH-9845</div>
+                <div class="shipment-route">
+                  <i class="fas fa-route"></i>
+                  Farm → Processing → Mill
+                </div>
+              </div>
+              <span class="shipment-status status-delayed">
+                <i class="fas fa-exclamation-triangle"></i>
+                Delayed
+              </span>
+            </div>
+            <div class="shipment-body">
+              <div class="shipment-details">
+                <div class="detail-item">
+                  <span class="detail-label">Contract</span>
+                  <span class="detail-value">EC-2025-015</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Lot</span>
+                  <span class="detail-value">PB Lot 3</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Bags</span>
+                  <span class="detail-value">60 bags</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">ETA</span>
+                  <span class="detail-value">Mar 15, 2025</span>
+                </div>
+              </div>
+              <div class="progress-container">
+                <div class="progress-label">
+                  <span>Progress</span>
+                  <span style="font-weight: 700; color: #111827;">20%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 20%; background: var(--danger-gradient);"></div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.9375rem; color: #ef4444;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Awaiting pickup at Kirinyaga Farm</span>
+              </div>
+            </div>
+            <div class="shipment-footer">
+              <button class="btn btn-outline" data-id="SH-9845">
+                <i class="fas fa-headset"></i>
+                Support
+              </button>
+              <button class="btn btn-primary" data-id="SH-9845">
+                <i class="fas fa-edit"></i>
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Enhanced Shipment Modal -->
+  <div class="modal" id="shipment-modal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="header-title-icon">
+            <i class="fas fa-truck"></i>
+          </div>
+          <div>
+            <h3 id="modal-title" style="margin: 0; font-size: 1.5rem; font-weight: 700;">Shipment Details</h3>
+            <div id="modal-subtitle" style="font-size: 0.875rem; color: #6b7280;"></div>
+          </div>
+        </div>
+        <button class="modal-close" id="modal-close" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280;">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Shipment details will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">Close</button>
+        <button class="btn btn-primary" id="modal-confirm">Track Shipment</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced Logistics & Shipment Tracking JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize UI components
+      initQuickActions();
+      initSearch();
+      initFilters();
+      initActions();
+      initModal();
+      initRealTimeUpdates();
+      
+      // Show welcome notification
+      setTimeout(() => {
+        showNotification('Logistics Dashboard', 'You have 3 active shipments and 1 delayed shipment requiring attention.');
+      }, 1000);
+    });
+
+    // Quick Actions
+    function initQuickActions() {
+      // Track Shipment
+      document.getElementById('track-shipment').addEventListener('click', function() {
+        showNotification('Track Shipment', 'Opening real-time tracking interface...');
+        // In real app, this would open a tracking modal/map
+      });
+
+      // Upload Documents
+      document.getElementById('add-document').addEventListener('click', function() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf,.jpg,.png,.doc,.docx';
+        input.multiple = true;
+        input.onchange = () => {
+          showNotification('Documents Uploaded', 'Shipping documents have been uploaded successfully.');
+        };
+        input.click();
+      });
+
+      // New Shipment
+      document.getElementById('new-shipment').addEventListener('click', function() {
+        showShipmentModal('new');
+      });
+
+      // Contact Support
+      document.getElementById('contact-logistics').addEventListener('click', function() {
+        showNotification('Contact Support', 'Connecting to logistics support team...');
+      });
+
+      // New Shipment Button
+      document.getElementById('new-shipment-btn').addEventListener('click', function() {
+        showShipmentModal('new');
+      });
+    }
+
+    // Enhanced Search with Debounce
+    function initSearch() {
+      const searchInput = document.getElementById('shipment-search');
+      let searchTimeout;
+      
+      searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const searchTerm = this.value.toLowerCase().trim();
+          const rows = document.querySelectorAll('.logistics-table tbody tr');
+          const cards = document.querySelectorAll('.shipment-card');
+          let visibleCount = 0;
+          
+          // Search in table rows
+          rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const matches = searchTerm === '' || text.includes(searchTerm);
+            
+            row.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+          
+          // Search in cards
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            const matches = searchTerm === '' || text.includes(searchTerm);
+            
+            card.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+          
+          // Update count in table toolbar
+          const countElement = document.querySelector('.table-toolbar .text-light');
+          if (countElement) {
+            countElement.textContent = `Showing ${visibleCount} of 6 shipments`;
+          }
+        }, 300);
+      });
+    }
+
+    // Filter System
+    function initFilters() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const shipmentRows = document.querySelectorAll('.logistics-table tbody tr');
+      const shipmentCards = document.querySelectorAll('.shipment-card');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const filter = this.textContent.toLowerCase().trim();
+          
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          let visibleCount = 0;
+          
+          shipmentRows.forEach(row => {
+            const status = row.dataset.status;
+            let matches = false;
+            
+            switch(filter) {
+              case 'all':
+                matches = true;
+                break;
+              case 'active':
+                matches = status === 'in-transit' || status === 'at-port';
+                break;
+              case 'pending':
+                matches = status === 'delayed';
+                break;
+              case 'completed':
+                matches = status === 'delivered';
+                break;
+              default:
+                matches = true;
+            }
+            
+            row.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+          
+          shipmentCards.forEach(card => {
+            const status = card.classList.contains('delayed') ? 'delayed' : 
+                          card.classList.contains('completed') ? 'delivered' : 'in-transit';
+            let matches = false;
+            
+            switch(filter) {
+              case 'all':
+                matches = true;
+                break;
+              case 'active':
+                matches = status === 'in-transit';
+                break;
+              case 'pending':
+                matches = status === 'delayed';
+                break;
+              case 'completed':
+                matches = status === 'delivered';
+                break;
+              default:
+                matches = true;
+            }
+            
+            card.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+          
+          // Update count
+          const countElement = document.querySelector('.table-toolbar .text-light');
+          if (countElement) {
+            countElement.textContent = `Showing ${visibleCount} shipments`;
+          }
+        });
+      });
+    }
+
+    // Action Handlers
+    function initActions() {
+      // Row Click Handlers
+      document.querySelectorAll('.logistics-table tbody tr').forEach(row => {
+        row.addEventListener('click', function(e) {
+          if (!e.target.closest('.action-btn')) {
+            const shipmentId = this.dataset.id;
+            showShipmentModal(shipmentId);
+          }
+        });
+      });
+      
+      // Card Click Handlers
+      document.querySelectorAll('.shipment-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+          if (!e.target.closest('button')) {
+            const shipmentId = this.querySelector('.shipment-id').textContent;
+            showShipmentModal(shipmentId);
+          }
+        });
+      });
+      
+      // Action Buttons
+      document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const shipmentId = this.dataset.id || this.closest('tr')?.dataset.id;
+          const title = this.getAttribute('title');
+          
+          switch(title) {
+            case 'Track Shipment':
+              showNotification('Tracking Shipment', `Opening real-time tracking for ${shipmentId}`);
+              break;
+            case 'View Details':
+              showShipmentModal(shipmentId);
+              break;
+            case 'Documents':
+              showNotification('Documents', `Opening documents for ${shipmentId}`);
+              break;
+            case 'Contact Support':
+              showNotification('Contact Support', `Connecting support for ${shipmentId}`);
+              break;
+            case 'Update':
+              showNotification('Update Shipment', `Updating details for ${shipmentId}`);
+              break;
+            case 'Notify':
+              showNotification('Notification Sent', `Buyer notified about ${shipmentId}`);
+              break;
+            case 'Review':
+              showNotification('Add Review', `Adding review for ${shipmentId}`);
+              break;
+          }
+        });
+      });
+      
+      // Card Buttons
+      document.querySelectorAll('.shipment-card button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const shipmentId = this.dataset.id || this.closest('.shipment-card')?.querySelector('.shipment-id')?.textContent;
+          const text = this.textContent.trim();
+          
+          if (text.includes('Track')) {
+            showNotification('Tracking Shipment', `Opening real-time tracking for ${shipmentId}`);
+          } else if (text.includes('View')) {
+            showShipmentModal(shipmentId);
+          } else if (text.includes('Support')) {
+            showNotification('Contact Support', `Connecting support for ${shipmentId}`);
+          } else if (text.includes('Update')) {
+            showNotification('Update Shipment', `Updating details for ${shipmentId}`);
+          }
+        });
+      });
+    }
+
+    // Modal System
+    function initModal() {
+      const modal = document.getElementById('shipment-modal');
+      const modalClose = document.getElementById('modal-close');
+      const modalCancel = document.getElementById('modal-cancel');
+      
+      // Close modal
+      modalClose.addEventListener('click', () => modal.style.display = 'none');
+      modalCancel.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+      
+      // Confirm button
+      document.getElementById('modal-confirm').addEventListener('click', function() {
+        const shipmentId = this.dataset.shipmentId;
+        showNotification('Tracking Started', `Opening real-time tracking for ${shipmentId}`);
+        modal.style.display = 'none';
+      });
+    }
+
+    // Show Shipment Modal
+    function showShipmentModal(shipmentId) {
+      const modal = document.getElementById('shipment-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalSubtitle = document.getElementById('modal-subtitle');
+      const modalBody = document.getElementById('modal-body');
+      const modalConfirm = document.getElementById('modal-confirm');
+      
+      if (shipmentId === 'new') {
+        modalTitle.textContent = 'Schedule New Shipment';
+        modalSubtitle.textContent = 'Arrange transport for your coffee';
+        modalConfirm.textContent = 'Schedule Shipment';
+        modalConfirm.dataset.shipmentId = 'new';
+        
+        modalBody.innerHTML = `
+          <div style="display: grid; gap: 1.5rem;">
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Select Contract</label>
+              <select style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white;">
+                <option value="">Choose a contract...</option>
+                <option value="EC-2025-014">EC-2025-014 - AB Lot 12 (120 bags)</option>
+                <option value="EC-2025-015">EC-2025-015 - PB Lot 3 (60 bags)</option>
+              </select>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Pickup Date</label>
+                <input type="date" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Delivery Date</label>
+                <input type="date" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+              </div>
+            </div>
+            
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Transport Type</label>
+              <select style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white;">
+                <option value="">Select transport...</option>
+                <option value="truck">Truck (Land)</option>
+                <option value="container">Shipping Container</option>
+                <option value="air">Air Freight</option>
+              </select>
+            </div>
+            
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Special Instructions</label>
+              <textarea style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; min-height: 100px;" placeholder="Any special requirements..."></textarea>
+            </div>
+          </div>
+        `;
+      } else {
+        modalTitle.textContent = `Shipment ${shipmentId}`;
+        modalSubtitle.textContent = 'View shipment details and progress';
+        modalConfirm.textContent = 'Track Shipment';
+        modalConfirm.dataset.shipmentId = shipmentId;
+        
+        // Mock shipment data
+        const shipmentData = {
+          'SH-9821': {
+            contract: 'EC-2025-014',
+            buyer: 'Berlin Roasters',
+            lot: 'AB Lot 12',
+            quantity: '120 bags',
+            value: '$28,800',
+            status: 'In Transit',
+            progress: 65,
+            pickupDate: 'Feb 20, 2025',
+            eta: 'Mar 08, 2025',
+            currentLocation: 'Nyeri Highway',
+            lastUpdated: '2 hours ago',
+            route: 'Farm → Mill → Mombasa Port'
+          },
+          'SH-9845': {
+            contract: 'EC-2025-015',
+            buyer: 'Nordic Import',
+            lot: 'PB Lot 3',
+            quantity: '60 bags',
+            value: '$14,400',
+            status: 'Delayed',
+            progress: 20,
+            pickupDate: 'Scheduled',
+            eta: 'Mar 15, 2025',
+            currentLocation: 'Kirinyaga Farm',
+            lastUpdated: 'Yesterday',
+            route: 'Farm → Processing → Mill'
+          }
+        };
+        
+        const data = shipmentData[shipmentId] || {
+          contract: 'Unknown',
+          buyer: 'Unknown Buyer',
+          lot: 'Unknown Lot',
+          quantity: '0 bags',
+          value: '$0',
+          status: 'Unknown',
+          progress: 0,
+          pickupDate: 'Unknown',
+          eta: 'Unknown',
+          currentLocation: 'Unknown',
+          lastUpdated: 'Unknown',
+          route: 'Unknown'
+        };
+        
+        modalBody.innerHTML = `
+          <div style="display: grid; gap: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Contract</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.contract}</div>
+                <div style="font-size: 0.875rem; color: #6b7280;">${data.buyer}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Lot</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.lot}</div>
+                <div style="font-size: 0.875rem; color: #6b7280;">${data.quantity}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Value</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.value}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Route</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.route}</div>
+              </div>
+            </div>
+            
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="font-size: 0.875rem; color: #6b7280;">Progress</div>
+                <div style="font-weight: 700; color: #111827;">${data.progress}%</div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${data.progress}%; background: ${data.status === 'Delayed' ? 'var(--danger-gradient)' : 'var(--info-gradient)'};"></div>
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; background: #f8fafc; padding: 1.5rem; border-radius: 12px;">
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Current Location</div>
+                <div style="font-weight: 600; color: #111827;">${data.currentLocation}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Last Updated</div>
+                <div style="font-weight: 600; color: #111827;">${data.lastUpdated}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Pickup Date</div>
+                <div style="font-weight: 600; color: #111827;">${data.pickupDate}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">ETA</div>
+                <div style="font-weight: 600; color: #111827;">${data.eta}</div>
+              </div>
+            </div>
+            
+            <div>
+              <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">Shipment Status</div>
+              <span class="shipment-status status-${data.status.toLowerCase().replace(' ', '-')}">
+                <i class="fas fa-${data.status === 'In Transit' ? 'truck' : data.status === 'Delayed' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                ${data.status}
+              </span>
+            </div>
+          </div>
+        `;
+      }
+      
+      modal.style.display = 'flex';
+    }
+
+    // Real-time Updates Simulation
+    function initRealTimeUpdates() {
+      function updateShipmentProgress() {
+        const progressBars = document.querySelectorAll('.progress-fill');
+        const etaElements = document.querySelectorAll('.eta-days');
+        
+        progressBars.forEach(bar => {
+          const currentWidth = parseInt(bar.style.width) || 0;
+          if (currentWidth < 100) {
+            // Simulate progress increase
+            const increase = Math.random() * 5;
+            const newWidth = Math.min(100, currentWidth + increase);
+            bar.style.width = `${newWidth}%`;
+            
+            // Update corresponding ETA if progress is high
+            if (newWidth > 80) {
+              const row = bar.closest('tr');
+              if (row) {
+                const etaDays = row.querySelector('.eta-days');
+                if (etaDays && etaDays.textContent.includes('days')) {
+                  const days = parseInt(etaDays.textContent.match(/\d+/)[0]);
+                  if (days > 0) {
+                    etaDays.textContent = `In ${days - 1} days`;
+                  }
+                }
+              }
+            }
+          }
+        });
+        
+        // Update status badges occasionally
+        if (Math.random() < 0.1) {
+          const statusElements = document.querySelectorAll('.shipment-status');
+          if (statusElements.length > 0) {
+            const randomIndex = Math.floor(Math.random() * statusElements.length);
+            const element = statusElements[randomIndex];
+            const currentStatus = element.textContent.trim();
+            
+            if (currentStatus === 'Delayed' && Math.random() < 0.3) {
+              // Sometimes delayed shipments get back on track
+              element.textContent = 'In Transit';
+              element.className = 'shipment-status status-in-transit';
+              element.innerHTML = '<i class="fas fa-truck"></i> In Transit';
+              
+              // Update ETA indicator
+              const row = element.closest('tr');
+              if (row) {
+                const etaIndicator = row.querySelector('.eta-indicator');
+                if (etaIndicator) {
+                  etaIndicator.className = 'eta-indicator on-time';
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      // Update every 30 seconds
+      setInterval(updateShipmentProgress, 30000);
+      
+      // Simulate occasional status changes
+      setInterval(() => {
+        if (Math.random() < 0.05) { // 5% chance every minute
+          showNotification('Shipment Update', 'One of your shipments has been updated.');
+        }
+      }, 60000);
+    }
+
+    // Notification System
+    function showNotification(title, message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #10b981;
+        min-width: 300px;
+        max-width: 400px;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+        font-family: inherit;
+      `;
+      
+      notification.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+          <div style="width: 40px; height: 40px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.25rem;">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">${title}</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">${message}</div>
+          </div>
+          <button style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 1.125rem;">&times;</button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      notification.querySelector('button').addEventListener('click', () => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      });
+      
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }
+      }, 5000);
+      
+      // Add animation styles
+      if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (sidebarToggle) {
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+    }
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl/Cmd + F to focus search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        const searchInput = document.getElementById('shipment-search');
+        if (searchInput) searchInput.focus();
+      }
+      
+      // Ctrl/Cmd + N for new shipment
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        showShipmentModal('new');
+      }
+      
+      // Escape to close modal
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('shipment-modal');
+        if (modal.style.display === 'flex') {
+          modal.style.display = 'none';
+        }
+      }
+    });
+  </script>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

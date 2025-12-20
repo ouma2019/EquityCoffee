@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketplace | Equity Coffee</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body{background:#f8fafc;font-family:Inter,system-ui,sans-serif}
+    .top{background:#0f172a;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{height:34px}
+    .brand a{color:#fff;text-decoration:none;font-weight:900}
+    .wrap{max-width:1200px;margin:18px auto;padding:0 18px}
+    .filters{background:#fff;border-radius:14px;padding:14px;box-shadow:0 6px 14px rgba(0,0,0,.06);display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    label{display:block;font-size:.82rem;font-weight:800;color:#334155;margin:6px 0 6px}
+    input{width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:12px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#e9741e;color:#fff;border:none;font-weight:900;cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
+    .muted{color:#64748b}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#fff7ed;color:#9a3412;font-size:.8rem;font-weight:900}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">
+      <img src="images/logo.png" alt="Logo">
+      <a href="index.html">Marketplace</a>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a href="profile.html" style="color:#fff;text-decoration:none;font-weight:900"><i class="fa-solid fa-user"></i> Profile</a>
+      <button id="logoutBtn" class="btn" style="background:#334155"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h2 style="margin:0;color:#0f172a">Coffee Lots</h2>
+    <div class="muted" style="margin-top:6px">Published lots available on the marketplace.</div>
+
+    <div class="filters" style="margin-top:12px">
+      <div>
+        <label>Country</label>
+        <input id="fCountry" placeholder="Ethiopia" />
+      </div>
+      <div>
+        <label>Min cup score</label>
+        <input id="fMinScore" type="number" step="0.1" min="0" max="100" placeholder="85" />
+      </div>
+      <div>
+        <label>Max price (per kg)</label>
+        <input id="fMaxPrice" type="number" step="0.01" min="0" placeholder="10" />
+      </div>
+      <div style="grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+        <button id="btnApply" class="btn"><i class="fa-solid fa-filter"></i> Apply</button>
+        <button id="btnClear" class="btn" style="background:#0f172a"><i class="fa-solid fa-rotate-left"></i> Clear</button>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <script src="js/common-auth.js"></script>
+  <script>
+    if (!ECAuth.requireAuth({ redirectTo: "login.html" })) {}
+    document.getElementById("logoutBtn").addEventListener("click", () => ECAuth.logoutAndRedirect("login.html"));
+
+    const grid = document.getElementById("grid");
+    const fCountry = document.getElementById("fCountry");
+    const fMinScore = document.getElementById("fMinScore");
+    const fMaxPrice = document.getElementById("fMaxPrice");
+
+    function esc(s){return (s||"").toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+    function card(l){
+      const origin = `${esc(l.country||"")}${l.region ? " • "+esc(l.region) : ""}`;
+      const farmer = l.farmer_company || [l.farmer_first_name, l.farmer_last_name].filter(Boolean).join(" ") || "Farmer";
+      const price = l.price_per_kg ? `${l.price_per_kg} ${esc(l.currency||"USD")}/kg` : "Price on request";
+      const score = l.cup_score ? `${l.cup_score}` : "—";
+      return `
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div style="font-weight:900;color:#0f172a;font-size:1.05rem">${esc(l.lot_name)}</div>
+              <div class="muted" style="margin-top:4px">${origin}</div>
+            </div>
+            <span class="pill">${esc(l.process||"Process")}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <div><div class="muted" style="font-size:.82rem">Cup score</div><div style="font-weight:900">${esc(score)}</div></div>
+            <div><div class="muted" style="font-size:.82rem">Bags</div><div style="font-weight:900">${esc(l.bags_available||0)} × ${esc(l.bag_size_kg||60)}kg</div></div>
+            <div><div class="muted" style="font-size:.82rem">Price</div><div style="font-weight:900">${price}</div></div>
+            <div><div class="muted" style="font-size:.82rem">Farmer</div><div style="font-weight:900">${esc(farmer)}</div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function load() {
+      grid.innerHTML = `<div class="muted">Loading...</div>`;
+      const params = new URLSearchParams();
+      if (fCountry.value.trim()) params.set("country", fCountry.value.trim());
+      if (fMinScore.value) params.set("minScore", fMinScore.value);
+      if (fMaxPrice.value) params.set("maxPrice", fMaxPrice.value);
+
+      try{
+        const data = await ECAuth.apiFetch(`/api/marketplace/lots?${params.toString()}`);
+        const lots = data.lots || [];
+        grid.innerHTML = lots.length ? lots.map(card).join("") : `<div class="muted">No lots match your filters.</div>`;
+      }catch(e){
+        console.error(e);
+        grid.innerHTML = `<div class="muted">Failed to load marketplace: ${esc(e.message||"error")}</div>`;
+      }
+    }
+
+    document.getElementById("btnApply").addEventListener("click", load);
+    document.getElementById("btnClear").addEventListener("click", () => {fCountry.value="";fMinScore.value="";fMaxPrice.value="";load();});
+
+    load();
+  </script>
+</body>
+</html>

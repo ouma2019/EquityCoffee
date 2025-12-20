@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Roaster Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+  <header class="mobile-header">
+    <div class="logo">
+      <img src="../images/logo.png" alt="Equity Coffee">
+      <span>Roaster Dashboard</span>
+    </div>
+    <button class="nav-toggle" id="menu-toggle" aria-label="Toggle navigation">
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+    </button>
+  </header>
+  
+  <div class="overlay" id="overlay"></div>
+  
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+          <div class="logo-text">
+            <span class="logo-primary">Equity Coffee</span>
+            <span class="logo-secondary">Roaster Dashboard</span>
+          </div>
+        </div>
+        <button class="sidebar-close" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="sidebar-nav">
+        <li>
+          <a class="sidebar-link" href="/index.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link active" href="dashboard-roaster.html">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+            <span class="sidebar-badge">2</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-sourcing.html">
+            <i class="fas fa-search"></i>
+            <span>Sourcing</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-inventory.html">
+            <i class="fas fa-boxes"></i>
+            <span>Inventory</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-traceability.html">
+            <i class="fas fa-qrcode"></i>
+            <span>Traceability</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-consumers.html">
+            <i class="fas fa-users"></i>
+            <span>Consumers</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="/trader/trader-marketplace.html">
+            <i class="fas fa-store"></i>
+            <span>Marketplace</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="/directory.html">
+            <i class="fas fa-search-location"></i>
+            <span>Find Services</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">EC</div>
+          <div class="user-info">
+            <div class="user-name">Entercools Coffee</div>
+            <div class="user-email">admin@entercools.com</div>
+          </div>
+        </div>
+        <button class="btn-logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-header">
+            <h1>Roaster Dashboard</h1>
+            <p class="page-subtitle">Monitor sourcing, inventory, and consumer engagement</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-actions">
+            <button class="btn-icon" title="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </button>
+            <button class="btn-icon" title="Messages">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <button class="btn-icon" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+          <div class="topbar-divider"></div>
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <span class="stat-label">Online</span>
+              <span class="stat-indicator active"></span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- KPI Grid -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon">
+                <i class="fas fa-globe-americas"></i>
+              </div>
+              <div class="kpi-label">Active Origins</div>
+            </div>
+            <div class="kpi-value">9</div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+2 this month</span>
+            </div>
+            <div class="kpi-meta">In current menu</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <div class="kpi-label">Lots on Hand</div>
+            </div>
+            <div class="kpi-value">17</div>
+            <div class="kpi-trend">
+              <span>Total 420 bags</span>
+            </div>
+            <div class="kpi-meta">8,400 kg inventory</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon">
+                <i class="fas fa-qrcode"></i>
+              </div>
+              <div class="kpi-label">Consumer Scans</div>
+            </div>
+            <div class="kpi-value">3,240</div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+12% vs last month</span>
+            </div>
+            <div class="kpi-meta">QR scans (30 days)</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="kpi-label">Avg. Rating</div>
+            </div>
+            <div class="kpi-value">4.6<span class="kpi-unit">★</span></div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+0.2 this month</span>
+            </div>
+            <div class="kpi-meta">Customer satisfaction</div>
+          </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+          <!-- Left Column -->
+          <div class="content-column">
+            <!-- Traceability Panel -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-map-marked-alt"></i> Trace Your Lots</h2>
+                <p class="panel-subtitle">Quick access to any lot's journey from farm to cup</p>
+              </div>
+              <div class="panel-body">
+                <div class="trace-search">
+                  <div class="search-input-group">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                      type="text" 
+                      id="trace-lot-code"
+                      placeholder="Enter lot or trace code (e.g. EC-84KIR-2024)"
+                      class="search-input"
+                    />
+                    <button class="btn btn-primary">
+                      <i class="fas fa-external-link-alt"></i>
+                      Open Trace
+                    </button>
+                  </div>
+                  <div class="search-hints">
+                    <span class="hint-tag">Recent: EC-84KIR-2024</span>
+                    <span class="hint-tag">EC-ET-GD-24</span>
+                    <span class="hint-tag">EC-BL-HSE-01</span>
+                  </div>
+                </div>
+                
+                <div class="recent-traces">
+                  <h3 class="section-title">Recently Traced</h3>
+                  <div class="trace-list">
+                    <div class="trace-item">
+                      <div class="trace-lot">
+                        <div class="lot-name">Kirinyaga AB 12</div>
+                        <div class="lot-code">EC-84KIR-2024</div>
+                      </div>
+                      <div class="trace-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Kenya • Kirinyaga</span>
+                      </div>
+                      <div class="trace-product">Filter – Kirinyaga Bright</div>
+                      <div class="trace-time">
+                        <i class="far fa-clock"></i>
+                        12 min ago
+                      </div>
+                      <button class="btn-trace-action">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                    
+                    <div class="trace-item">
+                      <div class="trace-lot">
+                        <div class="lot-name">Gedeo Natural</div>
+                        <div class="lot-code">EC-ET-GD-24</div>
+                      </div>
+                      <div class="trace-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Ethiopia • Gedeo</span>
+                      </div>
+                      <div class="trace-product">Espresso – Yirgacheffe</div>
+                      <div class="trace-time">
+                        <i class="far fa-clock"></i>
+                        2 hours ago
+                      </div>
+                      <button class="btn-trace-action">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Consumer Engagement Panel -->
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2><i class="fas fa-chart-bar"></i> Consumer Engagement</h2>
+                  <p class="panel-subtitle">Product performance and customer feedback</p>
+                </div>
+                <div class="panel-actions">
+                  <select class="select-period">
+                    <option>Last 30 days</option>
+                    <option>Last 7 days</option>
+                    <option>Last quarter</option>
+                  </select>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Scans</th>
+                        <th>Avg Rating</th>
+                        <th>Feedback</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="product-info">
+                            <div class="product-name">Kenya Kirinyaga Bright</div>
+                            <div class="product-meta">LOT: EC-84KIR-2024</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="stat-cell">
+                            <span class="stat-value">1,240</span>
+                            <span class="stat-change positive">+8%</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="rating-cell">
+                            <div class="stars">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-value">4.7</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="feedback-cell">
+                            <span class="feedback-badge positive">18%</span>
+                            <span>comment rate</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            <button class="btn-icon-small" title="View Details">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Download Report">
+                              <i class="fas fa-download"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="product-info">
+                            <div class="product-name">Brazil Cerrado Classic</div>
+                            <div class="product-meta">LOT: CER-EST-21</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="stat-cell">
+                            <span class="stat-value">980</span>
+                            <span class="stat-change">±0%</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="rating-cell">
+                            <div class="stars">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="far fa-star"></i>
+                            </div>
+                            <span class="rating-value">4.4</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="feedback-cell">
+                            <span class="feedback-badge">9%</span>
+                            <span>comment rate</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            <button class="btn-icon-small" title="View Details">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Download Report">
+                              <i class="fas fa-download"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="content-column">
+            <!-- Inventory Snapshot Panel -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-box-open"></i> Inventory Snapshot</h2>
+                <p class="panel-subtitle">Current stock levels and coverage</p>
+              </div>
+              <div class="panel-body">
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Origin</th>
+                        <th>Lots</th>
+                        <th>Bags</th>
+                        <th>Coverage</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag kenya"></span>
+                            <span>Kenya</span>
+                          </div>
+                        </td>
+                        <td>3</td>
+                        <td>70</td>
+                        <td>
+                          <div class="coverage-indicator">
+                            <div class="coverage-bar">
+                              <div class="coverage-fill warning" style="width: 40%"></div>
+                            </div>
+                            <span>4 weeks</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge warning">Low Stock</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag brazil"></span>
+                            <span>Brazil</span>
+                          </div>
+                        </td>
+                        <td>4</td>
+                        <td>160</td>
+                        <td>
+                          <div class="coverage-indicator">
+                            <div class="coverage-bar">
+                              <div class="coverage-fill success" style="width: 80%"></div>
+                            </div>
+                            <span>8 weeks</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge success">In Stock</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag colombia"></span>
+                            <span>Colombia</span>
+                          </div>
+                        </td>
+                        <td>2</td>
+                        <td>40</td>
+                        <td>
+                          <div class="coverage-indicator">
+                            <div class="coverage-bar">
+                              <div class="coverage-fill warning" style="width: 30%"></div>
+                            </div>
+                            <span>3 weeks</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge warning">Reorder</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag ethiopia"></span>
+                            <span>Ethiopia</span>
+                          </div>
+                        </td>
+                        <td>3</td>
+                        <td>90</td>
+                        <td>
+                          <div class="coverage-indicator">
+                            <div class="coverage-bar">
+                              <div class="coverage-fill success" style="width: 60%"></div>
+                            </div>
+                            <span>6 weeks</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge success">In Stock</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="inventory-summary">
+                  <div class="summary-item">
+                    <div class="summary-label">Total Inventory Value</div>
+                    <div class="summary-value">$42,850</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Average Coverage</div>
+                    <div class="summary-value">5.2 weeks</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Needs Reorder</div>
+                    <div class="summary-value">3 lots</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Actions Panel -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+              </div>
+              <div class="panel-body">
+                <div class="quick-actions-grid">
+                  <button class="quick-action">
+                    <div class="action-icon primary">
+                      <i class="fas fa-plus"></i>
+                    </div>
+                    <span class="action-label">New Brief</span>
+                    <span class="action-description">Create sourcing request</span>
+                  </button>
+                  
+                  <button class="quick-action">
+                    <div class="action-icon success">
+                      <i class="fas fa-truck-loading"></i>
+                    </div>
+                    <span class="action-label">Receive Stock</span>
+                    <span class="action-description">Record shipment</span>
+                  </button>
+                  
+                  <button class="quick-action">
+                    <div class="action-icon warning">
+                      <i class="fas fa-fire"></i>
+                    </div>
+                    <span class="action-label">Record Roast</span>
+                    <span class="action-description">Update inventory</span>
+                  </button>
+                  
+                  <button class="quick-action">
+                    <div class="action-icon info">
+                      <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="action-label">View Reports</span>
+                    <span class="action-description">Performance analytics</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <!-- Footer -->
+      <footer class="dashboard-footer">
+        <div class="footer-content">
+          <span class="copyright">© 2024 Equity Coffee. All rights reserved.</span>
+          <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/dashboard.js"></script>
+  <script>
+    // Modern JavaScript for dashboard functionality
+    class ModernDashboard {
+      constructor() {
+        this.init();
+      }
+      
+      init() {
+        this.setupSidebar();
+        this.setupTheme();
+        this.setupInteractions();
+      }
+      
+      setupSidebar() {
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const sidebar = document.querySelector('.sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+        });
+        
+        sidebarClose.addEventListener('click', () => {
+          sidebar.classList.add('collapsed');
+        });
+        
+        // Close sidebar on mobile when clicking outside
+        document.addEventListener('click', (e) => {
+          if (window.innerWidth <= 768 && 
+              !sidebar.contains(e.target) && 
+              !sidebarToggle.contains(e.target) &&
+              !sidebar.classList.contains('collapsed')) {
+            sidebar.classList.add('collapsed');
+          }
+        });
+      }
+      
+      setupTheme() {
+        // Theme toggle functionality
+        const themeToggle = document.createElement('button');
+        themeToggle.className = 'btn-icon theme-toggle';
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        themeToggle.title = 'Toggle theme';
+        
+        themeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('dark-theme');
+          const icon = themeToggle.querySelector('i');
+          if (document.body.classList.contains('dark-theme')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+          } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+          }
+        });
+        
+        document.querySelector('.topbar-actions').prepend(themeToggle);
+      }
+      
+      setupInteractions() {
+        // Interactive elements
+        document.querySelectorAll('.trace-item').forEach(item => {
+          item.addEventListener('click', (e) => {
+            if (!e.target.closest('.btn-trace-action')) {
+              const lotCode = item.querySelector('.lot-code').textContent;
+              this.openTraceView(lotCode);
+            }
+          });
+        });
+        
+        // Quick actions
+        document.querySelectorAll('.quick-action').forEach(action => {
+          action.addEventListener('click', () => {
+            const label = action.querySelector('.action-label').textContent;
+            this.handleQuickAction(label);
+          });
+        });
+        
+        // KPI card animations
+        document.querySelectorAll('.kpi-card').forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-4px)';
+          });
+          
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+          });
+        });
+      }
+      
+      openTraceView(lotCode) {
+        console.log(`Opening trace view for ${lotCode}`);
+        // In production, this would navigate to traceability page
+        alert(`Opening traceability for ${lotCode}\nThis would show the complete journey from farm to cup.`);
+      }
+      
+      handleQuickAction(action) {
+        const actions = {
+          'New Brief': () => window.location.href = 'roaster-sourcing.html',
+          'Receive Stock': () => this.showModal('Receive Stock', 'Coming soon: Record new shipment functionality'),
+          'Record Roast': () => this.showModal('Record Roast', 'Coming soon: Update inventory after roasting'),
+          'View Reports': () => this.showModal('Reports', 'Coming soon: View detailed performance analytics')
+        };
+        
+        if (actions[action]) {
+          actions[action]();
+        }
+      }
+      
+      showModal(title, message) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+          <div class="modal">
+            <div class="modal-header">
+              <h3>${title}</h3>
+              <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>${message}</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary modal-close-btn">OK</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.body.removeChild(modal);
+          });
+        });
+      }
+    }
+    
+    // Initialize dashboard when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new ModernDashboard();
+    });
+  </script>
+  
+  <style>
+    /* Modern CSS Variables */
+    :root {
+      --primary-color: #8B4513;
+      --primary-light: #A0522D;
+      --secondary-color: #D4A76A;
+      --success-color: #10B981;
+      --warning-color: #F59E0B;
+      --danger-color: #EF4444;
+      --info-color: #3B82F6;
+      
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --bg-sidebar: #1F2937;
+      --bg-card: #FFFFFF;
+      
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      
+      --border-color: #E5E7EB;
+      --border-radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark-theme {
+      --bg-primary: #111827;
+      --bg-secondary: #1F2937;
+      --bg-card: #1F2937;
+      --text-primary: #F9FAFB;
+      --text-secondary: #D1D5DB;
+      --border-color: #374151;
+    }
+    
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease;
+    }
+    
+    /* Layout */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      color: var(--text-white);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+    
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .logo-primary {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    
+    .logo-secondary {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+    
+    .sidebar-close {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-white);
+      font-size: 1.25rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .sidebar-close:hover {
+      opacity: 1;
+    }
+    
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem 0;
+      list-style: none;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1.5rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-white);
+    }
+    
+    .sidebar-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-white);
+      border-left: 3px solid var(--secondary-color);
+    }
+    
+    .sidebar-link i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-badge {
+      margin-left: auto;
+      background: var(--secondary-color);
+      color: var(--bg-sidebar);
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 999px;
+    }
+    
+    .sidebar-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .user-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .user-email {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+    
+    .btn-logout {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    
+    .btn-logout:hover {
+      color: var(--text-white);
+    }
+    
+    /* Topbar */
+    .topbar {
+      height: 70px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+    
+    .sidebar-toggle:hover {
+      background: var(--border-color);
+    }
+    
+    .page-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.125rem;
+    }
+    
+    .page-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .btn-icon:hover {
+      background: var(--border-color);
+      transform: translateY(-1px);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--danger-color);
+      color: white;
+      font-size: 0.75rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .theme-toggle {
+      background: var(--secondary-color);
+      color: var(--text-white);
+    }
+    
+    .topbar-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-color);
+    }
+    
+    .quick-stats {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .quick-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .stat-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-light);
+    }
+    
+    .stat-indicator.active {
+      background: var(--success-color);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    
+    /* Main Content */
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .dashboard-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+    }
+    
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .kpi-card {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+    }
+    
+    .kpi-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .kpi-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+    }
+    
+    .kpi-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    
+    .kpi-value {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    
+    .kpi-unit {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .kpi-trend {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .kpi-trend.positive {
+      color: var(--success-color);
+    }
+    
+    .kpi-trend.negative {
+      color: var(--danger-color);
+    }
+    
+    .kpi-meta {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+    
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .content-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    /* Panels */
+    .panel {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .panel-header {
+      padding: 1.5rem 1.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .panel-header h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .panel-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .panel-body {
+      padding: 1.5rem;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 0.625rem 1.25rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-icon-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    
+    .btn-icon-small:hover {
+      background: var(--border-color);
+      color: var(--text-primary);
+    }
+    
+    /* Search */
+    .search-input-group {
+      position: relative;
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      pointer-events: none;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 0.875rem 1rem 0.875rem 3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: border-color 0.2s;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+    }
+    
+    .search-hints {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .hint-tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .hint-tag:hover {
+      background: var(--border-color);
+    }
+    
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .data-table thead {
+      background: var(--bg-secondary);
+    }
+    
+    .data-table th {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .data-table td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .data-table tbody tr {
+      transition: background-color 0.2s;
+    }
+    
+    .data-table tbody tr:hover {
+      background: var(--bg-secondary);
+    }
+    
+    /* Product Info */
+    .product-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-name {
+      font-weight: 500;
+    }
+    
+    .product-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Stats */
+    .stat-cell {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .stat-value {
+      font-weight: 600;
+    }
+    
+    .stat-change {
+      font-size: 0.75rem;
+    }
+    
+    .stat-change.positive {
+      color: var(--success-color);
+    }
+    
+    /* Ratings */
+    .rating-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .stars {
+      color: #FBBF24;
+    }
+    
+    .rating-value {
+      font-weight: 600;
+    }
+    
+    /* Status Badges */
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+    
+    .status-badge.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    .status-badge.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .status-badge.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger-color);
+    }
+    
+    /* Coverage Indicators */
+    .coverage-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .coverage-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .coverage-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+    
+    .coverage-fill.success {
+      background: var(--success-color);
+    }
+    
+    .coverage-fill.warning {
+      background: var(--warning-color);
+    }
+    
+    /* Country Flags */
+    .origin-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .country-flag {
+      width: 24px;
+      height: 18px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    
+    .country-flag.kenya {
+      background: linear-gradient(180deg, #000 33%, #FFF 33%, #FFF 66%, #060 66%, #060 0%, #C00 0%);
+    }
+    
+    .country-flag.brazil {
+      background: linear-gradient(180deg, #009B3A 50%, #FEDF00 50%);
+    }
+    
+    .country-flag.colombia {
+      background: linear-gradient(180deg, #FCD116 50%, #003893 50%);
+    }
+    
+    .country-flag.ethiopia {
+      background: linear-gradient(180deg, #078930 33%, #FEDD00 33%, #FEDD00 66%, #DA1219 66%);
+    }
+    
+    /* Quick Actions */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    
+    .quick-action {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-action:hover {
+      background: var(--border-color);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: white;
+    }
+    
+    .action-icon.primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    }
+    
+    .action-icon.success {
+      background: linear-gradient(135deg, var(--success-color), #34D399);
+    }
+    
+    .action-icon.warning {
+      background: linear-gradient(135deg, var(--warning-color), #FBBF24);
+    }
+    
+    .action-icon.info {
+      background: linear-gradient(135deg, var(--info-color), #60A5FA);
+    }
+    
+    .action-label {
+      font-weight: 600;
+    }
+    
+    .action-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Trace List */
+    .trace-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .trace-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto auto;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .trace-item:hover {
+      background: var(--border-color);
+    }
+    
+    .btn-trace-action {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    
+    .btn-trace-action:hover {
+      color: var(--primary-color);
+    }
+    
+    /* Inventory Summary */
+    .inventory-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .summary-item {
+      text-align: center;
+    }
+    
+    .summary-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .summary-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    /* Footer */
+    .dashboard-footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-card);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .copyright {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        height: 100vh;
+        left: -280px;
+        transform: none;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+      
+      .sidebar.open {
+        left: 0;
+      }
+      
+      .sidebar-close {
+        display: block;
+      }
+      
+      .sidebar-toggle {
+        display: block;
+      }
+      
+      .topbar {
+        padding: 0 1rem;
+      }
+      
+      .dashboard-main {
+        margin-left: 0;
+        padding-top: 70px;
+      }
+      
+      .dashboard-content {
+        padding: 1rem;
+      }
+      
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .inventory-summary {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      
+      .mobile-header {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(135deg, #5a3d2b, #8B4513);
+        z-index: 999;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+      }
+      
+      .mobile-header .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+      }
+      
+      .mobile-header .logo img {
+        height: 36px;
+        border-radius: 6px;
+      }
+      
+      .mobile-header .logo span {
+        font-weight: 600;
+      }
+      
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+      
+      .toggle-line {
+        width: 24px;
+        height: 2px;
+        background: white;
+        transition: all 0.3s ease;
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(2) {
+        opacity: 0;
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+      
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      
+      .overlay.active {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-header { display: none; }
+      .nav-toggle { display: none; }
+      .overlay { display: none !important; }
+    }
+  </style>
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('overlay');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (menuToggle && sidebar && overlay) {
+        menuToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('active');
+          menuToggle.classList.toggle('active');
+        });
+        
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          menuToggle.classList.remove('active');
+        });
+      }
+    });
+  </script>
+  <script src="../js/common-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!window.ECAuth || !ECAuth.requireAuth({ redirectTo: '/login.html' })) return;
+      var user = ECAuth.getUser();
+      if (user) {
+        var displayName = user.companyName || user.company_name || 
+                          ((user.firstName || user.first_name || '') + ' ' + (user.lastName || user.last_name || '')).trim() ||
+                          user.username || 'User';
+        var email = user.email || '';
+        var initials = displayName.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().substring(0, 2) || 'U';
+        document.querySelectorAll('.user-name, #user-name').forEach(function(el) { el.textContent = displayName; });
+        document.querySelectorAll('.user-email, #user-email').forEach(function(el) { el.textContent = email; });
+        document.querySelectorAll('.avatar, .user-avatar').forEach(function(el) { el.textContent = initials; });
+      }
+    });
+  </script>
+</body>
+</html>

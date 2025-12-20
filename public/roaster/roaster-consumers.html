@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consumers – Equity Coffee Roaster</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+          <div class="logo-text">
+            <span class="logo-primary">Equity Coffee</span>
+            <span class="logo-secondary">Consumer Insights</span>
+          </div>
+        </div>
+        <button class="sidebar-close" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="sidebar-nav">
+        <li>
+          <a class="sidebar-link" href="dashboard-roaster.html">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-sourcing.html">
+            <i class="fas fa-search"></i>
+            <span>Sourcing</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-inventory.html">
+            <i class="fas fa-boxes"></i>
+            <span>Inventory</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-traceability.html">
+            <i class="fas fa-qrcode"></i>
+            <span>Traceability</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link active" href="roaster-consumers.html">
+            <i class="fas fa-users"></i>
+            <span>Consumers</span>
+            <span class="sidebar-badge pulse">24</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">DC</div>
+          <div class="user-info">
+            <div class="user-name">Deep Concept Roastery</div>
+            <div class="user-email">insights@deepconcept.com</div>
+          </div>
+        </div>
+        <button class="btn-logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-header">
+            <h1><span class="page-title-text">Consumer Insights</span> 
+              <span class="live-indicator">
+                <i class="fas fa-circle"></i>
+                <span>Live</span>
+              </span>
+            </h1>
+            <p class="page-subtitle">Real-time tracking of QR scans, ratings, and customer engagement</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-actions">
+            <div class="filter-group">
+              <select class="select-filter" id="timeFilter">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last quarter</option>
+                <option value="365">Year to date</option>
+              </select>
+            </div>
+            <button class="btn-icon" id="exportBtn" title="Export Data">
+              <i class="fas fa-file-export"></i>
+            </button>
+            <button class="btn-icon" id="refreshBtn" title="Refresh">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+          <div class="topbar-divider"></div>
+          <div class="quick-stats">
+            <div class="quick-stat live-stat">
+              <div class="stat-icon">
+                <i class="fas fa-qrcode"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value" id="liveScans">142</div>
+                <div class="stat-label">Active Today</div>
+              </div>
+              <div class="stat-indicator pulse"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Consumer Overview -->
+        <section class="kpi-grid animated-fade-in">
+          <div class="kpi-card hover-lift">
+            <div class="kpi-header">
+              <div class="kpi-icon pulse-bg" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                <i class="fas fa-qrcode"></i>
+              </div>
+              <div class="kpi-label">QR Scans (30d)</div>
+              <button class="kpi-info" title="View details">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            <div class="kpi-value">3,240</div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+12% vs last month</span>
+            </div>
+            <div class="kpi-progress">
+              <div class="progress-bar" style="width: 85%">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-label">85% of target</div>
+            </div>
+          </div>
+          
+          <div class="kpi-card hover-lift">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="kpi-label">Avg. Product Rating</div>
+              <button class="kpi-info" title="View details">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            <div class="kpi-value">4.6<span class="kpi-unit">★</span></div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+0.2 this month</span>
+            </div>
+            <div class="rating-distribution">
+              <div class="rating-bar">
+                <span class="rating-label">5★</span>
+                <div class="rating-fill" style="width: 68%"></div>
+                <span class="rating-percent">68%</span>
+              </div>
+              <div class="rating-bar">
+                <span class="rating-label">4★</span>
+                <div class="rating-fill" style="width: 25%"></div>
+                <span class="rating-percent">25%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="kpi-card hover-lift">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                <i class="fas fa-globe-americas"></i>
+              </div>
+              <div class="kpi-label">Top Market</div>
+              <button class="kpi-info" title="View details">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            <div class="kpi-value interactive">
+              <div class="country-flag">🇦🇪</div>
+              <span>UAE</span>
+            </div>
+            <div class="kpi-trend">
+              <span>Dubai, Abu Dhabi, Sharjah</span>
+            </div>
+            <div class="market-breakdown">
+              <div class="breakdown-item">
+                <span class="breakdown-city">Dubai</span>
+                <span class="breakdown-value">58%</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-city">Abu Dhabi</span>
+                <span class="breakdown-value">28%</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-city">Sharjah</span>
+                <span class="breakdown-value">14%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="kpi-card hover-lift">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                <i class="fas fa-comment-alt"></i>
+              </div>
+              <div class="kpi-label">Comment Rate</div>
+              <button class="kpi-info" title="View details">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            <div class="kpi-value">14.3<span class="kpi-unit">%</span></div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+2.1% vs last month</span>
+            </div>
+            <div class="sentiment-analysis">
+              <div class="sentiment positive">
+                <i class="fas fa-smile"></i>
+                <span>78% Positive</span>
+              </div>
+              <div class="sentiment neutral">
+                <i class="fas fa-meh"></i>
+                <span>18% Neutral</span>
+              </div>
+              <div class="sentiment negative">
+                <i class="fas fa-frown"></i>
+                <span>4% Negative</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+          <!-- Left Column -->
+          <div class="content-column">
+            <!-- Product Performance Chart -->
+            <div class="panel slide-in-left">
+              <div class="panel-header">
+                <div>
+                  <h2><i class="fas fa-chart-line"></i> Product Performance</h2>
+                  <p class="panel-subtitle">Scan trends and ratings comparison</p>
+                </div>
+                <div class="panel-actions">
+                  <div class="view-toggle">
+                    <button class="view-btn active" data-view="chart">
+                      <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="view-btn" data-view="table">
+                      <i class="fas fa-table"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="chart-container" id="productChart">
+                  <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="table-container" id="productTable" style="display: none;">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Scans</th>
+                        <th>Rating</th>
+                        <th>Engagement</th>
+                        <th>Growth</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-row hover-effect">
+                        <td>
+                          <div class="product-info">
+                            <div class="product-badge" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"></div>
+                            <div>
+                              <div class="product-name">Kenya Kirinyaga Bright</div>
+                              <div class="product-meta">Filter • LOT: EC-84KIR-2024</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="stat-cell">
+                            <span class="stat-value">1,280</span>
+                            <div class="stat-progress" style="width: 90%"></div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="rating-display">
+                            <div class="stars">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-value">4.7</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="engagement-score high">
+                            <div class="score-dot"></div>
+                            <span>High</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="growth-indicator positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8%</span>
+                          </div>
+                        </td>
+                      </tr>
+                      <!-- More rows would be dynamically loaded -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Recent Feedback with Sentiment -->
+            <div class="panel slide-in-left delayed">
+              <div class="panel-header">
+                <h2><i class="fas fa-comment-dots"></i> Recent Feedback</h2>
+                <div class="panel-actions">
+                  <div class="sentiment-filter">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="positive">
+                      <i class="fas fa-smile"></i>
+                      Positive
+                    </button>
+                    <button class="filter-btn" data-filter="neutral">
+                      <i class="fas fa-meh"></i>
+                      Neutral
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="feedback-stream">
+                  <!-- Feedback items would be dynamically loaded -->
+                  <div class="feedback-item positive slide-in" data-sentiment="positive">
+                    <div class="feedback-avatar">
+                      <div class="avatar-initials">SM</div>
+                    </div>
+                    <div class="feedback-content">
+                      <div class="feedback-header">
+                        <div class="feedback-rating">
+                          <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <span class="rating-value">5.0</span>
+                        </div>
+                        <div class="feedback-meta">
+                          <span class="feedback-product">Kenya Kirinyaga Bright</span>
+                          •
+                          <span class="feedback-time">2 hours ago</span>
+                        </div>
+                      </div>
+                      <div class="feedback-text">
+                        "Absolutely stunning coffee! The blackcurrant notes are incredible. Best Kenyan I've had this year."
+                      </div>
+                      <div class="feedback-footer">
+                        <span class="feedback-user">Sarah M. • Dubai</span>
+                        <div class="feedback-actions">
+                          <button class="action-btn like-btn" title="Helpful">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">12</span>
+                          </button>
+                          <button class="action-btn reply-btn" title="Reply">
+                            <i class="far fa-comment"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- More feedback items -->
+                </div>
+                <div class="load-more">
+                  <button class="btn btn-ghost" id="loadMoreFeedback">
+                    <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+                    Load More Feedback
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="content-column">
+            <!-- Interactive Map -->
+            <div class="panel slide-in-right">
+              <div class="panel-header">
+                <h2><i class="fas fa-map-marked-alt"></i> Geographic Distribution</h2>
+                <div class="panel-actions">
+                  <select class="select-metric" id="mapMetric">
+                    <option value="scans">By Scans</option>
+                    <option value="rating">By Rating</option>
+                    <option value="engagement">By Engagement</option>
+                  </select>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="interactive-map">
+                  <div class="map-container">
+                    <div class="map-visualization">
+                      <!-- This would be replaced with a real SVG map in production -->
+                      <div class="map-region" data-country="UAE" data-value="1362" data-rating="4.7" 
+                           style="top: 60%; left: 65%; width: 40px; height: 40px;">
+                        <div class="map-marker pulse">
+                          <i class="fas fa-map-pin"></i>
+                        </div>
+                        <div class="map-tooltip">
+                          <strong>United Arab Emirates</strong><br>
+                          <span>1,362 scans (42%)</span><br>
+                          <span>4.7★ average rating</span>
+                        </div>
+                      </div>
+                      <!-- More regions -->
+                    </div>
+                    <div class="map-legend">
+                      <div class="legend-item">
+                        <div class="legend-color high"></div>
+                        <span>High Engagement</span>
+                      </div>
+                      <div class="legend-item">
+                        <div class="legend-color medium"></div>
+                        <span>Medium Engagement</span>
+                      </div>
+                      <div class="legend-item">
+                        <div class="legend-color low"></div>
+                        <span>Low Engagement</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="country-list">
+                    <!-- Country items would be dynamically loaded -->
+                    <div class="country-item active" data-country="UAE">
+                      <div class="country-rank">1</div>
+                      <div class="country-flag">🇦🇪</div>
+                      <div class="country-info">
+                        <div class="country-name">United Arab Emirates</div>
+                        <div class="country-stats">
+                          <div class="stat-item">
+                            <i class="fas fa-qrcode"></i>
+                            <span>1,362 scans</span>
+                          </div>
+                          <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <span>4.7★</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="country-growth positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8.2%</span>
+                      </div>
+                    </div>
+                    <!-- More country items -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Real-time Analytics -->
+            <div class="panel slide-in-right delayed">
+              <div class="panel-header">
+                <h2><i class="fas fa-bolt"></i> Real-time Analytics</h2>
+                <div class="live-updates">
+                  <span class="update-indicator">
+                    <i class="fas fa-circle"></i>
+                    <span>Updates every 30s</span>
+                  </span>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="realtime-metrics">
+                  <div class="metric-card realtime">
+                    <div class="metric-value">
+                      <div id="currentScans">142</div>
+                      <div class="metric-label">Scans Today</div>
+                    </div>
+                    <div class="metric-sparkline">
+                      <canvas id="todayChart" width="100" height="40"></canvas>
+                    </div>
+                  </div>
+                  
+                  <div class="metric-card realtime">
+                    <div class="metric-value">
+                      <div id="currentRating">4.6</div>
+                      <div class="metric-label">Avg Rating</div>
+                    </div>
+                    <div class="metric-trend positive">
+                      <i class="fas fa-arrow-up"></i>
+                      <span>+0.1 today</span>
+                    </div>
+                  </div>
+                  
+                  <div class="metric-card realtime">
+                    <div class="metric-value">
+                      <div id="activeUsers">89</div>
+                      <div class="metric-label">Active Users</div>
+                    </div>
+                    <div class="metric-change">
+                      <span class="change-indicator positive">+12</span>
+                      <span class="change-label">vs yesterday</span>
+                    </div>
+                  </div>
+                  
+                  <div class="metric-card realtime">
+                    <div class="metric-value">
+                      <div id="feedbackRate">18%</div>
+                      <div class="metric-label">Feedback Rate</div>
+                    </div>
+                    <div class="metric-gauge">
+                      <div class="gauge-bar" style="width: 18%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="realtime-feed">
+                  <h4>Recent Activity</h4>
+                  <div class="activity-stream">
+                    <div class="activity-item">
+                      <div class="activity-icon scan">
+                        <i class="fas fa-qrcode"></i>
+                      </div>
+                      <div class="activity-content">
+                        <div class="activity-text">
+                          <strong>New scan</strong> from Dubai
+                        </div>
+                        <div class="activity-time">Just now</div>
+                      </div>
+                      <div class="activity-product">
+                        Kenya Kirinyaga
+                      </div>
+                    </div>
+                    <!-- More activity items -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Dynamic Tooltip -->
+  <div class="dynamic-tooltip" id="tooltip"></div>
+
+  <!-- Floating Action Button -->
+  <button class="fab" id="quickActions">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Quick Actions Menu -->
+  <div class="quick-actions-menu" id="actionsMenu">
+    <div class="action-item" data-action="new-report">
+      <i class="fas fa-chart-pie"></i>
+      <span>New Report</span>
+    </div>
+    <div class="action-item" data-action="add-filter">
+      <i class="fas fa-filter"></i>
+      <span>Add Filter</span>
+    </div>
+    <div class="action-item" data-action="export-all">
+      <i class="fas fa-file-export"></i>
+      <span>Export All</span>
+    </div>
+    <div class="action-item" data-action="notifications">
+      <i class="fas fa-bell"></i>
+      <span>Notifications</span>
+      <span class="badge">3</span>
+    </div>
+  </div>
+
+  <script src="../js/dashboard.js"></script>
+  <script>
+    class DynamicConsumersDashboard {
+      constructor() {
+        this.initCharts();
+        this.setupInteractions();
+        this.startLiveUpdates();
+        this.setupEventListeners();
+      }
+      
+      initCharts() {
+        // Performance Chart
+        this.performanceChart = new Chart(
+          document.getElementById('performanceChart'),
+          {
+            type: 'bar',
+            data: {
+              labels: ['Kenya Kirinyaga', 'Gedeo Natural', 'House Espresso', 'Brazil Cerrado'],
+              datasets: [
+                {
+                  label: 'QR Scans',
+                  data: [1280, 960, 740, 520],
+                  backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                  borderRadius: 8,
+                  borderSkipped: false,
+                },
+                {
+                  label: 'Avg Rating',
+                  data: [4.7, 4.5, 4.4, 4.3],
+                  backgroundColor: 'rgba(251, 191, 36, 0.8)',
+                  borderRadius: 8,
+                  borderSkipped: false,
+                  yAxisID: 'y1'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              interaction: {
+                intersect: false,
+                mode: 'index',
+              },
+              plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      let label = context.dataset.label || '';
+                      if (label) {
+                        label += ': ';
+                      }
+                      if (context.datasetIndex === 0) {
+                        label += context.parsed.y.toLocaleString() + ' scans';
+                      } else {
+                        label += context.parsed.y + '★';
+                      }
+                      return label;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'QR Scans'
+                  }
+                },
+                y1: {
+                  position: 'right',
+                  beginAtZero: true,
+                  max: 5,
+                  title: {
+                    display: true,
+                    text: 'Rating'
+                  },
+                  grid: {
+                    drawOnChartArea: false,
+                  },
+                }
+              }
+            }
+          }
+        );
+        
+        // Sparkline charts for real-time metrics
+        this.initSparklineCharts();
+      }
+      
+      initSparklineCharts() {
+        // Today's scan sparkline
+        const chartEl = document.getElementById('todayChart');
+        if (!chartEl || !chartEl.getContext) {
+          console.warn('Chart canvas not found, skipping sparkline');
+          return;
+        }
+        const ctx = chartEl.getContext('2d');
+        this.todayChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: Array.from({length: 12}, (_, i) => `${i*2}h`),
+            datasets: [{
+              data: [12, 19, 15, 22, 18, 25, 30, 28, 32, 36, 34, 42],
+              borderColor: '#8B5CF6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: false
+              }
+            },
+            scales: {
+              x: { display: false },
+              y: { display: false }
+            },
+            elements: {
+              point: {
+                radius: 0
+              }
+            }
+          }
+        });
+      }
+      
+      setupInteractions() {
+        // View toggle for product performance
+        document.querySelectorAll('.view-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (view === 'chart') {
+              document.getElementById('productChart').style.display = 'block';
+              document.getElementById('productTable').style.display = 'none';
+              this.performanceChart.resize();
+            } else {
+              document.getElementById('productChart').style.display = 'none';
+              document.getElementById('productTable').style.display = 'block';
+            }
+          });
+        });
+        
+        // Sentiment filter for feedback
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.querySelectorAll('.feedback-item').forEach(item => {
+              if (filter === 'all' || item.dataset.sentiment === filter) {
+                item.style.display = 'flex';
+              } else {
+                item.style.display = 'none';
+              }
+            });
+          });
+        });
+        
+        // Interactive map regions
+        document.querySelectorAll('.map-region').forEach(region => {
+          region.addEventListener('mouseenter', (e) => {
+            const tooltip = region.querySelector('.map-tooltip');
+            const rect = region.getBoundingClientRect();
+            tooltip.style.display = 'block';
+            tooltip.style.left = `${rect.left}px`;
+            tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+          });
+          
+          region.addEventListener('mouseleave', () => {
+            const tooltip = region.querySelector('.map-tooltip');
+            tooltip.style.display = 'none';
+          });
+        });
+        
+        // Country list selection
+        document.querySelectorAll('.country-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const country = item.dataset.country;
+            document.querySelectorAll('.country-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            
+            // Highlight corresponding map region
+            document.querySelectorAll('.map-region').forEach(region => {
+              if (region.dataset.country === country) {
+                region.querySelector('.map-marker').classList.add('active');
+              } else {
+                region.querySelector('.map-marker').classList.remove('active');
+              }
+            });
+          });
+        });
+        
+        // Load more feedback
+        document.getElementById('loadMoreFeedback').addEventListener('click', async () => {
+          const btn = document.getElementById('loadMoreFeedback');
+          const spinner = btn.querySelector('.fa-spinner');
+          
+          spinner.style.display = 'inline-block';
+          btn.disabled = true;
+          
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Add more feedback items
+          const feedbackStream = document.querySelector('.feedback-stream');
+          const newItem = document.querySelector('.feedback-item').cloneNode(true);
+          newItem.querySelector('.feedback-time').textContent = 'Just now';
+          newItem.querySelector('.feedback-text').textContent = 'Another satisfied customer!';
+          newItem.classList.add('slide-in');
+          feedbackStream.appendChild(newItem);
+          
+          spinner.style.display = 'none';
+          btn.disabled = false;
+        });
+        
+        // Quick actions menu
+        document.getElementById('quickActions').addEventListener('click', (e) => {
+          const menu = document.getElementById('actionsMenu');
+          menu.classList.toggle('show');
+          e.stopPropagation();
+        });
+        
+        document.querySelectorAll('.action-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const action = item.dataset.action;
+            this.handleQuickAction(action);
+          });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', () => {
+          document.getElementById('actionsMenu').classList.remove('show');
+        });
+      }
+      
+      startLiveUpdates() {
+        // Simulate live data updates
+        setInterval(() => {
+          this.updateLiveMetrics();
+        }, 30000); // Update every 30 seconds
+        
+        // Update today's scans every 5 seconds
+        setInterval(() => {
+          const current = parseInt(document.getElementById('currentScans').textContent);
+          const increment = Math.floor(Math.random() * 5) + 1;
+          document.getElementById('currentScans').textContent = current + increment;
+          
+          // Update chart
+          const data = this.todayChart.data.datasets[0].data;
+          data.shift();
+          data.push(data[data.length - 1] + increment);
+          this.todayChart.update('none');
+        }, 5000);
+      }
+      
+      updateLiveMetrics() {
+        // Simulate API call for live updates
+        const metrics = {
+          currentScans: Math.floor(Math.random() * 20) + 140,
+          currentRating: (4.5 + Math.random() * 0.3).toFixed(1),
+          activeUsers: Math.floor(Math.random() * 20) + 80,
+          feedbackRate: (15 + Math.random() * 6).toFixed(1) + '%'
+        };
+        
+        Object.keys(metrics).forEach(key => {
+          const element = document.getElementById(key);
+          if (element) {
+            element.textContent = metrics[key];
+          }
+        });
+        
+        // Add activity item
+        const activities = [
+          "New scan from Abu Dhabi",
+          "Customer rated product 5 stars",
+          "New feedback received",
+          "User shared product on social media"
+        ];
+        
+        const activityStream = document.querySelector('.activity-stream');
+        const activity = activities[Math.floor(Math.random() * activities.length)];
+        
+        const activityItem = document.createElement('div');
+        activityItem.className = 'activity-item slide-in';
+        activityItem.innerHTML = `
+          <div class="activity-icon scan">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-text">
+              <strong>${activity}</strong>
+            </div>
+            <div class="activity-time">Just now</div>
+          </div>
+          <div class="activity-product">
+            Kenya Kirinyaga
+          </div>
+        `;
+        
+        activityStream.prepend(activityItem);
+        
+        // Remove old items if too many
+        const items = activityStream.querySelectorAll('.activity-item');
+        if (items.length > 5) {
+          items[items.length - 1].remove();
+        }
+      }
+      
+      handleQuickAction(action) {
+        const actions = {
+          'new-report': () => this.createNewReport(),
+          'add-filter': () => this.showFilterModal(),
+          'export-all': () => this.exportAllData(),
+          'notifications': () => this.showNotifications()
+        };
+        
+        if (actions[action]) {
+          actions[action]();
+        }
+      }
+      
+      createNewReport() {
+        this.showNotification('Creating new report...', 'info');
+        setTimeout(() => {
+          this.showNotification('Report created successfully!', 'success');
+        }, 1500);
+      }
+      
+      exportAllData() {
+        this.showNotification('Exporting all consumer data...', 'info');
+        setTimeout(() => {
+          this.showNotification('Data exported successfully!', 'success');
+        }, 2000);
+      }
+      
+      showFilterModal() {
+        // Show filter modal
+        this.showModal('Add Filters', 'Add custom filters to analyze consumer data');
+      }
+      
+      showNotifications() {
+        // Show notifications panel
+        this.showModal('Notifications', '3 unread notifications');
+      }
+      
+      setupEventListeners() {
+        // KPI info buttons
+        document.querySelectorAll('.kpi-info').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = btn.closest('.kpi-card');
+            const title = card.querySelector('.kpi-label').textContent;
+            this.showKpiDetails(title, card);
+          });
+        });
+        
+        // Time filter
+        document.getElementById('timeFilter').addEventListener('change', (e) => {
+          this.updateDataForPeriod(e.target.value);
+        });
+        
+        // Export button
+        document.getElementById('exportBtn').addEventListener('click', () => {
+          this.exportData();
+        });
+        
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+          this.refreshData();
+        });
+      }
+      
+      updateDataForPeriod(days) {
+        // This would fetch new data based on selected period
+        this.showNotification(`Loading data for last ${days} days...`, 'info');
+        
+        // Simulate API call
+        setTimeout(() => {
+          this.showNotification('Data updated successfully!', 'success');
+        }, 1000);
+      }
+      
+      refreshData() {
+        const btn = document.getElementById('refreshBtn');
+        btn.classList.add('rotating');
+        
+        setTimeout(() => {
+          btn.classList.remove('rotating');
+          this.showNotification('Data refreshed!', 'success');
+        }, 800);
+      }
+      
+      showKpiDetails(title, card) {
+        const value = card.querySelector('.kpi-value').textContent;
+        this.showModal(
+          title,
+          `Detailed analysis for: ${value}\n\nThis includes:\n• Historical trends\n• Breakdown by segment\n• Comparative analysis\n• Recommendations`
+        );
+      }
+      
+      showModal(title, message) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay fade-in';
+        modal.innerHTML = `
+          <div class="modal slide-in-top">
+            <div class="modal-header">
+              <h3>${title}</h3>
+              <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>${message}</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary modal-close-btn">OK</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        modal.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            modal.classList.add('fade-out');
+            setTimeout(() => {
+              document.body.removeChild(modal);
+            }, 300);
+          });
+        });
+      }
+      
+      showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type} slide-in-right`;
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+          <button class="notification-close">&times;</button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.classList.add('slide-out-right');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              document.body.removeChild(notification);
+            }
+          }, 300);
+        }, 5000);
+        
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+          notification.classList.add('slide-out-right');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              document.body.removeChild(notification);
+            }
+          }, 300);
+        });
+      }
+      
+      exportData() {
+        this.showNotification('Preparing export...', 'info');
+        setTimeout(() => {
+          this.showNotification('Export ready! Downloading...', 'success');
+        }, 1500);
+      }
+    }
+    
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      new DynamicConsumersDashboard();
+      
+      // Add hover effects
+      document.querySelectorAll('.hover-lift').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-4px)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+        });
+      });
+      
+      // Add click effects to buttons
+      document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+          btn.style.transform = 'scale(0.98)';
+        });
+        
+        btn.addEventListener('mouseup', () => {
+          btn.style.transform = 'scale(1)';
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'scale(1)';
+        });
+      });
+    });
+  </script>
+  
+  <style>
+    /* Dynamic Dashboard Styles */
+    
+    :root {
+      --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+      --success-gradient: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+      --warning-gradient: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+      --danger-gradient: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideInLeft {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideInTop {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideInBottom {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .animated-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .slide-in-left {
+      animation: slideInLeft 0.5s ease-out;
+    }
+    
+    .slide-in-right {
+      animation: slideInRight 0.5s ease-out;
+    }
+    
+    .slide-in-top {
+      animation: slideInTop 0.4s ease-out;
+    }
+    
+    .slide-in-bottom {
+      animation: slideInBottom 0.4s ease-out;
+    }
+    
+    .slide-in {
+      animation: slideInTop 0.3s ease-out;
+    }
+    
+    .delayed {
+      animation-delay: 0.2s;
+    }
+    
+    /* Pulse animations */
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    .pulse-bg {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pulse-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      animation: pulse 2s infinite;
+      opacity: 0.5;
+      border-radius: inherit;
+    }
+    
+    /* Live indicator */
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--success-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    
+    .live-indicator i {
+      font-size: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    
+    /* Hover effects */
+    .hover-lift {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .hover-effect {
+      transition: all 0.2s ease;
+    }
+    
+    .hover-effect:hover {
+      background: var(--bg-secondary);
+      transform: scale(1.02);
+    }
+    
+    /* KPI Card enhancements */
+    .kpi-card {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .kpi-card:hover::before {
+      opacity: 1;
+    }
+    
+    .kpi-info {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+    }
+    
+    .kpi-info:hover {
+      opacity: 1;
+    }
+    
+    .kpi-value.interactive {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .country-flag {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    
+    /* Rating distribution */
+    .rating-distribution {
+      margin-top: 0.75rem;
+    }
+    
+    .rating-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.375rem;
+    }
+    
+    .rating-label {
+      width: 24px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .rating-fill {
+      flex: 1;
+      height: 6px;
+      background: linear-gradient(90deg, #FBBF24, #F59E0B);
+      border-radius: 3px;
+      transition: width 1s ease-out;
+    }
+    
+    .rating-percent {
+      width: 32px;
+      text-align: right;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    /* Market breakdown */
+    .market-breakdown {
+      margin-top: 0.75rem;
+    }
+    
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.375rem 0;
+      font-size: 0.75rem;
+    }
+    
+    .breakdown-city {
+      color: var(--text-secondary);
+    }
+    
+    .breakdown-value {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    /* Sentiment analysis */
+    .sentiment-analysis {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    
+    .sentiment {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+    
+    .sentiment.positive {
+      color: var(--success-color);
+    }
+    
+    .sentiment.neutral {
+      color: var(--warning-color);
+    }
+    
+    .sentiment.negative {
+      color: var(--danger-color);
+    }
+    
+    /* View toggle */
+    .view-toggle {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--bg-secondary);
+      padding: 0.25rem;
+      border-radius: 8px;
+    }
+    
+    .view-btn {
+      background: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .view-btn.active {
+      background: white;
+      color: var(--primary-color);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .view-btn:hover:not(.active) {
+      background: var(--border-color);
+    }
+    
+    /* Chart container */
+    .chart-container {
+      height: 250px;
+      position: relative;
+    }
+    
+    /* Table enhancements */
+    .table-row {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .product-badge {
+      width: 4px;
+      height: 32px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    
+    .stat-cell {
+      position: relative;
+    }
+    
+    .stat-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 1s ease-out;
+    }
+    
+    .engagement-score {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      width: fit-content;
+    }
+    
+    .engagement-score.high {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    .score-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    
+    .growth-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .growth-indicator.positive {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    /* Feedback enhancements */
+    .feedback-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .feedback-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .feedback-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .feedback-item.positive {
+      border-left: 4px solid var(--success-color);
+    }
+    
+    .feedback-avatar {
+      flex-shrink: 0;
+    }
+    
+    .avatar-initials {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .feedback-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .feedback-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+    
+    .action-btn:hover {
+      background: var(--border-color);
+      color: var(--primary-color);
+    }
+    
+    .like-count {
+      font-size: 0.75rem;
+      margin-left: 0.25rem;
+    }
+    
+    .load-more {
+      text-align: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    /* Interactive Map */
+    .interactive-map {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .map-container {
+      position: relative;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .map-visualization {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .map-region {
+      position: absolute;
+      cursor: pointer;
+    }
+    
+    .map-marker {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .map-marker.active {
+      color: #FBBF24;
+      transform: scale(1.2);
+    }
+    
+    .map-tooltip {
+      display: none;
+      position: fixed;
+      background: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.75rem;
+      z-index: 1000;
+      max-width: 200px;
+    }
+    
+    .map-legend {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      background: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.375rem;
+      font-size: 0.75rem;
+    }
+    
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .legend-color.high {
+      background: var(--success-color);
+    }
+    
+    .legend-color.medium {
+      background: var(--warning-color);
+    }
+    
+    .legend-color.low {
+      background: var(--danger-color);
+    }
+    
+    .country-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .country-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .country-item:hover {
+      background: var(--border-color);
+    }
+    
+    .country-item.active {
+      background: rgba(139, 69, 19, 0.1);
+      border: 1px solid rgba(139, 69, 19, 0.2);
+    }
+    
+    .country-rank {
+      width: 24px;
+      height: 24px;
+      background: var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    
+    .country-item.active .country-rank {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .country-flag {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .country-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .country-name {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .country-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .country-growth {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+    }
+    
+    .country-growth.positive {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    /* Real-time Metrics */
+    .realtime-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .metric-card.realtime {
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border-left: 4px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .metric-card.realtime:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .metric-card.realtime:nth-child(1) {
+      border-left-color: #8B5CF6;
+    }
+    
+    .metric-card.realtime:nth-child(2) {
+      border-left-color: #FBBF24;
+    }
+    
+    .metric-card.realtime:nth-child(3) {
+      border-left-color: #10B981;
+    }
+    
+    .metric-card.realtime:nth-child(4) {
+      border-left-color: #3B82F6;
+    }
+    
+    .metric-value {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .metric-value > div:first-child {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    .metric-sparkline {
+      height: 40px;
+      margin-top: 0.5rem;
+    }
+    
+    .metric-change {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+    }
+    
+    .change-indicator {
+      font-weight: 600;
+    }
+    
+    .change-indicator.positive {
+      color: var(--success-color);
+    }
+    
+    .metric-gauge {
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .gauge-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+      transition: width 1s ease-out;
+    }
+    
+    /* Activity Stream */
+    .realtime-feed {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .activity-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      animation: slideInLeft 0.3s ease-out;
+    }
+    
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .activity-icon.scan {
+      background: rgba(139, 92, 246, 0.1);
+      color: #8B5CF6;
+    }
+    
+    .activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .activity-text {
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .activity-product {
+      font-size: 0.75rem;
+      color: var(--primary-color);
+      font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      background: rgba(139, 69, 19, 0.1);
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-xl);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 100;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+    }
+    
+    /* Quick Actions Menu */
+    .quick-actions-menu {
+      position: fixed;
+      bottom: 7rem;
+      right: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-xl);
+      padding: 0.5rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 99;
+      animation: slideInBottom 0.3s ease-out;
+    }
+    
+    .quick-actions-menu.show {
+      display: flex;
+    }
+    
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    
+    .action-item:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .action-item i {
+      width: 20px;
+      color: var(--text-secondary);
+    }
+    
+    .action-item span {
+      font-size: 0.875rem;
+    }
+    
+    .action-item .badge {
+      background: var(--danger-color);
+      color: white;
+      font-size: 0.625rem;
+      padding: 0.125rem 0.375rem;
+      border-radius: 8px;
+      margin-left: auto;
+    }
+    
+    /* Live stat in topbar */
+    .live-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .stat-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success-color);
+      animation: pulse 2s infinite;
+    }
+    
+    /* Rotating animation for refresh */
+    .rotating {
+      animation: rotate 0.8s linear;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Modal animations */
+    .modal-overlay.fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal-overlay.fade-out {
+      animation: fadeIn 0.3s ease-out reverse;
+    }
+    
+    /* Notification animations */
+    .notification {
+      animation: slideInRight 0.3s ease-out;
+    }
+    
+    .notification.slide-out-right {
+      animation: slideInRight 0.3s ease-out reverse;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .realtime-metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .realtime-metrics {
+        grid-template-columns: 1fr;
+      }
+      
+      .sentiment-analysis {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .market-breakdown {
+        font-size: 0.75rem;
+      }
+      
+      .feedback-item {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      
+      .feedback-avatar {
+        align-self: flex-start;
+      }
+      
+      .country-list {
+        max-height: 150px;
+      }
+      
+      .fab {
+        bottom: 1rem;
+        right: 1rem;
+      }
+      
+      .quick-actions-menu {
+        bottom: 6rem;
+        right: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .kpi-value.interactive {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+      
+      .feedback-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .feedback-meta {
+        text-align: left;
+      }
+      
+      .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .activity-product {
+        align-self: flex-start;
+      }
+    }
+  </style>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

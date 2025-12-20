@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Route Planner – Equity Coffee Logistics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --secondary: #34a853;
+      --warning: #f9ab00;
+      --danger: #ea4335;
+      --info: #4285f4;
+      --light-bg: #f8f9fa;
+      --dark-bg: #202124;
+      --card-bg: #ffffff;
+      --sidebar-bg: #1e293b;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --text-light: #ffffff;
+      --border: #dadce0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.3s ease;
+    }
+    
+    body.dashboard-body {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--sidebar-bg);
+      color: var(--text-light);
+      width: 260px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      background-color: white;
+      padding: 4px;
+    }
+    
+    .sidebar-logo > div {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .sidebar-role {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .sidebar-nav li {
+      margin-bottom: 8px;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .sidebar-link:hover {
+      background-color: rgba(255,255,255,0.1);
+      color: var(--text-light);
+    }
+    
+    .sidebar-link.active {
+      background-color: var(--primary);
+      color: var(--text-light);
+      box-shadow: var(--shadow);
+    }
+    
+    .sidebar-link i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-footer {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+    
+    /* Main Content */
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* Topbar */
+    .topbar {
+      background-color: var(--card-bg);
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+    
+    .topbar-left h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+    
+    .topbar-left p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    #sidebar-toggle {
+      display: none;
+    }
+    
+    .topbar-right span {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--info));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Content */
+    .dashboard-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+    
+    /* Panel */
+    .panel {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+      margin-bottom: 24px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .panel-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .panel-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .panel-meta {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    /* Map Container */
+    .map-container {
+      height: 500px;
+      width: 100%;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      background: #e8eaed;
+      margin-bottom: 24px;
+    }
+    
+    #route-map {
+      height: 100%;
+      width: 100%;
+    }
+    
+    .map-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      max-width: 300px;
+    }
+    
+    .map-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    
+    /* Route Stats */
+    .route-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-card:nth-child(2) { border-left-color: var(--secondary); }
+    .stat-card:nth-child(3) { border-left-color: var(--warning); }
+    .stat-card:nth-child(4) { border-left-color: var(--danger); }
+    
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    
+    .stat-card .trend {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: auto;
+    }
+    
+    .trend.positive { color: var(--secondary); }
+    .trend.negative { color: var(--danger); }
+    
+    /* Tables */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+    
+    .table thead {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .table th {
+      padding: 18px 24px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .table td {
+      padding: 18px 24px;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+    
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    
+    .badge-warning {
+      background-color: rgba(249, 171, 0, 0.1);
+      color: #b06000;
+    }
+    
+    .badge-success {
+      background-color: rgba(52, 168, 83, 0.1);
+      color: var(--secondary);
+    }
+    
+    .badge-danger {
+      background-color: rgba(234, 67, 53, 0.1);
+      color: var(--danger);
+    }
+    
+    .badge-info {
+      background-color: rgba(66, 133, 244, 0.1);
+      color: var(--info);
+    }
+    
+    .badge-primary {
+      background-color: rgba(26, 115, 232, 0.1);
+      color: var(--primary);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+    
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-ghost:hover {
+      background-color: rgba(26, 115, 232, 0.05);
+      border-color: var(--primary);
+    }
+    
+    .btn-ghost-small {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .btn-ghost-small:hover {
+      background-color: rgba(26, 115, 232, 0.05);
+      border-color: var(--primary);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Route Cards */
+    .route-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    
+    .route-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .route-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .route-card-header {
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--info));
+      color: white;
+    }
+    
+    .route-card-body {
+      padding: 20px;
+    }
+    
+    .route-card-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    
+    .route-card-stat {
+      text-align: center;
+    }
+    
+    .route-card-stat .value {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    
+    .route-card-stat .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Capacity Bars */
+    .capacity-bar {
+      height: 8px;
+      background: #e8eaed;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .capacity-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .capacity-low { background: var(--secondary); width: 30%; }
+    .capacity-medium { background: var(--warning); width: 60%; }
+    .capacity-high { background: var(--danger); width: 90%; }
+    
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 16px;
+      padding: 20px 24px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    /* Inputs */
+    .input, .input-sm {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      background-color: white;
+      transition: var(--transition);
+    }
+    
+    .input:focus, .input-sm:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+    }
+    
+    .input-sm {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        height: 100vh;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      #sidebar-toggle {
+        display: block;
+      }
+      
+      .dashboard-main {
+        width: 100%;
+      }
+      
+      .map-container {
+        height: 400px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 20px;
+      }
+      
+      .topbar {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .topbar-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .panel-actions {
+        width: 100%;
+      }
+      
+      .route-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .route-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Scrollbar Styling */
+    .dashboard-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-placeholder">
+          <i class="fas fa-coffee" style="color: #8B4513; font-size: 1.8rem;"></i>
+        </div>
+        <div>
+          Equity Coffee
+          <div class="sidebar-role">Logistics Partner</div>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-logistics.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a class="sidebar-link" href="logistics-requests.html"><i class="fas fa-shipping-fast"></i> Shipping Requests</a></li>
+        <li><a class="sidebar-link" href="logistics-shipments.html"><i class="fas fa-truck-loading"></i> Assigned Shipments</a></li>
+        <li><a class="sidebar-link active" href="logistics-routes.html"><i class="fas fa-route"></i> Route Planner</a></li>
+        <li><a class="sidebar-link" href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+        <li><a class="sidebar-link" href="#"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <p><strong>Contact operations</strong></p>
+        <p>ops@equitycoffee.com</p>
+        <p>+1 (555) 123-4567</p>
+      </div>
+    </aside>
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Route Planner</h1>
+          <p>Maintain standard lanes and highlight capacity or risk by corridor.</p>
+        </div>
+        <div class="topbar-right">
+          <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i> Menu</button>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-building" style="color: var(--primary);"></i>
+            <span>TransGlobal Logistics</span>
+          </div>
+          <div class="avatar-dropdown">
+            <div class="avatar">TL</div>
+          </div>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        
+        <!-- Route Statistics -->
+        <div class="route-stats">
+          <div class="stat-card">
+            <div class="value">14</div>
+            <div class="label">Active Routes</div>
+            <div class="trend positive">
+              <i class="fas fa-arrow-up"></i> 2 new this month
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="value">93%</div>
+            <div class="label">On-time Performance</div>
+            <div class="trend positive">
+              <i class="fas fa-arrow-up"></i> 3% from last month
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="value">3</div>
+            <div class="label">High-risk Corridors</div>
+            <div class="trend negative">
+              <i class="fas fa-exclamation-triangle"></i> Needs attention
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="value">$1.2M</div>
+            <div class="label">Monthly Transport Cost</div>
+            <div class="trend positive">
+              <i class="fas fa-arrow-down"></i> 5% cost reduction
+            </div>
+          </div>
+        </div>
+        
+        <!-- Map Container -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Global Route Network</h2>
+              <div class="panel-meta">Visualize active routes and capacity utilization across corridors.</div>
+            </div>
+            <div class="panel-actions">
+              <button class="btn btn-ghost" id="toggle-routes"><i class="fas fa-eye"></i> Toggle Routes</button>
+              <button class="btn btn-primary" id="add-route-btn"><i class="fas fa-plus"></i> New Route</button>
+            </div>
+          </div>
+          <div class="map-container">
+            <div id="route-map"></div>
+            <div class="map-overlay">
+              <h3 style="margin-bottom: 12px;">Route Legend</h3>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 4px; background: var(--primary);"></div>
+                  <span>Primary Routes</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 4px; background: var(--secondary);"></div>
+                  <span>Secondary Routes</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 4px; background: var(--danger);"></div>
+                  <span>High-risk Corridors</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 4px; background: var(--warning);"></div>
+                  <span>Seasonal Routes</span>
+                </div>
+              </div>
+            </div>
+            <div class="map-controls">
+              <button class="btn btn-ghost-small" id="zoom-in"><i class="fas fa-plus"></i></button>
+              <button class="btn btn-ghost-small" id="zoom-out"><i class="fas fa-minus"></i></button>
+              <button class="btn btn-ghost-small" id="reset-map"><i class="fas fa-globe-americas"></i></button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Core Routes Table -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Core Routes</h2>
+              <div class="panel-meta">Standardized lanes used for speciality coffee shipments.</div>
+            </div>
+            <div class="panel-actions">
+              <select class="input input-sm" id="route-filter">
+                <option>All Routes</option>
+                <option>Primary Routes</option>
+                <option>Secondary Routes</option>
+                <option>High-risk Routes</option>
+              </select>
+              <button class="btn btn-primary" id="add-route-table"><i class="fas fa-plus"></i> Add Route</button>
+            </div>
+          </div>
+          
+          <div class="filter-bar">
+            <div class="filter-group">
+              <div class="filter-label">Transport Mode</div>
+              <select class="input input-sm">
+                <option>All Modes</option>
+                <option>Sea</option>
+                <option>Sea + Truck</option>
+                <option>Air</option>
+                <option>Rail</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">Region</div>
+              <select class="input input-sm">
+                <option>All Regions</option>
+                <option>Africa</option>
+                <option>South America</option>
+                <option>Central America</option>
+                <option>Asia</option>
+                <option>Europe</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">Capacity Status</div>
+              <select class="input input-sm">
+                <option>All Statuses</option>
+                <option>Available</option>
+                <option>Limited</option>
+                <option>Full</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Route</th>
+                  <th>Mode</th>
+                  <th>Typical Transit</th>
+                  <th>Frequency</th>
+                  <th>Capacity</th>
+                  <th>Risk Level</th>
+                  <th>Cost per Bag</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row 1 -->
+                <tr data-route="kenya-jebel">
+                  <td>
+                    <div><strong>Kenya → Jebel Ali</strong></div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Mombasa to Dubai</div>
+                  </td>
+                  <td>
+                    <span class="badge badge-info"><i class="fas fa-ship"></i> Sea + Truck</span>
+                  </td>
+                  <td>
+                    <div>18–22 days</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">± 2 days variance</div>
+                  </td>
+                  <td>Weekly</td>
+                  <td>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-high"></div>
+                    </div>
+                    <div style="font-size: 0.85rem;">90% utilized</div>
+                  </td>
+                  <td><span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Medium</span></td>
+                  <td><strong>$42.50</strong></td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="btn-ghost-small view-route"><i class="fas fa-eye"></i></button>
+                      <button class="btn-ghost-small edit-route"><i class="fas fa-edit"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Row 2 -->
+                <tr data-route="ethiopia-rotterdam">
+                  <td>
+                    <div><strong>Ethiopia → Rotterdam</strong></div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Djibouti to Netherlands</div>
+                  </td>
+                  <td>
+                    <span class="badge badge-primary"><i class="fas fa-ship"></i> Sea</span>
+                  </td>
+                  <td>
+                    <div>24–30 days</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">± 3 days variance</div>
+                  </td>
+                  <td>Twice monthly</td>
+                  <td>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-medium"></div>
+                    </div>
+                    <div style="font-size: 0.85rem;">60% utilized</div>
+                  </td>
+                  <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Low</span></td>
+                  <td><strong>$68.20</strong></td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="btn-ghost-small view-route"><i class="fas fa-eye"></i></button>
+                      <button class="btn-ghost-small edit-route"><i class="fas fa-edit"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Row 3 -->
+                <tr data-route="colombia-jebel">
+                  <td>
+                    <div><strong>Colombia → Jebel Ali</strong></div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Cartagena to Dubai</div>
+                  </td>
+                  <td>
+                    <span class="badge badge-primary"><i class="fas fa-ship"></i> Sea</span>
+                  </td>
+                  <td>
+                    <div>32–38 days</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">± 4 days variance</div>
+                  </td>
+                  <td>Monthly</td>
+                  <td>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-low"></div>
+                    </div>
+                    <div style="font-size: 0.85rem;">30% utilized</div>
+                  </td>
+                  <td><span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> High</span></td>
+                  <td><strong>$75.80</strong></td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="btn-ghost-small view-route"><i class="fas fa-eye"></i></button>
+                      <button class="btn-ghost-small edit-route"><i class="fas fa-edit"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Row 4 -->
+                <tr data-route="brazil-hamburg">
+                  <td>
+                    <div><strong>Brazil → Hamburg</strong></div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Santos to Germany</div>
+                  </td>
+                  <td>
+                    <span class="badge badge-info"><i class="fas fa-ship"></i> Sea + Rail</span>
+                  </td>
+                  <td>
+                    <div>28–35 days</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">± 5 days variance</div>
+                  </td>
+                  <td>Weekly</td>
+                  <td>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-high"></div>
+                    </div>
+                    <div style="font-size: 0.85rem;">85% utilized</div>
+                  </td>
+                  <td><span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Medium</span></td>
+                  <td><strong>$52.40</strong></td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="btn-ghost-small view-route"><i class="fas fa-eye"></i></button>
+                      <button class="btn-ghost-small edit-route"><i class="fas fa-edit"></i></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Capacity & Risk Overview -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Capacity & Risk Overview</h2>
+            <div class="panel-actions">
+              <button class="btn btn-ghost"><i class="fas fa-download"></i> Export Report</button>
+            </div>
+          </div>
+          <div style="padding: 0 24px 24px;">
+            <p class="panel-meta" style="margin-bottom: 24px;">
+              Use this page to coordinate with traders and roasters on which routes to prioritize during peak harvest.
+            </p>
+            
+            <div class="route-cards">
+              <div class="route-card">
+                <div class="route-card-header">
+                  <h3 style="color: white; margin: 0;">Kenya Corridor</h3>
+                  <div style="font-size: 0.9rem; opacity: 0.9;">East Africa to Middle East</div>
+                </div>
+                <div class="route-card-body">
+                  <div class="route-card-stats">
+                    <div class="route-card-stat">
+                      <div class="value">14</div>
+                      <div class="label">Shipments/Mo</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">91%</div>
+                      <div class="label">On-time</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">$42.50</div>
+                      <div class="label">Avg Cost</div>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                      <span style="font-size: 0.9rem;">Capacity Utilization</span>
+                      <span style="font-size: 0.9rem; font-weight: 600; color: var(--danger);">90%</span>
+                    </div>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-high"></div>
+                    </div>
+                  </div>
+                  <button class="btn-ghost-small" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-chart-line"></i> View Analytics
+                  </button>
+                </div>
+              </div>
+              
+              <div class="route-card">
+                <div class="route-card-header" style="background: linear-gradient(135deg, var(--secondary), #2e7d32);">
+                  <h3 style="color: white; margin: 0;">Ethiopia Corridor</h3>
+                  <div style="font-size: 0.9rem; opacity: 0.9;">Djibouti to Europe</div>
+                </div>
+                <div class="route-card-body">
+                  <div class="route-card-stats">
+                    <div class="route-card-stat">
+                      <div class="value">8</div>
+                      <div class="label">Shipments/Mo</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">95%</div>
+                      <div class="label">On-time</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">$68.20</div>
+                      <div class="label">Avg Cost</div>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                      <span style="font-size: 0.9rem;">Capacity Utilization</span>
+                      <span style="font-size: 0.9rem; font-weight: 600; color: var(--warning);">60%</span>
+                    </div>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-medium"></div>
+                    </div>
+                  </div>
+                  <button class="btn-ghost-small" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-chart-line"></i> View Analytics
+                  </button>
+                </div>
+              </div>
+              
+              <div class="route-card">
+                <div class="route-card-header" style="background: linear-gradient(135deg, var(--danger), #c62828);">
+                  <h3 style="color: white; margin: 0;">Colombia Corridor</h3>
+                  <div style="font-size: 0.9rem; opacity: 0.9;">South America to Middle East</div>
+                </div>
+                <div class="route-card-body">
+                  <div class="route-card-stats">
+                    <div class="route-card-stat">
+                      <div class="value">6</div>
+                      <div class="label">Shipments/Mo</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">82%</div>
+                      <div class="label">On-time</div>
+                    </div>
+                    <div class="route-card-stat">
+                      <div class="value">$75.80</div>
+                      <div class="label">Avg Cost</div>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                      <span style="font-size: 0.9rem;">Capacity Utilization</span>
+                      <span style="font-size: 0.9rem; font-weight: 600; color: var(--secondary);">30%</span>
+                    </div>
+                    <div class="capacity-bar">
+                      <div class="capacity-fill capacity-low"></div>
+                    </div>
+                  </div>
+                  <button class="btn-ghost-small" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-chart-line"></i> View Analytics
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="display: flex; justify-content: space-between; margin-top: 32px; color: var(--text-secondary); font-size: 0.9rem;">
+          <div>© 2023 Equity Coffee Logistics. All rights reserved.</div>
+          <div>Last updated: Today, 2:15 PM</div>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Add Route Modal -->
+  <div class="modal" id="add-route-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="margin: 0;">Add New Route</h2>
+        <button class="modal-close" id="close-modal">&times;</button>
+      </div>
+      <form id="route-form" style="display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">Route Name</label>
+          <input type="text" class="input" style="width: 100%;" placeholder="e.g., Brazil → Hamburg">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Origin</label>
+            <select class="input" style="width: 100%;">
+              <option>Select origin</option>
+              <option>Kenya</option>
+              <option>Ethiopia</option>
+              <option>Colombia</option>
+              <option>Brazil</option>
+              <option>Guatemala</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Destination</label>
+            <select class="input" style="width: 100%;">
+              <option>Select destination</option>
+              <option>Jebel Ali (Dubai)</option>
+              <option>Rotterdam</option>
+              <option>Hamburg</option>
+              <option>Singapore</option>
+              <option>Los Angeles</option>
+            </select>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Transport Mode</label>
+            <select class="input" style="width: 100%;">
+              <option>Sea</option>
+              <option>Sea + Truck</option>
+              <option>Sea + Rail</option>
+              <option>Air</option>
+              <option>Multimodal</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Typical Transit (days)</label>
+            <input type="text" class="input" style="width: 100%;" placeholder="e.g., 18-22">
+          </div>
+        </div>
+        
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">Notes</label>
+          <textarea class="input" style="width: 100%; min-height: 100px; resize: vertical;" placeholder="Add any special notes or requirements for this route..."></textarea>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-ghost" id="cancel-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Route</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize Map
+    const map = L.map('route-map').setView([20, 0], 2);
+    
+    // Add tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap contributors, © CartoDB'
+    }).addTo(map);
+    
+    // Define route coordinates (simplified)
+    const routes = [
+      {
+        name: "Kenya → Jebel Ali",
+        from: [ -1.2921, 36.8219 ], // Nairobi
+        to: [ 25.2048, 55.2708 ],   // Dubai
+        color: "#1a73e8",
+        popup: "<b>Kenya → Jebel Ali</b><br>Sea + Truck<br>18-22 days<br>Weekly"
+      },
+      {
+        name: "Ethiopia → Rotterdam",
+        from: [ 9.1450, 40.4897 ],  // Addis Ababa
+        to: [ 51.9244, 4.4777 ],    // Rotterdam
+        color: "#34a853",
+        popup: "<b>Ethiopia → Rotterdam</b><br>Sea<br>24-30 days<br>Twice monthly"
+      },
+      {
+        name: "Colombia → Jebel Ali",
+        from: [ 4.7110, -74.0721 ], // Bogota
+        to: [ 25.2048, 55.2708 ],   // Dubai
+        color: "#ea4335",
+        popup: "<b>Colombia → Jebel Ali</b><br>Sea<br>32-38 days<br>Monthly"
+      },
+      {
+        name: "Brazil → Hamburg",
+        from: [ -23.5505, -46.6333 ], // Sao Paulo
+        to: [ 53.5511, 9.9937 ],      // Hamburg
+        color: "#f9ab00",
+        popup: "<b>Brazil → Hamburg</b><br>Sea + Rail<br>28-35 days<br>Weekly"
+      }
+    ];
+    
+    // Draw routes on map
+    routes.forEach(route => {
+      // Create a curved line for the route
+      const latlngs = [
+        route.from,
+        [ (route.from[0] + route.to[0]) / 2 + 10, (route.from[1] + route.to[1]) / 2 ], // Control point
+        route.to
+      ];
+      
+      const curve = L.curve(['M', route.from, 'Q', latlngs[1], route.to], {
+        color: route.color,
+        weight: 3,
+        opacity: 0.7,
+        dashArray: route.color === "#ea4335" ? "5, 5" : null
+      }).addTo(map);
+      
+      // Add markers
+      L.marker(route.from, {
+        icon: L.divIcon({
+          html: `<div style="background: ${route.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`,
+          iconSize: [16, 16],
+          className: 'route-marker'
+        })
+      }).addTo(map).bindPopup(`<b>Origin:</b> ${route.name.split(' → ')[0]}`);
+      
+      L.marker(route.to, {
+        icon: L.divIcon({
+          html: `<div style="background: ${route.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`,
+          iconSize: [16, 16],
+          className: 'route-marker'
+        })
+      }).addTo(map).bindPopup(`<b>Destination:</b> ${route.name.split(' → ')[1]}`);
+      
+      // Bind popup to the route line
+      curve.bindPopup(route.popup);
+    });
+    
+    // Map controls
+    document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
+    document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
+    document.getElementById('reset-map').addEventListener('click', () => map.setView([20, 0], 2));
+    
+    // Toggle routes visibility
+    let routesVisible = true;
+    document.getElementById('toggle-routes').addEventListener('click', function() {
+      routesVisible = !routesVisible;
+      map.eachLayer(layer => {
+        if (layer instanceof L.Curve || layer instanceof L.Polyline) {
+          if (routesVisible) {
+            map.addLayer(layer);
+          } else {
+            map.removeLayer(layer);
+          }
+        }
+      });
+      this.innerHTML = routesVisible ? '<i class="fas fa-eye-slash"></i> Hide Routes' : '<i class="fas fa-eye"></i> Show Routes';
+    });
+    
+    // Modal functionality
+    const modal = document.getElementById('add-route-modal');
+    const addRouteBtn = document.getElementById('add-route-btn');
+    const addRouteTableBtn = document.getElementById('add-route-table');
+    const closeModal = document.getElementById('close-modal');
+    const cancelModal = document.getElementById('cancel-modal');
+    
+    addRouteBtn.addEventListener('click', () => modal.classList.add('active'));
+    addRouteTableBtn.addEventListener('click', () => modal.classList.add('active'));
+    closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    cancelModal.addEventListener('click', () => modal.classList.remove('active'));
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+    
+    // Route form submission
+    document.getElementById('route-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Route added successfully! In a real application, this would save to the database.');
+      modal.classList.remove('active');
+    });
+    
+    // Table row click functionality
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (!e.target.closest('button')) {
+          const routeName = row.querySelector('td:first-child strong').textContent;
+          alert(`Viewing details for route: ${routeName}`);
+        }
+      });
+    });
+    
+    // View/Edit route buttons
+    document.querySelectorAll('.view-route').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const routeName = btn.closest('tr').querySelector('td:first-child strong').textContent;
+        alert(`Viewing route details: ${routeName}`);
+      });
+    });
+    
+    document.querySelectorAll('.edit-route').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const routeName = btn.closest('tr').querySelector('td:first-child strong').textContent;
+        alert(`Editing route: ${routeName}`);
+      });
+    });
+    
+    // Toggle sidebar on mobile
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.toggle('active');
+    });
+    
+    // Avatar click
+    document.querySelector('.avatar').addEventListener('click', function() {
+      alert('User menu would open here');
+    });
+    
+    // Route filter
+    document.getElementById('route-filter').addEventListener('change', function() {
+      const filterValue = this.value;
+      const rows = document.querySelectorAll('.table tbody tr');
+      
+      rows.forEach(row => {
+        if (filterValue === 'All Routes') {
+          row.style.display = '';
+        } else if (filterValue === 'High-risk Routes') {
+          const riskBadge = row.querySelector('.badge-danger');
+          row.style.display = riskBadge ? '' : 'none';
+        } else {
+          // Simplified filtering - in real app would check route type
+          row.style.display = '';
+        }
+      });
+    });
+    
+    // Simulate real-time data updates
+    setInterval(() => {
+      const capacityBars = document.querySelectorAll('.capacity-fill');
+      capacityBars.forEach(bar => {
+        // Add small random fluctuation to capacity
+        const currentWidth = parseInt(bar.style.width);
+        const fluctuation = Math.random() * 4 - 2; // -2 to +2
+        const newWidth = Math.max(10, Math.min(100, currentWidth + fluctuation));
+        bar.style.width = `${newWidth}%`;
+        
+        // Update text
+        const parentRow = bar.closest('tr');
+        if (parentRow) {
+          const capacityText = parentRow.querySelector('.capacity-bar').nextElementSibling;
+          if (capacityText) {
+            capacityText.textContent = `${Math.round(newWidth)}% utilized`;
+          }
+        }
+      });
+    }, 5000);
+  </script>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

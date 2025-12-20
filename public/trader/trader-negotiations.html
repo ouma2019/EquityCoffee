@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Negotiations | Equity Coffee</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+                <div>
+                    Equity Coffee
+                    <div class="sidebar-role">Trader / Exporter</div>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a class="sidebar-link" href="dashboard-trader.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a class="sidebar-link" href="trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                <li><a class="sidebar-link active" href="trader-negotiations.html"><i class="fas fa-handshake"></i> Negotiations</a></li>
+                <li><a class="sidebar-link" href="trader-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+                <li><a class="sidebar-link" href="trader-shipments.html"><i class="fas fa-shipping-fast"></i> Shipments</a></li>
+                <li><a class="sidebar-link" href="trader-partners.html"><i class="fas fa-users"></i> Partners</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <i class="fas fa-clock"></i> Last login: 2h ago
+            </div>
+        </aside>
+
+        <div class="dashboard-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1><i class="fas fa-handshake"></i> Negotiations</h1>
+                    <p>Manage and track your coffee trading negotiations</p>
+                </div>
+                <div class="topbar-right">
+                    <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+                    <div class="user-info">
+                        <span>Global Coffee Traders Ltd</span>
+                        <div class="avatar">GT</div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard-content">
+                <div class="content-header">
+                    <div class="filters-card">
+                        <div class="filter-group">
+                            <div class="search-input">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchNegotiations" placeholder="Search negotiations...">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <select id="statusFilter" class="modern-select">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <button id="newNegotiationBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Negotiation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-list"></i> Active Negotiations</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-ghost-small"><i class="fas fa-download"></i> Export</button>
+                            <button class="btn btn-ghost-small"><i class="fas fa-filter"></i> More Filters</button>
+                        </div>
+                    </div>
+                    
+                    <table id="negotiationsTable" class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Partner</th>
+                                <th>Coffee Type</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="negotiationsBody">
+                            <!-- Sample Data -->
+                            <tr>
+                                <td><span class="badge badge-id">NEG-2024-001</span></td>
+                                <td>
+                                    <div class="partner-info">
+                                        <div class="partner-avatar">KC</div>
+                                        <div>
+                                            <strong>Kirinyaga Cooperative</strong>
+                                            <small>kenya@example.com</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>SL28 Washed</td>
+                                <td><strong>120</strong> bags</td>
+                                <td><span class="price-tag">$4.20/kg</span></td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><span class="timestamp">2 hours ago</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="View Details"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon text-danger" title="Cancel"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-id">NEG-2024-002</span></td>
+                                <td>
+                                    <div class="partner-info">
+                                        <div class="partner-avatar">EC</div>
+                                        <div>
+                                            <strong>Ethiopian Exporter</strong>
+                                            <small>ethiopia@example.com</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Heirloom Natural</td>
+                                <td><strong>40</strong> bags</td>
+                                <td><span class="price-tag">$5.10/kg</span></td>
+                                <td><span class="badge badge-info">In Progress</span></td>
+                                <td><span class="timestamp">Yesterday</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="View Details"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon text-success" title="Approve"><i class="fas fa-check"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="table-footer">
+                        <div class="pagination-info">
+                            Showing 1-10 of 24 negotiations
+                        </div>
+                        <div class="pagination">
+                            <button class="btn btn-ghost-small" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                            <span class="page-numbers">
+                                <button class="btn-page active">1</button>
+                                <button class="btn-page">2</button>
+                                <button class="btn-page">3</button>
+                            </span>
+                            <button class="btn btn-ghost-small">Next <i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Negotiation Modal -->
+    <div id="negotiationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-handshake"></i> New Negotiation</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="negotiationForm" class="modal-form">
+                <input type="hidden" id="negotiationId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="partnerSelect" class="form-label">
+                            <i class="fas fa-user"></i> Partner
+                        </label>
+                        <select id="partnerSelect" class="modern-select" required>
+                            <option value="">Select Partner</option>
+                            <option value="1">Kirinyaga Cooperative</option>
+                            <option value="2">Ethiopian Exporter</option>
+                            <option value="3">Brazilian Farm</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="coffeeType" class="form-label">
+                            <i class="fas fa-seedling"></i> Coffee Type
+                        </label>
+                        <input type="text" id="coffeeType" class="modern-input" placeholder="e.g., SL28 Washed" required>
+                    </div>
+                </div>
+                
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="quantity" class="form-label">
+                            <i class="fas fa-weight-hanging"></i> Quantity
+                        </label>
+                        <div class="input-with-unit">
+                            <input type="number" id="quantity" class="modern-input" min="1" required>
+                            <span class="input-unit">bags</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price" class="form-label">
+                            <i class="fas fa-dollar-sign"></i> Price per kg
+                        </label>
+                        <div class="input-with-unit">
+                            <input type="number" id="price" step="0.01" class="modern-input" min="0" required>
+                            <span class="input-unit">$/kg</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="notes" class="form-label">
+                            <i class="fas fa-sticky-note"></i> Notes
+                        </label>
+                        <textarea id="notes" class="modern-textarea" rows="4" placeholder="Add negotiation details, terms, or special requirements..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Negotiation
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/common-auth.js"></script>
+    <script src="../js/trader.js"></script>
+    <style>
+        .data-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .modern-table thead {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        }
+        
+        .modern-table th {
+            padding: 1rem;
+            text-align: left;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .modern-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background 0.2s ease;
+        }
+        
+        .modern-table tbody tr:hover {
+            background: #f8f4f0;
+        }
+        
+        .partner-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .partner-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        
+        .price-tag {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .timestamp {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-icon:hover {
+            background: #f5f5f5;
+            transform: translateY(-1px);
+        }
+        
+        .btn-icon.text-danger:hover {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .btn-icon.text-success:hover {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .table-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-page {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .btn-page.active {
+            background: #8B4513;
+            color: white;
+            border-color: #8B4513;
+        }
+        
+        .badge-id {
+            background: #f0f0f0;
+            color: #333;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.75rem;
+        }
+        
+        .filters-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modal-form .form-row {
+            margin-bottom: 1.5rem;
+        }
+        
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .input-with-unit {
+            position: relative;
+        }
+        
+        .input-with-unit .input-unit {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            background: white;
+            padding: 0 0.25rem;
+        }
+        
+        .modern-input, .modern-select, .modern-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+    </style>
+</body>
+</html>

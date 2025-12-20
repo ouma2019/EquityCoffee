@@ -1,0 +1,500 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Contracts | Equity Coffee</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+                <div>
+                    Equity Coffee
+                    <div class="sidebar-role">Trader / Exporter</div>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a class="sidebar-link" href="dashboard-trader.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a class="sidebar-link" href="trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                <li><a class="sidebar-link" href="trader-negotiations.html"><i class="fas fa-handshake"></i> Negotiations</a></li>
+                <li><a class="sidebar-link active" href="trader-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+                <li><a class="sidebar-link" href="trader-shipments.html"><i class="fas fa-shipping-fast"></i> Shipments</a></li>
+                <li><a class="sidebar-link" href="trader-partners.html"><i class="fas fa-users"></i> Partners</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <i class="fas fa-clock"></i> Last login: 2h ago
+            </div>
+        </aside>
+
+        <div class="dashboard-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1><i class="fas fa-file-contract"></i> Contracts</h1>
+                    <p>Manage and track your trading contracts</p>
+                </div>
+                <div class="topbar-right">
+                    <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+                    <div class="user-info">
+                        <span>Global Coffee Traders Ltd</span>
+                        <div class="avatar">GT</div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard-content">
+                <div class="content-header">
+                    <div class="filters-card">
+                        <div class="filter-group">
+                            <div class="search-input">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchContracts" placeholder="Search contracts...">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <select id="contractStatusFilter" class="modern-select">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="expired">Expired</option>
+                                <option value="terminated">Terminated</option>
+                            </select>
+                        </div>
+                        <button id="newContractBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Contract
+                        </button>
+                    </div>
+                </div>
+
+                <div class="contracts-timeline">
+                    <div class="timeline-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Contract Timeline</h3>
+                        <div class="timeline-actions">
+                            <button class="btn btn-ghost-small"><i class="fas fa-download"></i> Export</button>
+                            <button class="btn btn-ghost-small"><i class="fas fa-filter"></i> Filter</button>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline">
+                        <div class="contract-item status-active">
+                            <div class="contract-dates">
+                                <div class="date-start">
+                                    <div class="date-label">Start</div>
+                                    <div class="date-value">Jan 15, 2024</div>
+                                </div>
+                                <div class="date-connector">
+                                    <div class="connector-line"></div>
+                                    <div class="connector-dot"></div>
+                                </div>
+                                <div class="date-end">
+                                    <div class="date-label">End</div>
+                                    <div class="date-value">Dec 15, 2024</div>
+                                </div>
+                            </div>
+                            <div class="contract-content">
+                                <div class="contract-header">
+                                    <h4>EC-2024-001</h4>
+                                    <span class="contract-status badge badge-success">Active</span>
+                                </div>
+                                <div class="contract-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Kirinyaga Cooperative</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-coffee"></i>
+                                        <span>SL28 Washed • 120 bags/month</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>$4.20/kg • Total: $604,800</span>
+                                    </div>
+                                </div>
+                                <div class="contract-progress">
+                                    <div class="progress-info">
+                                        <span>Progress: 45%</span>
+                                        <span>120/240 bags delivered</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                                    <button class="btn btn-primary-small"><i class="fas fa-edit"></i> Amend</button>
+                                    <button class="btn btn-ghost-small"><i class="fas fa-file-download"></i> PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contract-item status-active">
+                            <div class="contract-dates">
+                                <div class="date-start">
+                                    <div class="date-label">Start</div>
+                                    <div class="date-value">Feb 1, 2024</div>
+                                </div>
+                                <div class="date-connector">
+                                    <div class="connector-line"></div>
+                                    <div class="connector-dot"></div>
+                                </div>
+                                <div class="date-end">
+                                    <div class="date-label">End</div>
+                                    <div class="date-value">Nov 30, 2024</div>
+                                </div>
+                            </div>
+                            <div class="contract-content">
+                                <div class="contract-header">
+                                    <h4>EC-2024-002</h4>
+                                    <span class="contract-status badge badge-success">Active</span>
+                                </div>
+                                <div class="contract-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Roastery Tech GmbH</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-coffee"></i>
+                                        <span>Premium Blends • 80 bags/month</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>$5.50/kg • Total: $422,400</span>
+                                    </div>
+                                </div>
+                                <div class="contract-progress">
+                                    <div class="progress-info">
+                                        <span>Progress: 25%</span>
+                                        <span>40/160 bags delivered</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                                    <button class="btn btn-primary-small"><i class="fas fa-edit"></i> Amend</button>
+                                    <button class="btn btn-ghost-small"><i class="fas fa-file-download"></i> PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contract-item status-expiring">
+                            <div class="contract-dates">
+                                <div class="date-start">
+                                    <div class="date-label">Start</div>
+                                    <div class="date-value">Dec 1, 2023</div>
+                                </div>
+                                <div class="date-connector">
+                                    <div class="connector-line"></div>
+                                    <div class="connector-dot"></div>
+                                </div>
+                                <div class="date-end">
+                                    <div class="date-label">End</div>
+                                    <div class="date-value">Mar 31, 2024</div>
+                                </div>
+                            </div>
+                            <div class="contract-content">
+                                <div class="contract-header">
+                                    <h4>EC-2023-015</h4>
+                                    <span class="contract-status badge badge-warning">Expiring Soon</span>
+                                </div>
+                                <div class="contract-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Ethiopian Coffee Export</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-coffee"></i>
+                                        <span>Heirloom Natural • 60 bags total</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>$5.10/kg • Total: $153,000</span>
+                                    </div>
+                                </div>
+                                <div class="contract-progress">
+                                    <div class="progress-info">
+                                        <span>Progress: 100%</span>
+                                        <span>60/60 bags delivered</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                                    <button class="btn btn-primary-small"><i class="fas fa-redo"></i> Renew</button>
+                                    <button class="btn btn-ghost-small"><i class="fas fa-file-download"></i> PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/common-auth.js"></script>
+    <script src="../js/trader.js"></script>
+    <style>
+        .contracts-timeline {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .timeline-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timeline {
+            padding: 1.5rem;
+        }
+        
+        .contract-item {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .contract-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #8B4513;
+        }
+        
+        .contract-item.status-active {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .contract-item.status-expiring {
+            border-left: 4px solid #ff9800;
+        }
+        
+        .contract-dates {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 160px;
+        }
+        
+        .date-start, .date-end {
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .date-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .date-value {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        
+        .date-connector {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin: 0.5rem 0;
+        }
+        
+        .connector-line {
+            width: 2px;
+            flex: 1;
+            background: linear-gradient(to bottom, #8B4513, #D2691E);
+        }
+        
+        .connector-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #8B4513;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .contract-content {
+            flex: 1;
+        }
+        
+        .contract-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .contract-header h4 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .contract-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .detail-item i {
+            width: 20px;
+            color: #8B4513;
+        }
+        
+        .contract-progress {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B4513, #D2691E);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .contract-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .filters-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modern-select {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            min-width: 180px;
+        }
+        
+        .btn-primary-small {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+        }
+        
+        .btn-ghost-small {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: #666;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-ghost-small:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</body>
+</html>
+

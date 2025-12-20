@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Cupping & Evaluations Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Modern Design Variables */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --primary-light: #e0e7ff;
+      --secondary: #7209b7;
+      --accent: #f72585;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #f94144;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #64748b;
+      --gray-800: #334155;
+      --sidebar-width: 280px;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 20px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --box-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body.dashboard-body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Dashboard Shell */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Enhanced Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--dark) 0%, #1a1f35 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 1000;
+      transition: var(--transition);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-image i {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-primary {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-secondary {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 2px;
+    }
+
+    .sidebar-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.5rem 0;
+      list-style: none;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+      margin: 4px 0;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(67, 97, 238, 0.15), transparent);
+      color: white;
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link i {
+      width: 24px;
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .dashboard-main {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Modern Topbar */
+    .topbar {
+      padding: 1.25rem 2rem;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .sidebar-toggle {
+      background: var(--primary);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      margin-right: 1rem;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .topbar-title {
+      flex: 1;
+    }
+
+    .topbar-title h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--dark), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar-title p {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+      flex: 1;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .card:hover {
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 20px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .badge-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    /* Enhanced Table */
+    .table-wrapper {
+      padding: 0 1.5rem 1.5rem;
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .table thead {
+      background: linear-gradient(90deg, rgba(67, 97, 238, 0.05), transparent);
+    }
+
+    .table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--gray-800);
+      border-bottom: 2px solid var(--gray-200);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+    }
+
+    .table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 0.9rem;
+    }
+
+    .table tbody tr {
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background: rgba(67, 97, 238, 0.03);
+      transform: translateX(4px);
+    }
+
+    /* Dashboard Footer */
+    .dashboard-footer {
+      padding: 1.5rem 2rem;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--gray-600);
+      font-size: 0.875rem;
+    }
+
+    /* Modern Additions */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      width: 300px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      padding: 0.5rem;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+
+    .search-box input:focus {
+      outline: none;
+    }
+
+    .search-box i {
+      color: var(--gray-600);
+      margin-right: 0.5rem;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-tab {
+      padding: 0.5rem 1rem;
+      background: var(--gray-100);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-tab:hover {
+      background: var(--gray-200);
+    }
+
+    .filter-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Score Indicators */
+    .score-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .score-excellent {
+      background: rgba(76, 201, 240, 0.15);
+      color: #06b6d4;
+    }
+
+    .score-good {
+      background: rgba(34, 197, 94, 0.15);
+      color: #16a34a;
+    }
+
+    .score-average {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+    }
+
+    .score-poor {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    /* Cupping Form Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--border-radius-xl);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--box-shadow-lg);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .modal-close {
+      background: var(--gray-100);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background: var(--gray-200);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--gray-800);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .score-slider {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--gray-200);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .score-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-display {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+
+    /* Attribute Grid */
+    .attribute-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .attribute-card {
+      padding: 1rem;
+      background: var(--gray-100);
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    .attribute-card:hover {
+      background: var(--gray-200);
+    }
+
+    .attribute-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .attribute-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--gray-800);
+    }
+
+    .attribute-value {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .attribute-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--gray-300);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .dashboard-main {
+        margin-left: 0;
+      }
+      
+      .sidebar-toggle {
+        display: flex;
+      }
+
+      .action-bar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 1rem;
+      }
+
+      .table-wrapper {
+        padding: 0 1rem 1rem;
+      }
+
+      .table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .attribute-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-image">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-primary">Equity Coffee</span>
+            <span class="logo-secondary">Educator / Evaluator</span>
+          </div>
+        </div>
+        <button class="sidebar-close" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-educator.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+        <li><a class="sidebar-link active" href="educator-evaluations.html"><i class="fas fa-clipboard-check"></i><span>Cupping &amp; Evaluations</span><span class="notification-badge">8</span></a></li>
+        <li><a class="sidebar-link" href="educator-training.html"><i class="fas fa-chalkboard-teacher"></i><span>Training Sessions</span></a></li>
+        <li><a class="sidebar-link" href="educator-reports.html"><i class="fas fa-file-alt"></i><span>Reports &amp; Feedback</span></a></li>
+        <li><a class="sidebar-link" href="../trader/trader-marketplace.html"><i class="fas fa-store"></i><span>Marketplace</span></a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">EC</div>
+          <div class="user-info">
+            <div class="user-name">Educator Demo</div>
+            <div class="user-email">educator@equitycoffee.com</div>
+          </div>
+        </div>
+        <a href="/profile.html" class="btn-logout" title="My Profile" style="margin-right: 0.5rem; text-decoration: none;">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <button class="btn-logout" id="logout-btn" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="topbar-title">
+          <h1>Cupping & Evaluations</h1>
+          <p>Record, review, and analyze cupping scores and quality notes.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary" id="new-evaluation">
+            <i class="fas fa-plus-circle"></i>
+            <span>New Evaluation</span>
+          </button>
+          <button class="btn btn-ghost btn-logout" id="topbar-logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Action Bar -->
+        <div class="action-bar">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search evaluations by lot ID, origin, or score...">
+          </div>
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Evaluations</button>
+            <button class="filter-tab" data-filter="pending">Pending Review</button>
+            <button class="filter-tab" data-filter="approved">Approved</button>
+            <button class="filter-tab" data-filter="archived">Archived</button>
+          </div>
+        </div>
+
+        <!-- Cupping Log Card -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Cupping Evaluation Log</h2>
+            <div>
+              <span class="badge badge-outline">Live Data</span>
+              <span class="badge" style="background: var(--success); margin-left: 0.5rem;">24 Evaluations</span>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="table" id="evaluationsTable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Lot ID</th>
+                  <th>Origin & Details</th>
+                  <th>Score</th>
+                  <th>Attributes</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="evaluation-row" data-status="approved">
+                  <td>
+                    <div class="date-display">
+                      <div class="date-day">01</div>
+                      <div class="date-month">Mar</div>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>EC-2025-UG-01</strong>
+                    <div class="text-muted">Washed Arabica</div>
+                  </td>
+                  <td>
+                    <div><strong>Uganda • Mt. Elgon</strong></div>
+                    <div class="text-muted">1600m • Grade AA • Smallholder Co-op</div>
+                  </td>
+                  <td>
+                    <div class="score-indicator score-excellent">84.25</div>
+                  </td>
+                  <td>
+                    <div class="attribute-display">
+                      <span class="attribute-tag">Stone Fruit</span>
+                      <span class="attribute-tag">Sweet</span>
+                      <span class="attribute-tag">Mild Astringency</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-approved">Approved</span>
+                  </td>
+                  <td>
+                    <button class="action-btn view-btn" data-id="1">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit-btn" data-id="1">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="evaluation-row" data-status="pending">
+                  <td>
+                    <div class="date-display">
+                      <div class="date-day">04</div>
+                      <div class="date-month">Mar</div>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>EC-2025-ET-03</strong>
+                    <div class="text-muted">Natural Arabica</div>
+                  </td>
+                  <td>
+                    <div><strong>Ethiopia • Guji</strong></div>
+                    <div class="text-muted">2100m • Grade 1 • Family Farm</div>
+                  </td>
+                  <td>
+                    <div class="score-indicator score-excellent">86.00</div>
+                  </td>
+                  <td>
+                    <div class="attribute-display">
+                      <span class="attribute-tag">Floral</span>
+                      <span class="attribute-tag">Bergamot</span>
+                      <span class="attribute-tag">Bright</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-pending">Follow-up</span>
+                  </td>
+                  <td>
+                    <button class="action-btn view-btn" data-id="2">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit-btn" data-id="2">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="evaluation-row" data-status="approved">
+                  <td>
+                    <div class="date-display">
+                      <div class="date-day">02</div>
+                      <div class="date-month">Mar</div>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>EC-2025-CO-01</strong>
+                    <div class="text-muted">Washed Arabica</div>
+                  </td>
+                  <td>
+                    <div><strong>Colombia • Huila</strong></div>
+                    <div class="text-muted">1800m • Supremo • Finca Especial</div>
+                  </td>
+                  <td>
+                    <div class="score-indicator score-excellent">87.50</div>
+                  </td>
+                  <td>
+                    <div class="attribute-display">
+                      <span class="attribute-tag">Chocolate</span>
+                      <span class="attribute-tag">Caramel</span>
+                      <span class="attribute-tag">Balanced</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-approved">Approved</span>
+                  </td>
+                  <td>
+                    <button class="action-btn view-btn" data-id="3">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit-btn" data-id="3">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="evaluation-row" data-status="archived">
+                  <td>
+                    <div class="date-display">
+                      <div class="date-day">28</div>
+                      <div class="date-month">Feb</div>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>EC-2025-BR-02</strong>
+                    <div class="text-muted">Pulped Natural Arabica</div>
+                  </td>
+                  <td>
+                    <div><strong>Brazil • Cerrado</strong></div>
+                    <div class="text-muted">900m • Fine Cup • Large Estate</div>
+                  </td>
+                  <td>
+                    <div class="score-indicator score-good">82.75</div>
+                  </td>
+                  <td>
+                    <div class="attribute-display">
+                      <span class="attribute-tag">Nutty</span>
+                      <span class="attribute-tag">Cocoa</span>
+                      <span class="attribute-tag">Medium Body</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-archived">Archived</span>
+                  </td>
+                  <td>
+                    <button class="action-btn view-btn" data-id="4">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit-btn" data-id="4">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="dashboard-footer">
+        <div class="footer-content">
+          <span>© 2024 Equity Coffee – Cupping & Evaluations System v2.0</span>
+          <span>Last updated: <span id="last-updated">Today, 15:45</span></span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Cupping Form Modal -->
+  <div class="modal-overlay" id="cuppingModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">New Cupping Evaluation</h3>
+        <button class="modal-close" id="modalClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="cuppingForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="lotId">Lot ID</label>
+              <input type="text" id="lotId" placeholder="EC-2025-XX-01" required>
+            </div>
+            <div class="form-group">
+              <label for="origin">Origin</label>
+              <select id="origin" required>
+                <option value="">Select origin</option>
+                <option value="uganda">Uganda • Mt. Elgon</option>
+                <option value="ethiopia">Ethiopia • Guji</option>
+                <option value="colombia">Colombia • Huila</option>
+                <option value="brazil">Brazil • Cerrado</option>
+                <option value="kenya">Kenya • Nyeri</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="process">Process Method</label>
+              <select id="process" required>
+                <option value="">Select process</option>
+                <option value="washed">Washed</option>
+                <option value="natural">Natural</option>
+                <option value="honey">Honey</option>
+                <option value="anaerobic">Anaerobic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Cupping Date</label>
+              <input type="date" id="date" required>
+            </div>
+          </div>
+
+          <div class="score-display">
+            <span id="scoreValue">84.50</span>
+          </div>
+          <input type="range" class="score-slider" id="scoreSlider" min="70" max="95" step="0.25" value="84.5">
+
+          <div class="attribute-grid">
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Aroma</span>
+                <span class="attribute-value" id="aromaValue">8.5</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="aroma" min="6" max="10" step="0.5" value="8.5">
+            </div>
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Flavor</span>
+                <span class="attribute-value" id="flavorValue">8.7</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="flavor" min="6" max="10" step="0.5" value="8.7">
+            </div>
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Aftertaste</span>
+                <span class="attribute-value" id="aftertasteValue">8.3</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="aftertaste" min="6" max="10" step="0.5" value="8.3">
+            </div>
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Acidity</span>
+                <span class="attribute-value" id="acidityValue">8.6</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="acidity" min="6" max="10" step="0.5" value="8.6">
+            </div>
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Body</span>
+                <span class="attribute-value" id="bodyValue">8.4</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="body" min="6" max="10" step="0.5" value="8.4">
+            </div>
+            <div class="attribute-card">
+              <div class="attribute-header">
+                <span class="attribute-name">Balance</span>
+                <span class="attribute-value" id="balanceValue">8.5</span>
+              </div>
+              <input type="range" class="attribute-slider" data-attribute="balance" min="6" max="10" step="0.5" value="8.5">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Tasting Notes & Observations</label>
+            <textarea id="notes" placeholder="Describe aroma, flavor profile, body, acidity, aftertaste, defects, and overall impression..." rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Evaluation Status</label>
+            <select id="status">
+              <option value="pending">Pending Review</option>
+              <option value="approved">Approved</option>
+              <option value="follow-up">Follow-up Required</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">
+              <i class="fas fa-save"></i>
+              Save Evaluation
+            </button>
+            <button type="button" class="btn btn-ghost" id="cancelForm" style="flex: 1;">
+              <i class="fas fa-times"></i>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/common-auth.js"></script>
+  <script>
+    // Enhanced JavaScript for Cupping & Evaluations
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebarClose = document.getElementById('sidebar-close');
+      const logoutBtns = document.querySelectorAll('#logout-btn, #topbar-logout');
+      const newEvaluationBtn = document.getElementById('new-evaluation');
+      const cuppingModal = document.getElementById('cuppingModal');
+      const modalClose = document.getElementById('modalClose');
+      const cancelForm = document.getElementById('cancelForm');
+      const cuppingForm = document.getElementById('cuppingForm');
+      const searchInput = document.getElementById('searchInput');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const evaluationRows = document.querySelectorAll('.evaluation-row');
+      const viewButtons = document.querySelectorAll('.view-btn');
+      const editButtons = document.querySelectorAll('.edit-btn');
+
+      // Sidebar Toggle
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      sidebarClose.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+      });
+
+      // Logout Functionality
+      logoutBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            window.location.href = '../index.html';
+          }
+        });
+      });
+
+      // Modal Functions
+      function openModal(title = 'New Cupping Evaluation') {
+        document.getElementById('modalTitle').textContent = title;
+        cuppingModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        cuppingModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        cuppingForm.reset();
+        resetSliders();
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      cancelForm.addEventListener('click', closeModal);
+
+      // New Evaluation Button
+      newEvaluationBtn.addEventListener('click', () => {
+        openModal();
+        // Set today's date
+        document.getElementById('date').valueAsDate = new Date();
+      });
+
+      // View/Edit Buttons
+      viewButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.closest('button').dataset.id;
+          openModal(`View Evaluation #${id}`);
+          // In a real app, load data for this ID
+          loadSampleData(id);
+        });
+      });
+
+      editButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.closest('button').dataset.id;
+          openModal(`Edit Evaluation #${id}`);
+          // In a real app, load data for this ID
+          loadSampleData(id);
+        });
+      });
+
+      // Form Submission
+      cuppingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Collect form data
+        const formData = {
+          lotId: document.getElementById('lotId').value,
+          origin: document.getElementById('origin').value,
+          process: document.getElementById('process').value,
+          date: document.getElementById('date').value,
+          score: document.getElementById('scoreValue').textContent,
+          aroma: document.getElementById('aromaValue').textContent,
+          flavor: document.getElementById('flavorValue').textContent,
+          aftertaste: document.getElementById('aftertasteValue').textContent,
+          acidity: document.getElementById('acidityValue').textContent,
+          body: document.getElementById('bodyValue').textContent,
+          balance: document.getElementById('balanceValue').textContent,
+          notes: document.getElementById('notes').value,
+          status: document.getElementById('status').value
+        };
+
+        // In a real app, send this to server
+        console.log('Form submitted:', formData);
+        
+        // Show success message
+        alert('Evaluation saved successfully!');
+        closeModal();
+        
+        // Refresh table (simulated)
+        setTimeout(() => {
+          updateLastUpdated();
+        }, 500);
+      });
+
+      // Score Slider
+      const scoreSlider = document.getElementById('scoreSlider');
+      const scoreValue = document.getElementById('scoreValue');
+
+      scoreSlider.addEventListener('input', () => {
+        const score = parseFloat(scoreSlider.value);
+        scoreValue.textContent = score.toFixed(2);
+        updateScoreIndicator(score);
+      });
+
+      // Attribute Sliders
+      const attributeSliders = document.querySelectorAll('.attribute-slider');
+      attributeSliders.forEach(slider => {
+        slider.addEventListener('input', () => {
+          const attribute = slider.dataset.attribute;
+          const value = slider.value;
+          document.getElementById(`${attribute}Value`).textContent = value;
+          calculateTotalScore();
+        });
+      });
+
+      // Calculate total score from attributes
+      function calculateTotalScore() {
+        let total = 0;
+        attributeSliders.forEach(slider => {
+          total += parseFloat(slider.value);
+        });
+        const average = total / attributeSliders.length;
+        const finalScore = (average * 10).toFixed(2);
+        scoreValue.textContent = finalScore;
+        scoreSlider.value = finalScore;
+        updateScoreIndicator(finalScore);
+      }
+
+      // Update score indicator color
+      function updateScoreIndicator(score) {
+        if (score >= 85) {
+          scoreValue.style.color = '#06b6d4';
+        } else if (score >= 80) {
+          scoreValue.style.color = '#16a34a';
+        } else if (score >= 75) {
+          scoreValue.style.color = '#f59e0b';
+        } else {
+          scoreValue.style.color = '#ef4444';
+        }
+      }
+
+      // Reset sliders to default values
+      function resetSliders() {
+        scoreSlider.value = 84.5;
+        scoreValue.textContent = '84.50';
+        updateScoreIndicator(84.5);
+        
+        const defaultValues = {
+          aroma: 8.5,
+          flavor: 8.7,
+          aftertaste: 8.3,
+          acidity: 8.6,
+          body: 8.4,
+          balance: 8.5
+        };
+
+        attributeSliders.forEach(slider => {
+          const attr = slider.dataset.attribute;
+          slider.value = defaultValues[attr];
+          document.getElementById(`${attr}Value`).textContent = defaultValues[attr];
+        });
+      }
+
+      // Load sample data for demo
+      function loadSampleData(id) {
+        const samples = {
+          1: {
+            lotId: 'EC-2025-UG-01',
+            origin: 'uganda',
+            process: 'washed',
+            date: '2025-03-01',
+            score: '84.25',
+            aroma: '8.4',
+            flavor: '8.4',
+            aftertaste: '8.2',
+            acidity: '8.5',
+            body: '8.3',
+            balance: '8.4',
+            notes: 'Sweet, stone fruit, mild astringency in finish. Good body, balanced acidity.',
+            status: 'approved'
+          },
+          2: {
+            lotId: 'EC-2025-ET-03',
+            origin: 'ethiopia',
+            process: 'natural',
+            date: '2025-03-04',
+            score: '86.00',
+            aroma: '8.7',
+            flavor: '8.8',
+            aftertaste: '8.6',
+            acidity: '8.9',
+            body: '8.5',
+            balance: '8.7',
+            notes: 'Floral, bergamot, tea-like body, bright acidity. Excellent complexity.',
+            status: 'follow-up'
+          }
+        };
+
+        const data = samples[id] || samples[1];
+        
+        // Populate form
+        document.getElementById('lotId').value = data.lotId;
+        document.getElementById('origin').value = data.origin;
+        document.getElementById('process').value = data.process;
+        document.getElementById('date').value = data.date;
+        document.getElementById('scoreValue').textContent = data.score;
+        document.getElementById('aromaValue').textContent = data.aroma;
+        document.getElementById('flavorValue').textContent = data.flavor;
+        document.getElementById('aftertasteValue').textContent = data.aftertaste;
+        document.getElementById('acidityValue').textContent = data.acidity;
+        document.getElementById('bodyValue').textContent = data.body;
+        document.getElementById('balanceValue').textContent = data.balance;
+        document.getElementById('notes').value = data.notes;
+        document.getElementById('status').value = data.status;
+        
+        // Update sliders
+        scoreSlider.value = data.score;
+        document.querySelector('[data-attribute="aroma"]').value = data.aroma;
+        document.querySelector('[data-attribute="flavor"]').value = data.flavor;
+        document.querySelector('[data-attribute="aftertaste"]').value = data.aftertaste;
+        document.querySelector('[data-attribute="acidity"]').value = data.acidity;
+        document.querySelector('[data-attribute="body"]').value = data.body;
+        document.querySelector('[data-attribute="balance"]').value = data.balance;
+        
+        updateScoreIndicator(data.score);
+      }
+
+      // Search Functionality
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        
+        evaluationRows.forEach(row => {
+          const rowText = row.textContent.toLowerCase();
+          if (rowText.includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+      // Filter Tabs
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Update active tab
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          const filter = tab.dataset.filter;
+          
+          // Filter rows
+          evaluationRows.forEach(row => {
+            if (filter === 'all') {
+              row.style.display = '';
+            } else {
+              const status = row.dataset.status;
+              if (filter === 'pending') {
+                row.style.display = status === 'pending' ? '' : 'none';
+              } else if (filter === 'approved') {
+                row.style.display = status === 'approved' ? '' : 'none';
+              } else if (filter === 'archived') {
+                row.style.display = status === 'archived' ? '' : 'none';
+              }
+            }
+          });
+        });
+      });
+
+      // Update last updated timestamp
+      function updateLastUpdated() {
+        const now = new Date();
+        const options = { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: false
+        };
+        const timeString = now.toLocaleTimeString('en-US', options);
+        document.getElementById('last-updated').textContent = `Today, ${timeString}`;
+      }
+
+      // Initialize
+      updateLastUpdated();
+      resetSliders();
+
+      // Close modal on ESC key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && cuppingModal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Close modal on outside click
+      cuppingModal.addEventListener('click', (e) => {
+        if (e.target === cuppingModal) {
+          closeModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

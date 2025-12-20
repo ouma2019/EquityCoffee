@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Partners | Equity Coffee</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+                <div>
+                    Equity Coffee
+                    <div class="sidebar-role">Trader / Exporter</div>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a class="sidebar-link" href="dashboard-trader.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a class="sidebar-link" href="trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                <li><a class="sidebar-link" href="trader-negotiations.html"><i class="fas fa-handshake"></i> Negotiations</a></li>
+                <li><a class="sidebar-link" href="trader-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+                <li><a class="sidebar-link" href="trader-shipments.html"><i class="fas fa-shipping-fast"></i> Shipments</a></li>
+                <li><a class="sidebar-link active" href="trader-partners.html"><i class="fas fa-users"></i> Partners</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <i class="fas fa-clock"></i> Last login: 2h ago
+            </div>
+        </aside>
+
+        <div class="dashboard-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1><i class="fas fa-users"></i> Partners</h1>
+                    <p>Manage your coffee trading partners and contacts</p>
+                </div>
+                <div class="topbar-right">
+                    <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+                    <div class="user-info">
+                        <span>Global Coffee Traders Ltd</span>
+                        <div class="avatar">GT</div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard-content">
+                <div class="content-header">
+                    <div class="filters-card">
+                        <div class="filter-group">
+                            <div class="search-input">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchPartners" placeholder="Search partners...">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <select id="partnerTypeFilter" class="modern-select">
+                                <option value="">All Types</option>
+                                <option value="supplier">Supplier</option>
+                                <option value="buyer">Buyer</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                        <button id="newPartnerBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Partner
+                        </button>
+                    </div>
+                </div>
+
+                <div class="partners-grid">
+                    <div class="partner-card type-supplier">
+                        <div class="partner-header">
+                            <div class="partner-avatar-large">KC</div>
+                            <div class="partner-info">
+                                <h4>Kirinyaga Cooperative</h4>
+                                <span class="partner-type badge badge-success">Supplier</span>
+                                <span class="partner-location"><i class="fas fa-map-marker-alt"></i> Kenya</span>
+                            </div>
+                        </div>
+                        <div class="partner-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Active Lots</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">86.5</div>
+                                <div class="stat-label">Avg. Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">$4.2M</div>
+                                <div class="stat-label">Total Volume</div>
+                            </div>
+                        </div>
+                        <div class="partner-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-user"></i>
+                                <span>John Kamau</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>contact@kirinyaga.co.ke</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+254 712 345 678</span>
+                            </div>
+                        </div>
+                        <div class="partner-actions">
+                            <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn btn-primary-small"><i class="fas fa-comment"></i> Message</button>
+                        </div>
+                    </div>
+
+                    <div class="partner-card type-buyer">
+                        <div class="partner-header">
+                            <div class="partner-avatar-large">RT</div>
+                            <div class="partner-info">
+                                <h4>Roastery Tech</h4>
+                                <span class="partner-type badge badge-primary">Buyer</span>
+                                <span class="partner-location"><i class="fas fa-map-marker-alt"></i> Germany</span>
+                            </div>
+                        </div>
+                        <div class="partner-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Active Orders</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">85+</div>
+                                <div class="stat-label">Min. Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">$3.1M</div>
+                                <div class="stat-label">Annual Spend</div>
+                            </div>
+                        </div>
+                        <div class="partner-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-user"></i>
+                                <span>Anna Schmidt</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>procurement@roastery.de</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+49 30 123 4567</span>
+                            </div>
+                        </div>
+                        <div class="partner-actions">
+                            <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn btn-primary-small"><i class="fas fa-comment"></i> Message</button>
+                        </div>
+                    </div>
+
+                    <div class="partner-card type-both">
+                        <div class="partner-header">
+                            <div class="partner-avatar-large">EC</div>
+                            <div class="partner-info">
+                                <h4>Ethiopian Coffee Export</h4>
+                                <span class="partner-type badge badge-warning">Supplier & Buyer</span>
+                                <span class="partner-location"><i class="fas fa-map-marker-alt"></i> Ethiopia</span>
+                            </div>
+                        </div>
+                        <div class="partner-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Lots Available</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">87.2</div>
+                                <div class="stat-label">Avg. Score</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">$5.8M</div>
+                                <div class="stat-label">Trade Volume</div>
+                            </div>
+                        </div>
+                        <div class="partner-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-user"></i>
+                                <span>Mekonnen Alemu</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>export@ethiopiancoffee.et</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+251 11 123 4567</span>
+                            </div>
+                        </div>
+                        <div class="partner-actions">
+                            <button class="btn btn-ghost-small"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn btn-primary-small"><i class="fas fa-comment"></i> Message</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/common-auth.js"></script>
+    <script src="../js/trader.js"></script>
+    <style>
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .partner-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        
+        .partner-card.type-supplier {
+            border-top: 4px solid #4caf50;
+        }
+        
+        .partner-card.type-buyer {
+            border-top: 4px solid #2196f3;
+        }
+        
+        .partner-card.type-both {
+            border-top: 4px solid #ff9800;
+        }
+        
+        .partner-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #f8f4f0 0%, #fff 100%);
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .partner-avatar-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .partner-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+        
+        .partner-type {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            margin-right: 0.5rem;
+        }
+        
+        .partner-location {
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .partner-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .partner-contact {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #555;
+            font-size: 0.875rem;
+        }
+        
+        .contact-item i {
+            width: 20px;
+            color: #8B4513;
+        }
+        
+        .partner-actions {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            gap: 0.75rem;
+            background: #fafafa;
+        }
+        
+        .btn-primary-small {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-primary {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .filters-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modern-select {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            min-width: 180px;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        .btn-ghost:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</body>
+</html>
+
+
+[

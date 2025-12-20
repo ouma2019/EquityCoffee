@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Find Services & Partners</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --bg-light: #f8fafc;
+      --text-dark: #1f2937;
+      --text-muted: #6b7280;
+      --border-light: #e5e7eb;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .directory-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .directory-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .directory-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .directory-header h1 i {
+      color: var(--primary);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .back-link:hover {
+      background: rgba(5, 150, 105, 0.1);
+    }
+    
+    .filters-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filter-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+    
+    .search-input-wrapper {
+      position: relative;
+    }
+    
+    .search-input-wrapper i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    
+    .search-input-wrapper input {
+      padding-left: 2.75rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-light);
+    }
+    
+    .btn-ghost:hover {
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+    
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .results-count {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .user-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: all 0.2s;
+    }
+    
+    .user-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .user-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: white;
+    }
+    
+    .role-farmer { background: linear-gradient(135deg, #059669, #10b981); }
+    .role-trader { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+    .role-roaster { background: linear-gradient(135deg, #d97706, #f59e0b); }
+    .role-logistics { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+    .role-educator { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .role-admin { background: linear-gradient(135deg, #374151, #4b5563); }
+    
+    .user-info h3 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .user-info .company {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    
+    .user-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .meta-item i {
+      color: var(--primary);
+      font-size: 0.75rem;
+    }
+    
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    
+    .role-badge.farmer { background: rgba(5, 150, 105, 0.1); color: #059669; }
+    .role-badge.trader { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+    .role-badge.roaster { background: rgba(217, 119, 6, 0.1); color: #d97706; }
+    .role-badge.logistics { background: rgba(124, 58, 237, 0.1); color: #7c3aed; }
+    .role-badge.educator { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+    .role-badge.admin { background: rgba(55, 65, 81, 0.1); color: #374151; }
+    
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .verified-badge i {
+      font-size: 0.875rem;
+    }
+    
+    .user-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-light);
+    }
+    
+    .user-actions .btn {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 2px dashed var(--border-light);
+    }
+    
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: var(--bg-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--text-muted);
+    }
+    
+    .empty-state h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--text-dark);
+    }
+    
+    .empty-state p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+    
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .loading-spinner.active {
+      display: block;
+    }
+    
+    .loading-spinner i {
+      font-size: 2rem;
+      color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .directory-container {
+        padding: 1rem;
+      }
+      
+      .filters-row {
+        flex-direction: column;
+      }
+      
+      .filter-group {
+        width: 100%;
+      }
+      
+      .users-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="directory-container">
+    <div class="directory-header">
+      <div>
+        <a href="/index.html" class="back-link">
+          <i class="fas fa-arrow-left"></i>
+          Back to Home
+        </a>
+        <h1><i class="fas fa-search-location"></i> Find Services & Partners</h1>
+        <p style="color: var(--text-muted); margin: 0.5rem 0 0 0;">Search for coffee farmers, traders, roasters, logistics providers, and educators by service type and location</p>
+      </div>
+    </div>
+    
+    <section class="filters-section">
+      <div class="filters-row">
+        <div class="filter-group" style="flex: 2;">
+          <label>Search</label>
+          <div class="search-input-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search by name, company, or email..." data-testid="input-search">
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Service Type</label>
+          <select id="role-filter" data-testid="select-role">
+            <option value="">All Services</option>
+            <option value="farmer">Coffee Farmers</option>
+            <option value="trader">Traders / Exporters</option>
+            <option value="roaster">Coffee Roasters</option>
+            <option value="logistics">Logistics & Shipping</option>
+            <option value="educator">Educators / Q Graders</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Location</label>
+          <select id="country-filter" data-testid="select-country">
+            <option value="">All Locations</option>
+          </select>
+        </div>
+        <div class="filter-group" style="flex: 0; min-width: auto;">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" id="search-btn" data-testid="button-search">
+            <i class="fas fa-search"></i>
+            Search
+          </button>
+        </div>
+      </div>
+    </section>
+    
+    <div class="results-header">
+      <span class="results-count" id="results-count">Loading users...</span>
+      <button class="btn btn-ghost" id="clear-filters" data-testid="button-clear-filters">
+        <i class="fas fa-times"></i>
+        Clear Filters
+      </button>
+    </div>
+    
+    <div class="loading-spinner" id="loading-spinner">
+      <i class="fas fa-spinner"></i>
+      <p>Loading directory...</p>
+    </div>
+    
+    <div class="users-grid" id="users-grid">
+    </div>
+    
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <div class="empty-state-icon">
+        <i class="fas fa-users-slash"></i>
+      </div>
+      <h3>No users found</h3>
+      <p>Try adjusting your search filters or check back later</p>
+    </div>
+  </div>
+  
+  <script>
+    const countries = [
+      "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia",
+      "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
+      "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei",
+      "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Central African Republic",
+      "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus",
+      "Czech Republic", "Denmark", "Djibouti", "Dominican Republic", "DR Congo", "Ecuador", "Egypt",
+      "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland",
+      "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala",
+      "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia",
+      "Iran", "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan",
+      "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia",
+      "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives",
+      "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova",
+      "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal",
+      "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia",
+      "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+      "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis",
+      "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe",
+      "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
+      "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka",
+      "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand",
+      "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+      "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+      "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+    ];
+    
+    function populateCountries() {
+      const select = document.getElementById('country-filter');
+      countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        select.appendChild(option);
+      });
+    }
+    
+    function getInitials(name) {
+      if (!name) return '??';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+    
+    function renderUser(user) {
+      const initials = user.firstName && user.lastName 
+        ? getInitials(user.firstName + ' ' + user.lastName)
+        : getInitials(user.companyName || user.username);
+      
+      const displayName = user.firstName && user.lastName 
+        ? user.firstName + ' ' + user.lastName 
+        : user.companyName || user.username;
+      
+      return `
+        <div class="user-card" data-testid="card-user-${user.id}">
+          <div class="user-card-header">
+            <div class="user-avatar role-${user.role}">${initials}</div>
+            <div class="user-info">
+              <h3>${escapeHtml(displayName)}</h3>
+              <span class="company">${escapeHtml(user.companyName || '')}</span>
+            </div>
+          </div>
+          <div class="user-meta">
+            <span class="role-badge ${user.role}">
+              <i class="fas fa-${getRoleIcon(user.role)}"></i>
+              ${user.role}
+            </span>
+            ${user.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+          </div>
+          <div class="user-meta">
+            ${user.country ? `<span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(user.country)}</span>` : ''}
+            ${user.location ? `<span class="meta-item"><i class="fas fa-globe"></i> ${escapeHtml(user.location)}</span>` : ''}
+            ${user.email ? `<span class="meta-item"><i class="fas fa-envelope"></i> ${escapeHtml(user.email)}</span>` : ''}
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-ghost" onclick="viewProfile('${user.id}')" data-testid="button-view-${user.id}">
+              <i class="fas fa-user"></i> View Profile
+            </button>
+            <button class="btn btn-primary" onclick="contactUser('${user.id}')" data-testid="button-contact-${user.id}">
+              <i class="fas fa-envelope"></i> Contact
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    
+    function getRoleIcon(role) {
+      const icons = {
+        farmer: 'seedling',
+        trader: 'exchange-alt',
+        roaster: 'fire',
+        logistics: 'truck',
+        educator: 'chalkboard-teacher',
+        admin: 'user-shield'
+      };
+      return icons[role] || 'user';
+    }
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+    
+    async function searchUsers() {
+      const search = document.getElementById('search-input').value;
+      const role = document.getElementById('role-filter').value;
+      const country = document.getElementById('country-filter').value;
+      
+      const spinner = document.getElementById('loading-spinner');
+      const grid = document.getElementById('users-grid');
+      const emptyState = document.getElementById('empty-state');
+      const resultsCount = document.getElementById('results-count');
+      
+      spinner.classList.add('active');
+      grid.innerHTML = '';
+      emptyState.style.display = 'none';
+      
+      try {
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (role) params.append('role', role);
+        if (country) params.append('country', country);
+        
+        const response = await fetch('/api/users/directory?' + params.toString());
+        const data = await response.json();
+        
+        spinner.classList.remove('active');
+        
+        if (data.users && data.users.length > 0) {
+          resultsCount.textContent = `Showing ${data.users.length} user${data.users.length !== 1 ? 's' : ''}`;
+          grid.innerHTML = data.users.map(renderUser).join('');
+        } else {
+          resultsCount.textContent = 'No users found';
+          emptyState.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        spinner.classList.remove('active');
+        resultsCount.textContent = 'Error loading users';
+        emptyState.style.display = 'block';
+      }
+    }
+    
+    function viewProfile(userId) {
+      window.location.href = '/profile.html?id=' + userId;
+    }
+    
+    function contactUser(userId) {
+      // Find user from current results
+      var user = null;
+      var cards = document.querySelectorAll('.user-card');
+      cards.forEach(function(card) {
+        if (card.querySelector('[data-testid="button-view-' + userId + '"]')) {
+          var nameEl = card.querySelector('h3');
+          var emailEl = card.querySelector('.user-email');
+          if (nameEl && emailEl) {
+            user = { 
+              id: userId, 
+              name: nameEl.textContent,
+              email: emailEl.textContent.replace('Email: ', '')
+            };
+          }
+        }
+      });
+      
+      if (!user || !user.email) {
+        alert('Could not find user contact information.');
+        return;
+      }
+      
+      var subject = prompt('Enter email subject:', 'Hello from Equity Coffee');
+      if (subject === null) return;
+      
+      var message = prompt('Enter your message:', '');
+      if (message === null) return;
+      
+      // Open email client
+      var mailtoLink = 'mailto:' + user.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+      window.location.href = mailtoLink;
+    }
+    
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('role-filter').value = '';
+      document.getElementById('country-filter').value = '';
+      searchUsers();
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Directory is now publicly accessible - anyone can browse and find services
+      populateCountries();
+      
+      document.getElementById('search-btn').addEventListener('click', searchUsers);
+      document.getElementById('clear-filters').addEventListener('click', clearFilters);
+      document.getElementById('search-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') searchUsers();
+      });
+      
+      searchUsers();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistics Dashboard – Equity Coffee Logistics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --secondary: #34a853;
+      --warning: #f9ab00;
+      --danger: #ea4335;
+      --info: #4285f4;
+      --light-bg: #f8f9fa;
+      --dark-bg: #202124;
+      --card-bg: #ffffff;
+      --sidebar-bg: #1e293b;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --text-light: #ffffff;
+      --border: #dadce0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.3s ease;
+    }
+    
+    body.dashboard-body {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--sidebar-bg);
+      color: var(--text-light);
+      width: 260px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      background-color: white;
+      padding: 4px;
+    }
+    
+    .sidebar-logo > div {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .sidebar-role {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .sidebar-nav li {
+      margin-bottom: 8px;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .sidebar-link:hover {
+      background-color: rgba(255,255,255,0.1);
+      color: var(--text-light);
+    }
+    
+    .sidebar-link.active {
+      background-color: var(--primary);
+      color: var(--text-light);
+      box-shadow: var(--shadow);
+    }
+    
+    .sidebar-link i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-footer {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+    
+    /* Main Content */
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* Topbar */
+    .topbar {
+      background-color: var(--card-bg);
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+    
+    .topbar-left h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+    
+    .topbar-left p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    #sidebar-toggle {
+      display: none;
+    }
+    
+    .topbar-right span {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--info));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Content */
+    .dashboard-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+    
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .kpi-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .kpi-card:nth-child(2) {
+      border-left-color: var(--secondary);
+    }
+    
+    .kpi-card:nth-child(3) {
+      border-left-color: var(--warning);
+    }
+    
+    .kpi-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .kpi-label i {
+      color: var(--primary);
+    }
+    
+    .kpi-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    
+    .kpi-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    
+    /* Columns Layout */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    @media (max-width: 1100px) {
+      .columns {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Panels */
+    .panel {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    .panel-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .panel-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .panel-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Chart Placeholder */
+    .chart-placeholder {
+      height: 280px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .chart-placeholder::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),
+        repeating-linear-gradient(0deg, #f0f0f0, #f0f0f0 2px, transparent 2px, transparent 20px),
+        repeating-linear-gradient(90deg, #f0f0f0, #f0f0f0 2px, transparent 2px, transparent 20px);
+      background-size: 200% 100%, 100% 100%, 100% 100%;
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0, 0 0, 0 0; }
+      100% { background-position: 200% 0, 0 0, 0 0; }
+    }
+    
+    /* Tables */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .table thead {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .table th {
+      padding: 16px 24px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .table td {
+      padding: 16px 24px;
+      color: var(--text-primary);
+    }
+    
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    .badge-info {
+      background-color: rgba(66, 133, 244, 0.1);
+      color: var(--info);
+    }
+    
+    .badge-success {
+      background-color: rgba(52, 168, 83, 0.1);
+      color: var(--secondary);
+    }
+    
+    .badge-warning {
+      background-color: rgba(249, 171, 0, 0.1);
+      color: var(--warning);
+    }
+    
+    .badge-danger {
+      background-color: rgba(234, 67, 53, 0.1);
+      color: var(--danger);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+    
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-ghost:hover {
+      background-color: rgba(26, 115, 232, 0.05);
+      border-color: var(--primary);
+    }
+    
+    .btn-ghost-small {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.85rem;
+    }
+    
+    .btn-ghost-small:hover {
+      background-color: rgba(26, 115, 232, 0.05);
+      border-color: var(--primary);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        height: 100vh;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      #sidebar-toggle {
+        display: block;
+      }
+      
+      .dashboard-main {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .dashboard-content {
+        padding: 20px;
+      }
+      
+      .topbar {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .topbar-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+    
+    /* Animation for chart */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .kpi-card, .panel {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Scrollbar Styling */
+    .dashboard-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    
+    .dashboard-content::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -260px;
+        height: 100vh;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .sidebar.open { left: 0; }
+      .dashboard-main { margin-left: 0; padding-top: 70px; }
+      
+      .mobile-header {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(135deg, #0d47a1, #1a73e8);
+        z-index: 999;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+      }
+      
+      .mobile-header .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+      }
+      
+      .mobile-header .logo img {
+        height: 36px;
+        border-radius: 6px;
+      }
+      
+      .mobile-header .logo span {
+        font-weight: 600;
+      }
+      
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+      
+      .toggle-line {
+        width: 24px;
+        height: 2px;
+        background: white;
+        transition: all 0.3s ease;
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(2) {
+        opacity: 0;
+      }
+      
+      .nav-toggle.active .toggle-line:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+      
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      
+      .overlay.active {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-header { display: none; }
+      .nav-toggle { display: none; }
+      .overlay { display: none !important; }
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <header class="mobile-header">
+    <div class="logo">
+      <img src="../images/logo.png" alt="Equity Coffee">
+      <span>Logistics Dashboard</span>
+    </div>
+    <button class="nav-toggle" id="menu-toggle" aria-label="Toggle navigation">
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+    </button>
+  </header>
+  
+  <div class="overlay" id="overlay"></div>
+  
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-placeholder">
+          <i class="fas fa-coffee" style="color: #8B4513; font-size: 1.8rem;"></i>
+        </div>
+        <div>
+          Equity Coffee
+          <div class="sidebar-role">Logistics Partner</div>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="/index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a class="sidebar-link active" href="dashboard-logistics.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a class="sidebar-link" href="logistics-requests.html"><i class="fas fa-shipping-fast"></i> Shipping requests</a></li>
+        <li><a class="sidebar-link" href="logistics-shipments.html"><i class="fas fa-truck-loading"></i> Assigned shipments</a></li>
+        <li><a class="sidebar-link" href="logistics-routes.html"><i class="fas fa-route"></i> Route planner</a></li>
+        <li><a class="sidebar-link" href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+        <li><a class="sidebar-link" href="/trader/trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+        <li><a class="sidebar-link" href="/directory.html"><i class="fas fa-search-location"></i> Find Services</a></li>
+        <li><a class="sidebar-link" href="#"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <p><strong>Contact operations</strong></p>
+        <p>ops@equitycoffee.com</p>
+        <p>+1 (555) 123-4567</p>
+      </div>
+    </aside>
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Logistics Dashboard</h1>
+          <p>Track requests, shipments and routes across all origins.</p>
+        </div>
+        <div class="topbar-right">
+          <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i> Menu</button>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-building" style="color: var(--primary);"></i>
+            <span>TransGlobal Logistics</span>
+          </div>
+          <div class="avatar-dropdown">
+            <div class="avatar">TL</div>
+            <div class="avatar-menu">
+              <a href="#"><i class="fas fa-user"></i> Profile</a>
+              <a href="#"><i class="fas fa-cog"></i> Settings</a>
+              <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label"><i class="fas fa-clock"></i> Pending requests</div>
+            <div class="kpi-value">8</div>
+            <div class="kpi-meta">Need assignment • 2 urgent</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label"><i class="fas fa-truck-moving"></i> Shipments in transit</div>
+            <div class="kpi-value">42</div>
+            <div class="kpi-meta">Across 5 routes • 3 delayed</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label"><i class="fas fa-check-circle"></i> Delivered this month</div>
+            <div class="kpi-value">31</div>
+            <div class="kpi-meta">On-time rate: 93% • +5% from last month</div>
+          </div>
+        </section>
+
+        <section class="columns">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Export Performance</h2>
+                <div class="panel-meta">Delivered vs in-transit shipments by region</div>
+              </div>
+              <div>
+                <button class="btn-ghost-small"><i class="fas fa-download"></i> Export</button>
+              </div>
+            </div>
+            <div class="chart-placeholder"></div>
+            <div style="padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.9rem;">
+              <div><span style="color: var(--secondary); font-weight: 600;">Delivered: 31</span> shipments</div>
+              <div><span style="color: var(--info); font-weight: 600;">In Transit: 42</span> shipments</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Assigned Shipments</h2>
+              <button class="btn-ghost-small">View all <i class="fas fa-arrow-right"></i></button>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Route</th>
+                  <th>Lot</th>
+                  <th>Status</th>
+                  <th>ETA</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SH-9821</strong></td>
+                  <td>Farm → Mill</td>
+                  <td>Kirinyaga AB 12</td>
+                  <td><span class="badge badge-info"><i class="fas fa-truck"></i> On truck</span></td>
+                  <td>Tomorrow</td>
+                </tr>
+                <tr>
+                  <td><strong>SH-9775</strong></td>
+                  <td>Port → Hamburg</td>
+                  <td>Cerrado 21</td>
+                  <td><span class="badge badge-success"><i class="fas fa-check"></i> Delivered</span></td>
+                  <td>Dec 12</td>
+                </tr>
+                <tr>
+                  <td><strong>SH-9810</strong></td>
+                  <td>Mill → Port</td>
+                  <td>Antigua 15</td>
+                  <td><span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Delayed</span></td>
+                  <td>Today</td>
+                </tr>
+                <tr>
+                  <td><strong>SH-9792</strong></td>
+                  <td>Warehouse → Roastery</td>
+                  <td>Sidamo 08</td>
+                  <td><span class="badge badge-info"><i class="fas fa-warehouse"></i> At hub</span></td>
+                  <td>Dec 18</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Open Shipping Requests</h2>
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> New Assignment</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Request</th>
+                <th>Origin</th>
+                <th>Volume</th>
+                <th>Route</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>REQ-2041</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-flag" style="color: #008000;"></i>
+                    Kenya
+                  </div>
+                </td>
+                <td>120 bags</td>
+                <td>Farm → Port</td>
+                <td><span class="badge badge-danger">High</span></td>
+                <td>2 days</td>
+                <td><button class="btn-ghost-small"><i class="fas fa-eye"></i> Review</button></td>
+              </tr>
+              <tr>
+                <td><strong>REQ-2038</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-flag" style="color: #FFD700;"></i>
+                    Colombia
+                  </div>
+                </td>
+                <td>80 bags</td>
+                <td>Mill → Port</td>
+                <td><span class="badge badge-warning">Medium</span></td>
+                <td>5 days</td>
+                <td><button class="btn-ghost-small"><i class="fas fa-eye"></i> Review</button></td>
+              </tr>
+              <tr>
+                <td><strong>REQ-2035</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-flag" style="color: #0000FF;"></i>
+                    Ethiopia
+                  </div>
+                </td>
+                <td>200 bags</td>
+                <td>Farm → Mill</td>
+                <td><span class="badge badge-danger">High</span></td>
+                <td>6 days</td>
+                <td><button class="btn-ghost-small"><i class="fas fa-eye"></i> Review</button></td>
+              </tr>
+              <tr>
+                <td><strong>REQ-2029</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-flag" style="color: #8B4513;"></i>
+                    Brazil
+                  </div>
+                </td>
+                <td>150 bags</td>
+                <td>Port → Warehouse</td>
+                <td><span class="badge">Low</span></td>
+                <td>8 days</td>
+                <td><button class="btn-ghost-small"><i class="fas fa-eye"></i> Review</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 32px; color: var(--text-secondary); font-size: 0.9rem;">
+          <div>© 2023 Equity Coffee Logistics. All rights reserved.</div>
+          <div>Last updated: Today, 10:42 AM</div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Toggle sidebar on mobile
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.toggle('active');
+    });
+
+    // Simulate chart loading
+    setTimeout(function() {
+      const chartPlaceholder = document.querySelector('.chart-placeholder');
+      if (chartPlaceholder) {
+        chartPlaceholder.innerHTML = `
+          <div style="text-align: center; width: 100%;">
+            <div style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 20px;">
+              <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary); margin-bottom: 10px;"></i>
+              <div>Performance chart would appear here</div>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+              Data visualization powered by Equity Analytics
+            </div>
+          </div>
+        `;
+      }
+    }, 1500);
+
+    // Add hover effect to avatar
+    const avatar = document.querySelector('.avatar');
+    if (avatar) {
+      avatar.addEventListener('click', function() {
+        alert('User menu would open here');
+      });
+    }
+
+    // Add loading animation to KPI cards
+    document.addEventListener('DOMContentLoaded', function() {
+      const kpiCards = document.querySelectorAll('.kpi-card');
+      kpiCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+      });
+    });
+
+    // Highlight table rows on click
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+      row.addEventListener('click', function() {
+        this.classList.toggle('selected');
+      });
+    });
+  </script>
+  <script src="../js/common-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!window.ECAuth || !ECAuth.requireAuth({ redirectTo: '/login.html' })) return;
+      var user = ECAuth.getUser();
+      if (user) {
+        var displayName = user.companyName || user.company_name || 
+                          ((user.firstName || user.first_name || '') + ' ' + (user.lastName || user.last_name || '')).trim() ||
+                          user.username || 'User';
+        var email = user.email || '';
+        var initials = displayName.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().substring(0, 2) || 'U';
+        document.querySelectorAll('.user-name, #user-name').forEach(function(el) { el.textContent = displayName; });
+        document.querySelectorAll('.user-email, #user-email').forEach(function(el) { el.textContent = email; });
+        document.querySelectorAll('.avatar, .user-avatar').forEach(function(el) { el.textContent = initials; });
+      }
+    });
+  </script>
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('overlay');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (menuToggle && sidebar && overlay) {
+        menuToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('active');
+          menuToggle.classList.toggle('active');
+        });
+        
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          menuToggle.classList.remove('active');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

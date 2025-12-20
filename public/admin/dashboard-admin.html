@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Admin Control Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+:root {
+  --primary: #7c3aed;
+  --primary-dark: #5b21b6;
+  --primary-light: #a78bfa;
+  --secondary: #D4A76A;
+  --accent: #9C6B3B;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  
+  --text: #1A1A1A;
+  --text-light: #6B7280;
+  --text-lighter: #9CA3AF;
+  
+  --background: #F9FAFB;
+  --background-alt: #FFFFFF;
+  --card-bg: #FFFFFF;
+  
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --border-dark: #D1D5DB;
+  
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+  
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background-color: var(--background);
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-logo img {
+  height: 40px;
+  border-radius: 8px;
+}
+
+.sidebar-logo h2 {
+  font-size: 1.25rem;
+  color: white;
+  margin: 0;
+}
+
+.sidebar-logo span {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  display: block;
+}
+
+.nav-section {
+  margin-bottom: 1.5rem;
+}
+
+.nav-section-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: var(--transition);
+  margin-bottom: 0.25rem;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.nav-link.active {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-weight: 600;
+}
+
+.nav-link i {
+  width: 20px;
+  text-align: center;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-title {
+  font-size: 1.75rem;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.page-subtitle {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.stat-icon.users { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+.stat-icon.farmers { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+.stat-icon.traders { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+.stat-icon.roasters { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+.stat-icon.logistics { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+.stat-icon.lots { background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; }
+.stat-icon.contracts { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+.stat-icon.shipments { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.section-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: var(--transition);
+  cursor: pointer;
+  border: none;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--background);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-light);
+}
+
+tr:hover {
+  background: var(--background);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.farmer { background: #d1fae5; color: #059669; }
+.role-badge.trader { background: #fef3c7; color: #d97706; }
+.role-badge.roaster { background: #fee2e2; color: #dc2626; }
+.role-badge.logistics { background: #e0e7ff; color: #4f46e5; }
+.role-badge.educator { background: #fce7f3; color: #db2777; }
+.role-badge.admin { background: #f3e8ff; color: #7c3aed; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.active { background: #d1fae5; color: #059669; }
+.status-badge.pending { background: #fef3c7; color: #d97706; }
+.status-badge.inactive { background: #fee2e2; color: #dc2626; }
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.filter-select, .filter-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+
+.filter-select:focus, .filter-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-light);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-light);
+}
+
+.loading i {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.activity-list {
+  padding: 0;
+  list-style: none;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.activity-item:hover {
+  background: var(--background);
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.activity-icon.lot { background: linear-gradient(135deg, #10b981, #059669); }
+.activity-icon.negotiation { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.activity-icon.shipment { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.activity-icon.contract { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-message {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: var(--text-lighter);
+}
+
+@media (max-width: 1024px) {
+  .sidebar { width: 240px; }
+  .main-content { margin-left: 240px; }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    z-index: 1000;
+    transition: var(--transition);
+  }
+  .sidebar.open { left: 0; }
+  .main-content { margin-left: 0; padding-top: 70px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .mobile-header {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    z-index: 999;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+  
+  .mobile-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+  }
+  
+  .mobile-header .logo img {
+    height: 36px;
+    border-radius: 6px;
+  }
+  
+  .mobile-header .logo span {
+    font-weight: 600;
+  }
+  
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  
+  .toggle-line {
+    width: 24px;
+    height: 2px;
+    background: white;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-toggle.active .toggle-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .nav-toggle.active .toggle-line:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .nav-toggle.active .toggle-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+  
+  .overlay.active {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-header { display: none; }
+  .nav-toggle { display: none; }
+  .overlay { display: none !important; }
+}
+  </style>
+</head>
+<body>
+  <header class="mobile-header">
+    <div class="logo">
+      <img src="../images/logo.png" alt="Equity Coffee">
+      <span>Admin Panel</span>
+    </div>
+    <button class="nav-toggle" id="menu-toggle" aria-label="Toggle navigation">
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+    </button>
+  </header>
+  
+  <div class="overlay" id="overlay"></div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.png" alt="Equity Coffee">
+      <div>
+        <h2>Equity Coffee</h2>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-section-title">Navigation</div>
+      <a href="../index.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-section-title">Dashboard</div>
+      <a href="#" class="nav-link active">
+        <i class="fas fa-chart-line"></i>
+        Overview
+      </a>
+      <a href="#" class="nav-link" onclick="showSection('users')">
+        <i class="fas fa-users"></i>
+        User Management
+      </a>
+      <a href="#" class="nav-link" onclick="showSection('activity')">
+        <i class="fas fa-rss"></i>
+        Platform Activity
+      </a>
+      <a href="#" class="nav-link" onclick="showSection('email')">
+        <i class="fas fa-envelope"></i>
+        Bulk Email
+      </a>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-section-title">Role Dashboards</div>
+      <a href="../farmer/dashboard-farmer.html" class="nav-link">
+        <i class="fas fa-seedling"></i>
+        Farmer Dashboard
+      </a>
+      <a href="../trader/dashboard-trader.html" class="nav-link">
+        <i class="fas fa-handshake"></i>
+        Trader Dashboard
+      </a>
+      <a href="../roaster/dashboard-roaster.html" class="nav-link">
+        <i class="fas fa-fire"></i>
+        Roaster Dashboard
+      </a>
+      <a href="../logistics/dashboard-logistics.html" class="nav-link">
+        <i class="fas fa-truck"></i>
+        Logistics Dashboard
+      </a>
+      <a href="../educator/dashboard-educator.html" class="nav-link">
+        <i class="fas fa-chalkboard-teacher"></i>
+        Educator Dashboard
+      </a>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-section-title">Platform</div>
+      <a href="../marketplace.html" class="nav-link">
+        <i class="fas fa-store"></i>
+        Marketplace
+      </a>
+      <a href="../directory.html" class="nav-link">
+        <i class="fas fa-address-book"></i>
+        User Directory
+      </a>
+      <a href="../landing.html" class="nav-link">
+        <i class="fas fa-info-circle"></i>
+        About Platform
+      </a>
+    </nav>
+
+    <nav class="nav-section" style="margin-top: auto;">
+      <a href="../login.html" class="nav-link">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Admin Control Panel</h1>
+        <p class="page-subtitle">Manage users, monitor activity, and control all platform operations</p>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="refreshData()">
+          <i class="fas fa-sync-alt"></i>
+          Refresh Data
+        </button>
+      </div>
+    </header>
+
+    <section class="stats-grid" id="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon users"><i class="fas fa-users"></i></div>
+        <div class="stat-value" id="total-users">-</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon farmers"><i class="fas fa-seedling"></i></div>
+        <div class="stat-value" id="total-farmers">-</div>
+        <div class="stat-label">Farmers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon traders"><i class="fas fa-handshake"></i></div>
+        <div class="stat-value" id="total-traders">-</div>
+        <div class="stat-label">Traders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon roasters"><i class="fas fa-fire"></i></div>
+        <div class="stat-value" id="total-roasters">-</div>
+        <div class="stat-label">Roasters</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon logistics"><i class="fas fa-truck"></i></div>
+        <div class="stat-value" id="total-logistics">-</div>
+        <div class="stat-label">Logistics</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon lots"><i class="fas fa-coffee"></i></div>
+        <div class="stat-value" id="total-lots">-</div>
+        <div class="stat-label">Coffee Lots</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon contracts"><i class="fas fa-file-contract"></i></div>
+        <div class="stat-value" id="total-contracts">-</div>
+        <div class="stat-label">Contracts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon shipments"><i class="fas fa-shipping-fast"></i></div>
+        <div class="stat-value" id="total-shipments">-</div>
+        <div class="stat-label">Shipments</div>
+      </div>
+    </section>
+
+    <section class="section-card" id="users-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-users"></i>
+          User Management
+        </h3>
+        <div class="section-actions">
+          <button class="btn btn-outline btn-sm" onclick="exportUsers()">
+            <i class="fas fa-download"></i>
+            Export
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label">Search</label>
+          <input type="text" class="filter-input" id="search-users" placeholder="Name or email..." onkeyup="filterUsers()">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Role</label>
+          <select class="filter-select" id="filter-role" onchange="filterUsers()">
+            <option value="">All Roles</option>
+            <option value="farmer">Farmer</option>
+            <option value="trader">Trader</option>
+            <option value="roaster">Roaster</option>
+            <option value="logistics">Logistics</option>
+            <option value="educator">Educator</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Country</label>
+          <select class="filter-select" id="filter-country" onchange="filterUsers()">
+            <option value="">All Countries</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Company</th>
+              <th>Country</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr>
+              <td colspan="7">
+                <div class="loading">
+                  <i class="fas fa-spinner"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="activity-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-rss"></i>
+          Recent Platform Activity
+        </h3>
+        <div class="section-actions">
+          <button class="btn btn-outline btn-sm" onclick="loadActivity()">
+            <i class="fas fa-sync-alt"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+      
+      <div style="padding: 1rem 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <i class="fas fa-globe" style="color: var(--primary);"></i>
+          <div>
+            <strong style="font-size: 0.9rem;">Public Activity Feed</strong>
+            <p style="font-size: 0.75rem; color: var(--text-light); margin: 0;">Control visibility of activity feed on main page</p>
+          </div>
+        </div>
+        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+          <input type="checkbox" id="feed-toggle" onchange="togglePublicFeed(this.checked)" style="width: 18px; height: 18px; cursor: pointer;">
+          <span id="feed-status" style="font-size: 0.85rem; font-weight: 500;">Enabled</span>
+        </label>
+      </div>
+      
+      <ul class="activity-list" id="activity-list">
+        <li class="activity-item">
+          <div class="loading" style="width: 100%; justify-content: center;">
+            <i class="fas fa-spinner"></i>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="email-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-envelope"></i>
+          Send Bulk Email to Users
+        </h3>
+      </div>
+      
+      <div style="padding: 1.5rem;">
+        <div id="email-message" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+        
+        <form id="bulkEmailForm" onsubmit="sendBulkEmail(event)">
+          <div class="filter-group" style="margin-bottom: 1rem;">
+            <label class="filter-label">Select Role (Recipients)</label>
+            <select class="filter-select" id="email-role" required style="width: 100%; max-width: 300px;">
+              <option value="">Choose a role...</option>
+              <option value="farmer">All Farmers</option>
+              <option value="trader">All Traders</option>
+              <option value="roaster">All Roasters</option>
+              <option value="logistics">All Logistics Providers</option>
+              <option value="educator">All Educators</option>
+              <option value="admin">All Admins</option>
+            </select>
+          </div>
+          
+          <div class="filter-group" style="margin-bottom: 1rem;">
+            <label class="filter-label">Email Subject</label>
+            <input type="text" class="filter-input" id="email-subject" placeholder="Enter email subject..." required style="width: 100%;">
+          </div>
+          
+          <div class="filter-group" style="margin-bottom: 1.5rem;">
+            <label class="filter-label">Message</label>
+            <textarea id="email-message-text" rows="6" placeholder="Write your message here..." required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 0.875rem; resize: vertical;"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="send-email-btn">
+            <i class="fas fa-paper-plane"></i>
+            Send Email to Selected Role
+          </button>
+        </form>
+        
+        <div id="email-preview" style="margin-top: 1.5rem; display: none;">
+          <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.75rem;">Recipients Preview:</h4>
+          <div id="recipient-list" style="background: var(--background); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let allUsers = [];
+    let allActivity = [];
+
+    // Public Feed Toggle Functions
+    async function initFeedToggle() {
+      const toggle = document.getElementById('feed-toggle');
+      const status = document.getElementById('feed-status');
+      
+      try {
+        const response = await fetch('/api/settings/activity-feed');
+        const data = await response.json();
+        const isEnabled = data.enabled !== false;
+        toggle.checked = isEnabled;
+        status.textContent = isEnabled ? 'Enabled' : 'Disabled';
+        status.style.color = isEnabled ? '#059669' : '#dc2626';
+      } catch (error) {
+        console.error('Error loading feed setting:', error);
+        toggle.checked = true;
+        status.textContent = 'Enabled';
+        status.style.color = '#059669';
+      }
+    }
+
+    async function togglePublicFeed(enabled) {
+      const status = document.getElementById('feed-status');
+      const token = localStorage.getItem('ec_token');
+      
+      try {
+        const response = await fetch('/api/admin/settings/activity-feed', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ enabled })
+        });
+        
+        if (response.ok) {
+          status.textContent = enabled ? 'Enabled' : 'Disabled';
+          status.style.color = enabled ? '#059669' : '#dc2626';
+        } else {
+          const data = await response.json();
+          alert('Failed to update: ' + (data.message || 'Unknown error'));
+          document.getElementById('feed-toggle').checked = !enabled;
+        }
+      } catch (error) {
+        console.error('Error updating feed setting:', error);
+        alert('Failed to update setting');
+        document.getElementById('feed-toggle').checked = !enabled;
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const [usersRes, lotsRes] = await Promise.all([
+          fetch('/api/directory/users'),
+          fetch('/api/marketplace/lots')
+        ]);
+        
+        const usersData = await usersRes.json();
+        const lotsData = await lotsRes.json();
+        
+        const users = usersData.users || [];
+        const lots = lotsData.lots || [];
+        
+        document.getElementById('total-users').textContent = users.length;
+        document.getElementById('total-farmers').textContent = users.filter(u => u.role === 'farmer').length;
+        document.getElementById('total-traders').textContent = users.filter(u => u.role === 'trader').length;
+        document.getElementById('total-roasters').textContent = users.filter(u => u.role === 'roaster').length;
+        document.getElementById('total-logistics').textContent = users.filter(u => u.role === 'logistics').length;
+        document.getElementById('total-lots').textContent = lots.length;
+        
+        const activityRes = await fetch('/api/activity/feed?limit=50');
+        const activityData = await activityRes.json();
+        const activity = activityData.activity || [];
+        
+        document.getElementById('total-contracts').textContent = activity.filter(a => a.type === 'contract').length;
+        document.getElementById('total-shipments').textContent = activity.filter(a => a.type === 'shipment').length;
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    async function loadUsers() {
+      try {
+        const response = await fetch('/api/directory/users');
+        const data = await response.json();
+        allUsers = data.users || [];
+        
+        const countries = [...new Set(allUsers.map(u => u.country).filter(Boolean))];
+        const countrySelect = document.getElementById('filter-country');
+        countries.sort().forEach(country => {
+          const option = document.createElement('option');
+          option.value = country;
+          option.textContent = country;
+          countrySelect.appendChild(option);
+        });
+        
+        renderUsers(allUsers);
+      } catch (error) {
+        console.error('Error loading users:', error);
+        document.getElementById('users-table-body').innerHTML = `
+          <tr><td colspan="7" class="empty-state">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>Failed to load users</p>
+          </td></tr>
+        `;
+      }
+    }
+
+    function renderUsers(users) {
+      const tbody = document.getElementById('users-table-body');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="7" class="empty-state">
+            <i class="fas fa-users"></i>
+            <p>No users found</p>
+          </td></tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = users.map(user => {
+        const initials = (user.firstName?.[0] || '') + (user.lastName?.[0] || user.username?.[0] || '');
+        const roleIcons = {
+          farmer: 'fa-seedling',
+          trader: 'fa-handshake',
+          roaster: 'fa-fire',
+          logistics: 'fa-truck',
+          educator: 'fa-chalkboard-teacher',
+          admin: 'fa-user-shield'
+        };
+        const joinDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-';
+        
+        return `
+          <tr data-user-id="${user.id}">
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">${initials.toUpperCase()}</div>
+                <div>
+                  <div class="user-name">${user.firstName || ''} ${user.lastName || user.username || 'Unknown'}</div>
+                  <div class="user-email">${user.email || '-'}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="role-badge ${user.role || 'user'}">
+                <i class="fas ${roleIcons[user.role] || 'fa-user'}"></i>
+                ${user.role || 'User'}
+              </span>
+            </td>
+            <td>${user.companyName || '-'}</td>
+            <td>${user.country || '-'}</td>
+            <td><span class="status-badge active">Active</span></td>
+            <td>${joinDate}</td>
+            <td class="actions-cell">
+              <button class="btn btn-outline btn-sm" onclick="viewUser('${user.id}')">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="editUser('${user.id}')">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterUsers() {
+      const search = document.getElementById('search-users').value.toLowerCase();
+      const role = document.getElementById('filter-role').value;
+      const country = document.getElementById('filter-country').value;
+      
+      let filtered = allUsers;
+      
+      if (search) {
+        filtered = filtered.filter(u => 
+          (u.firstName?.toLowerCase().includes(search)) ||
+          (u.lastName?.toLowerCase().includes(search)) ||
+          (u.email?.toLowerCase().includes(search)) ||
+          (u.companyName?.toLowerCase().includes(search))
+        );
+      }
+      
+      if (role) {
+        filtered = filtered.filter(u => u.role === role);
+      }
+      
+      if (country) {
+        filtered = filtered.filter(u => u.country === country);
+      }
+      
+      renderUsers(filtered);
+    }
+
+    async function loadActivity() {
+      try {
+        const response = await fetch('/api/activity/feed?limit=20');
+        const data = await response.json();
+        allActivity = data.activity || [];
+        renderActivity(allActivity);
+      } catch (error) {
+        console.error('Error loading activity:', error);
+      }
+    }
+
+    function renderActivity(activities) {
+      const list = document.getElementById('activity-list');
+      
+      if (activities.length === 0) {
+        list.innerHTML = `
+          <li class="empty-state">
+            <i class="fas fa-rss"></i>
+            <p>No recent activity</p>
+          </li>
+        `;
+        return;
+      }
+      
+      const icons = {
+        lot: 'fa-seedling',
+        negotiation: 'fa-handshake',
+        shipment: 'fa-truck',
+        contract: 'fa-file-contract'
+      };
+      
+      list.innerHTML = activities.map(item => {
+        const timeAgo = formatTimeAgo(new Date(item.createdAt));
+        return `
+          <li class="activity-item">
+            <div class="activity-icon ${item.type}">
+              <i class="fas ${icons[item.type] || 'fa-circle'}"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-message">${escapeHtml(item.message)}</div>
+              <div class="activity-time">${timeAgo}</div>
+            </div>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function formatTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      if (seconds < 60) return 'Just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return minutes + ' min ago';
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
+      const days = Math.floor(hours / 24);
+      return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function viewUser(userId) {
+      const user = allUsers.find(u => u.id === userId);
+      if (user) {
+        alert(`User Details:\n\nName: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nRole: ${user.role}\nCompany: ${user.companyName || 'N/A'}\nCountry: ${user.country || 'N/A'}`);
+      }
+    }
+
+    function editUser(userId) {
+      alert('Edit user functionality - Coming soon!');
+    }
+
+    function exportUsers() {
+      const csv = allUsers.map(u => 
+        `"${u.firstName || ''}","${u.lastName || ''}","${u.email || ''}","${u.role || ''}","${u.companyName || ''}","${u.country || ''}"`
+      ).join('\n');
+      
+      const header = 'First Name,Last Name,Email,Role,Company,Country\n';
+      const blob = new Blob([header + csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'equity-coffee-users.csv';
+      a.click();
+    }
+
+    function refreshData() {
+      loadStats();
+      loadUsers();
+      loadActivity();
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      event.target.closest('.nav-link').classList.add('active');
+      
+      // Scroll to section
+      const sectionEl = document.getElementById(section + '-section');
+      if (sectionEl) {
+        sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    async function sendBulkEmail(e) {
+      e.preventDefault();
+      
+      const role = document.getElementById('email-role').value;
+      const subject = document.getElementById('email-subject').value;
+      const message = document.getElementById('email-message-text').value;
+      const btn = document.getElementById('send-email-btn');
+      const msgDiv = document.getElementById('email-message');
+      
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      
+      try {
+        const response = await fetch('/api/admin/bulk-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ role, subject, message })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          msgDiv.style.display = 'block';
+          msgDiv.style.background = '#d1fae5';
+          msgDiv.style.color = '#059669';
+          msgDiv.style.border = '1px solid #a7f3d0';
+          msgDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${data.message}`;
+          
+          // Show recipients
+          const previewDiv = document.getElementById('email-preview');
+          const recipientList = document.getElementById('recipient-list');
+          previewDiv.style.display = 'block';
+          recipientList.innerHTML = data.recipients.map(email => `<div style="padding: 0.25rem 0;">${email}</div>`).join('');
+          
+          // Clear form
+          document.getElementById('email-subject').value = '';
+          document.getElementById('email-message-text').value = '';
+        } else {
+          msgDiv.style.display = 'block';
+          msgDiv.style.background = '#fee2e2';
+          msgDiv.style.color = '#dc2626';
+          msgDiv.style.border = '1px solid #fecaca';
+          msgDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.message}`;
+        }
+      } catch (error) {
+        msgDiv.style.display = 'block';
+        msgDiv.style.background = '#fee2e2';
+        msgDiv.style.color = '#dc2626';
+        msgDiv.style.border = '1px solid #fecaca';
+        msgDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> An error occurred. Please try again.';
+      }
+      
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Email to Selected Role';
+    }
+
+    // Preview recipients when role is selected
+    document.getElementById('email-role').addEventListener('change', function() {
+      const role = this.value;
+      const previewDiv = document.getElementById('email-preview');
+      const recipientList = document.getElementById('recipient-list');
+      
+      if (role && allUsers.length > 0) {
+        const roleUsers = allUsers.filter(u => u.role === role);
+        if (roleUsers.length > 0) {
+          previewDiv.style.display = 'block';
+          recipientList.innerHTML = roleUsers.map(u => 
+            `<div style="padding: 0.25rem 0;"><strong>${u.firstName || ''} ${u.lastName || u.username}</strong> - ${u.email}</div>`
+          ).join('');
+        } else {
+          previewDiv.style.display = 'block';
+          recipientList.innerHTML = '<div style="color: var(--text-light);">No users found with this role</div>';
+        }
+      } else {
+        previewDiv.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initFeedToggle();
+      loadStats();
+      loadUsers();
+      loadActivity();
+      
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+          menuToggle.classList.toggle('active');
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('active');
+        });
+      }
+      
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          menuToggle.classList.remove('active');
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+        });
+      }
+      
+      // Close menu when clicking nav links
+      document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            menuToggle.classList.remove('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

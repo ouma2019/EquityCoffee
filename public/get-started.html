@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account | Equity Coffee</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#e9741e;--primary-dark:#b54714;--dark:#0f172a;--text:#1e293b;--muted:#64748b;--r:12px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,sans-serif;background:#f8fafc;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:100%;max-width:880px;background:#fff;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 20px 25px -5px rgba(0,0,0,.1)}
+    .left{background:var(--dark);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+    .brand img{height:40px}
+    .brand span{font-family:Poppins,sans-serif;font-weight:700;font-size:1.4rem}
+    .right{padding:48px}
+    h1{font-family:Poppins,sans-serif;color:var(--dark);margin-bottom:8px}
+    p{color:var(--muted);margin-bottom:18px}
+    .status{display:none;margin:12px 0 16px;padding:12px 14px;border-radius:12px;font-size:.92rem;border:1px solid transparent}
+    .status.show{display:block}
+    .status.success{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
+    .status.error{background:#fef2f2;border-color:#fecaca;color:#7f1d1d}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin:12px 0 8px}
+    input,select{width:100%;padding:12px 12px;border:1.5px solid #e2e8f0;border-radius:var(--r);font-size:1rem}
+    input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(233,116,30,.1)}
+    .btn{width:100%;margin-top:16px;padding:14px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-weight:700;cursor:pointer}
+    .btn:disabled{opacity:.7;cursor:not-allowed}
+    .small{margin-top:14px;text-align:center;color:var(--muted)}
+    .small a{color:var(--primary);font-weight:700;text-decoration:none}
+    @media(max-width:900px){.card{grid-template-columns:1fr}.left{display:none}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="left">
+      <a class="brand" href="index.html">
+        <img src="images/logo.png" alt="Logo">
+        <span>Equity Coffee</span>
+      </a>
+      <div>
+        <h2 style="font-family:Poppins,sans-serif;font-size:2.2rem;line-height:1.15;margin-bottom:10px">Start trading with transparency.</h2>
+        <p style="opacity:.8">Create your account and access role-based dashboards.</p>
+      </div>
+      <div style="opacity:.7;font-size:.9rem">Farmers • Traders • Roasters • Logistics</div>
+    </div>
+
+    <div class="right">
+      <h1>Create Account</h1>
+      <p>Fill in your details to get started.</p>
+
+      <div id="status" class="status"></div>
+
+      <form id="registerForm">
+        <div class="grid">
+          <div>
+            <label for="firstName">First name</label>
+            <input id="firstName" type="text" placeholder="Ouma" />
+          </div>
+          <div>
+            <label for="lastName">Last name</label>
+            <input id="lastName" type="text" placeholder="Robert" />
+          </div>
+        </div>
+
+        <label for="companyName">Company</label>
+        <input id="companyName" type="text" placeholder="Your company / farm / roastery" />
+
+        <div class="grid">
+          <div>
+            <label for="country">Country</label>
+            <input id="country" type="text" placeholder="United Arab Emirates" />
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" placeholder="+971..." />
+          </div>
+        </div>
+
+        <label for="role">Role</label>
+        <select id="role" required>
+          <option value="" disabled selected>Select role</option>
+          <option value="farmer">Farmer</option>
+          <option value="trader">Trader</option>
+          <option value="roaster">Roaster</option>
+          <option value="logistics">Logistics</option>
+          <option value="educator">Educator</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="name@company.com" required />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Create a strong password" required />
+
+        <button id="btnRegister" class="btn" type="submit">Create account</button>
+      </form>
+
+      <div class="small">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+  </div>
+
+  <script src="js/common-auth.js"></script>
+  <script>
+    const BACKEND_BASE = ""; // set to backend Render URL if separate
+    const ENDPOINTS = ["/api/auth/register", "/auth/register", "/api/register"];
+
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("btnRegister");
+
+    function setStatus(type, msg){statusEl.className="status show "+type;statusEl.textContent=msg;}
+    function clearStatus(){statusEl.className="status";statusEl.textContent="";}
+
+    function setAuth(token,user){
+      if(window.ECAuth && typeof window.ECAuth.setAuth==="function"){window.ECAuth.setAuth(token,user);}
+      else{localStorage.setItem("ec_token",token);localStorage.setItem("ec_user",JSON.stringify(user));}
+    }
+
+    function redirectByRole(role){
+      const map={farmer:"farmer/dashboard-farmer.html",trader:"trader/dashboard-trader.html",roaster:"roaster/dashboard-roaster.html",logistics:"logistics/dashboard-logistics.html",admin:"admin/dashboard-admin.html",educator:"educator/dashboard-educator.html"};
+      location.href=map[role]||"index.html";
+    }
+
+    async function postJson(url,payload){
+      const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+      const data=await res.json().catch(()=>({}));
+      return {res,data};
+    }
+
+    async function register(payload){
+      const bases=Array.from(new Set(["",(BACKEND_BASE||"").replace(/\/$/,"")]));
+      let last="Registration failed.";
+      for(const base of bases){
+        for(const p of ENDPOINTS){
+          const url=`${base}${p}`;
+          try{
+            const {res,data}=await postJson(url,payload);
+            if(res.ok && data.token && data.user) return {ok:true,data,urlUsed:url};
+            last=data.message||`Registration failed on ${url}`;
+          }catch(e){last=`Network/CORS error on ${url}`;}
+        }
+      }
+      return {ok:false,message:last};
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();clearStatus();
+      const payload={
+        firstName:document.getElementById("firstName").value.trim(),
+        lastName:document.getElementById("lastName").value.trim(),
+        companyName:document.getElementById("companyName").value.trim(),
+        country:document.getElementById("country").value.trim(),
+        phone:document.getElementById("phone").value.trim(),
+        role:document.getElementById("role").value,
+        email:document.getElementById("email").value.trim().toLowerCase(),
+        password:document.getElementById("password").value
+      };
+      if(!payload.role) return setStatus("error","Please select a role.");
+      btn.disabled=true;btn.textContent="Creating...";
+      const r=await register(payload);
+      if(!r.ok){setStatus("error",r.message+" (If backend is separate, set BACKEND_BASE in get-started.html)");btn.disabled=false;btn.textContent="Create account";return;}
+      setAuth(r.data.token,r.data.user);
+      setStatus("success","Account created. Redirecting...");
+      setTimeout(()=>redirectByRole(r.data.user.role),600);
+    });
+  </script>
+</body>
+</html>

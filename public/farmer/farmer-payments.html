@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Farmer Payments</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* Global improvements */
+    :root {
+      --primary-color: #10b981;
+      --primary-dark: #059669;
+      --secondary-color: #6366f1;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --success-color: #10b981;
+      --info-color: #3b82f6;
+      --light-bg: #f9fafb;
+      --border-color: #e5e7eb;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body.dashboard-body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-primary);
+      background-color: #f8fafc;
+      margin: 0;
+    }
+    
+    /* Main layout improvements */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Enhanced sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      color: white;
+      width: 260px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: fixed;
+      height: 100vh;
+      z-index: 50;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+    }
+    
+    .sidebar-logo > div {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .sidebar-role {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: #d1d5db;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .sidebar-link.active {
+      background: var(--primary-color);
+      color: white;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+    }
+    
+    .sidebar-link i {
+      width: 20px;
+      margin-right: 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .sidebar-footer {
+      position: absolute;
+      bottom: 1.5rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      width: calc(100% - 3rem);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .dashboard-main {
+      flex: 1;
+      margin-left: 260px;
+      background-color: #f8fafc;
+      min-height: 100vh;
+    }
+    
+    /* Enhanced topbar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: white;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    
+    .topbar-left h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 0.25rem 0;
+    }
+    
+    .topbar-left p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    #sidebar-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    
+    .notification-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .notification-bell {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .notification-bell:hover {
+      background-color: var(--light-bg);
+      color: var(--primary-color);
+    }
+    
+    .notification-bell.active {
+      color: var(--primary-color);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background-color: var(--danger-color);
+      color: white;
+      font-size: 0.625rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    
+    .user-profile:hover {
+      background-color: var(--light-bg);
+      border-color: var(--border-color);
+    }
+    
+    .avatar {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .user-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Dashboard content improvements */
+    .dashboard-content {
+      padding: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Enhanced KPI cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    
+    .kpi-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .kpi-card:first-child {
+      border-top: 4px solid var(--success-color);
+    }
+    
+    .kpi-card:nth-child(2) {
+      border-top: 4px solid var(--warning-color);
+    }
+    
+    .kpi-card:nth-child(3) {
+      border-top: 4px solid var(--info-color);
+    }
+    
+    .kpi-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    
+    .kpi-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Payment summary section */
+    .payment-summary {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .payment-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Chart container */
+    .chart-container {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .chart-header h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .chart-period {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .period-btn {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    
+    .period-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    /* Chart visualization */
+    .chart-visual {
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1rem;
+    }
+    
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--primary-color), var(--primary-dark));
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      min-height: 10px;
+    }
+    
+    .chart-bar-label {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .chart-bar-value {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    /* Upcoming payments */
+    .upcoming-payments {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+    
+    .upcoming-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .upcoming-header h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .upcoming-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .upcoming-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: var(--light-bg);
+      border-radius: 6px;
+      border-left: 4px solid var(--warning-color);
+    }
+    
+    .upcoming-item.due-soon {
+      border-left-color: var(--danger-color);
+      background-color: rgba(239, 68, 68, 0.05);
+    }
+    
+    .upcoming-item.paid {
+      border-left-color: var(--success-color);
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+    
+    .upcoming-info {
+      flex: 1;
+    }
+    
+    .upcoming-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .upcoming-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .upcoming-amount {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    /* Payment breakdown */
+    .payment-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .breakdown-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .breakdown-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+    }
+    
+    .breakdown-icon.advance {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--info-color);
+    }
+    
+    .breakdown-icon.final {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    .breakdown-icon.bonus {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .breakdown-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    
+    .breakdown-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Enhanced panel */
+    .panel {
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #f8fafc;
+    }
+    
+    .panel-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Enhanced table */
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .table thead {
+      background-color: #f8fafc;
+    }
+    
+    .table th {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    
+    .table td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+    
+    .table tbody tr {
+      transition: all 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+    
+    .table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    /* Payment status badges */
+    .payment-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    
+    .badge-paid {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #065f46;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .badge-pending {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .badge-advance {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #1e40af;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .badge-final {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #065f46;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    /* Enhanced buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      gap: 0.375rem;
+      white-space: nowrap;
+    }
+    
+    .btn-small {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .btn-success {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .btn-success:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-color);
+    }
+    
+    .btn-ghost:hover {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+    }
+    
+    .btn-ghost-small {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .btn-ghost-small:hover {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+    }
+    
+    /* Alert container */
+    .alert-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      max-width: 400px;
+      width: calc(100% - 2rem);
+    }
+    
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid;
+      animation: slideInRight 0.3s ease;
+    }
+    
+    .alert-success {
+      border-left-color: var(--primary-color);
+    }
+    
+    .alert-info {
+      border-left-color: var(--secondary-color);
+    }
+    
+    .alert-warning {
+      border-left-color: var(--warning-color);
+    }
+    
+    .alert-error {
+      border-left-color: var(--danger-color);
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .alert-icon {
+      font-size: 1.25rem;
+      margin-right: 0.75rem;
+      margin-top: 0.125rem;
+    }
+    
+    .alert-success .alert-icon {
+      color: var(--primary-color);
+    }
+    
+    .alert-info .alert-icon {
+      color: var(--secondary-color);
+    }
+    
+    .alert-warning .alert-icon {
+      color: var(--warning-color);
+    }
+    
+    .alert-error .alert-icon {
+      color: var(--danger-color);
+    }
+    
+    .alert-content {
+      flex: 1;
+    }
+    
+    .alert-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .alert-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .alert-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+      padding: 0;
+    }
+    
+    /* Payment details modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Payment details */
+    .payment-detail {
+      margin-bottom: 1.5rem;
+    }
+    
+    .payment-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .payment-detail-label {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .payment-detail-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .payment-detail-value.success {
+      color: var(--success-color);
+    }
+    
+    .payment-detail-value.warning {
+      color: var(--warning-color);
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .dashboard-main {
+        margin-left: 0;
+      }
+      
+      #sidebar-toggle {
+        display: flex;
+      }
+      
+      .table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 1rem;
+      }
+      
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .chart-period {
+        flex-wrap: wrap;
+      }
+      
+      .payment-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Hidden class */
+    .hidden {
+      display: none !important;
+    }
+    
+    /* Quick actions */
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .action-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .action-chip:hover {
+      background-color: var(--light-bg);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .action-chip i {
+      color: var(--primary-color);
+    }
+    
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      background: white;
+      padding: 0.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    .filter-tab {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .filter-tab:hover {
+      color: var(--text-primary);
+      background-color: var(--light-bg);
+    }
+    
+    .filter-tab.active {
+      color: white;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      box-shadow: var(--shadow);
+    }
+    
+    /* No data state */
+    .no-data {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    
+    .no-data-icon {
+      font-size: 3rem;
+      color: var(--border-color);
+      margin-bottom: 1rem;
+    }
+    
+    .no-data-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .no-data-message {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-image">
+          <i class="fas fa-coffee"></i>
+        </div>
+        <div>
+          Equity Coffee
+          <div class="sidebar-role">Farmer / Coop</div>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-farmer.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a class="sidebar-link" href="farmer-lots.html"><i class="fas fa-leaf"></i> My Farm / Lots</a></li>
+        <li><a class="sidebar-link" href="farmer-offers.html"><i class="fas fa-tag"></i> Offers</a></li>
+        <li><a class="sidebar-link" href="farmer-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+        <li><a class="sidebar-link active" href="farmer-payments.html"><i class="fas fa-credit-card"></i> Payments</a></li>
+        <li><a class="sidebar-link" href="farmer-logistics.html"><i class="fas fa-truck"></i> Logistics</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <i class="fas fa-headset"></i> Support: support@equitycoffee.com
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Payments</h1>
+          <p>Track advances and final payments received.</p>
+        </div>
+        <div class="topbar-right">
+          <button id="sidebar-toggle" class="btn btn-ghost">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <!-- Notification Bell -->
+          <div class="notification-container">
+            <button class="notification-bell active" id="notification-bell">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">2</span>
+            </button>
+            
+            <!-- User Profile -->
+            <div class="user-profile" id="user-profile">
+              <div class="user-info">
+                <span class="user-name">Kirinyaga Coop</span>
+                <span class="user-role">Farmer / Coop</span>
+              </div>
+              <span class="avatar">KC</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Alert Container (for toast notifications) -->
+      <div class="alert-container" id="alert-container"></div>
+
+      <!-- Payment Details Modal -->
+      <div class="modal" id="payment-details-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Payment Details</h3>
+            <button class="modal-close" id="modal-close">&times;</button>
+          </div>
+          <div class="modal-body" id="payment-details-content">
+            <!-- Content will be populated by JavaScript -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost" id="modal-close-btn">Close</button>
+            <button class="btn btn-success" id="modal-receipt-btn">
+              <i class="fas fa-download"></i> Download Receipt
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <main class="dashboard-content">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="action-chip" onclick="requestAdvance()">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>Request Advance Payment</span>
+          </div>
+          <div class="action-chip" onclick="exportPayments()">
+            <i class="fas fa-download"></i>
+            <span>Export Payment History</span>
+          </div>
+          <div class="action-chip" onclick="viewPaymentSchedule()">
+            <i class="fas fa-calendar-alt"></i>
+            <span>View Payment Schedule</span>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">
+              <i class="fas fa-dollar-sign"></i>
+              Total this season
+            </div>
+            <div class="kpi-value">$32,400</div>
+            <div class="kpi-meta">Across all contracts</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">
+              <i class="fas fa-clock"></i>
+              Outstanding
+            </div>
+            <div class="kpi-value">$8,200</div>
+            <div class="kpi-meta">Awaiting final payment</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">
+              <i class="fas fa-weight"></i>
+              Average price / kg
+            </div>
+            <div class="kpi-value">$4.10</div>
+            <div class="kpi-meta">Across sold lots</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">
+              <i class="fas fa-percentage"></i>
+              Advance rate
+            </div>
+            <div class="kpi-value">40%</div>
+            <div class="kpi-meta">Of contract value</div>
+          </div>
+        </section>
+
+        <!-- Payment Breakdown -->
+        <section class="payment-breakdown">
+          <div class="breakdown-card">
+            <div class="breakdown-icon advance">
+              <i class="fas fa-hand-holding-usd"></i>
+            </div>
+            <div class="breakdown-value">$12,800</div>
+            <div class="breakdown-label">Advance Payments</div>
+          </div>
+          <div class="breakdown-card">
+            <div class="breakdown-icon final">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="breakdown-value">$19,600</div>
+            <div class="breakdown-label">Final Payments</div>
+          </div>
+          <div class="breakdown-card">
+            <div class="breakdown-icon bonus">
+              <i class="fas fa-gift"></i>
+            </div>
+            <div class="breakdown-value">$1,200</div>
+            <div class="breakdown-label">Quality Bonuses</div>
+          </div>
+          <div class="breakdown-card">
+            <div class="breakdown-icon">
+              <i class="fas fa-money-check-alt" style="background-color: rgba(168, 85, 247, 0.1); color: #8b5cf6;"></i>
+            </div>
+            <div class="breakdown-value">$8,200</div>
+            <div class="breakdown-label">Pending Payments</div>
+          </div>
+        </section>
+
+        <!-- Payment Summary Section -->
+        <section class="payment-summary">
+          <!-- Payment Chart -->
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Payment Timeline</h3>
+              <div class="chart-period">
+                <button class="period-btn active" data-period="month">This Month</button>
+                <button class="period-btn" data-period="quarter">This Quarter</button>
+                <button class="period-btn" data-period="year">This Year</button>
+              </div>
+            </div>
+            <div class="chart-visual" id="payment-chart">
+              <!-- Chart bars will be generated by JavaScript -->
+            </div>
+            <div style="text-align: center; font-size: 0.875rem; color: var(--text-secondary);">
+              <i class="fas fa-info-circle"></i>
+              Hover over bars to see details
+            </div>
+          </div>
+
+          <!-- Upcoming Payments -->
+          <div class="upcoming-payments">
+            <div class="upcoming-header">
+              <h3>Upcoming Payments</h3>
+              <span class="badge badge-pending">3 pending</span>
+            </div>
+            <div class="upcoming-list">
+              <div class="upcoming-item due-soon">
+                <div class="upcoming-info">
+                  <div class="upcoming-title">EC-2025-012 Final Payment</div>
+                  <div class="upcoming-meta">Due in 2 days • PB Lot 5</div>
+                </div>
+                <div class="upcoming-amount">$4,800</div>
+              </div>
+              <div class="upcoming-item">
+                <div class="upcoming-info">
+                  <div class="upcoming-title">EC-2025-013 Advance</div>
+                  <div class="upcoming-meta">Due in 7 days • Microlot 9</div>
+                </div>
+                <div class="upcoming-amount">$2,400</div>
+              </div>
+              <div class="upcoming-item paid">
+                <div class="upcoming-info">
+                  <div class="upcoming-title">EC-2025-011 Final Payment</div>
+                  <div class="upcoming-meta">Paid on Feb 14 • AB Lot 10</div>
+                </div>
+                <div class="upcoming-amount">$12,600</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All Payments</button>
+          <button class="filter-tab" data-filter="advance">Advance Payments</button>
+          <button class="filter-tab" data-filter="final">Final Payments</button>
+          <button class="filter-tab" data-filter="pending">Pending</button>
+          <button class="filter-tab" data-filter="this-month">This Month</button>
+        </div>
+
+        <!-- Payment History Table -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Payment History</h2>
+            <div class="panel-actions">
+              <button class="btn btn-ghost-small" onclick="refreshPayments()">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+              <button class="btn btn-ghost-small" onclick="exportPayments()">
+                <i class="fas fa-file-export"></i> Export
+              </button>
+            </div>
+          </div>
+
+          <table class="table" id="payments-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Contract</th>
+                <th>Lot</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Reference</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-type="final" data-status="paid" data-date="2025-02">
+                <td>
+                  <div class="payment-date">2025-02-14</div>
+                  <div class="payment-time">14:30 GMT</div>
+                </td>
+                <td>
+                  <strong>EC-2025-009</strong>
+                  <div class="contract-meta">UK Coffee Co.</div>
+                </td>
+                <td>
+                  <strong>Microlot 7</strong>
+                  <div class="lot-meta">Specialty, Grade AAA</div>
+                </td>
+                <td><span class="payment-badge badge-final">Final</span></td>
+                <td>
+                  <div class="payment-amount">$12,600</div>
+                  <div class="payment-meta">120 bags × $105</div>
+                </td>
+                <td><span class="payment-badge badge-paid">Paid</span></td>
+                <td>
+                  <div class="payment-ref">SWIFT 9812K</div>
+                  <div class="payment-meta">Bank transfer</div>
+                </td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="viewPaymentDetails(1)">
+                    <i class="fas fa-eye"></i> Details
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="downloadReceipt(1)">
+                    <i class="fas fa-receipt"></i> Receipt
+                  </button>
+                </td>
+              </tr>
+              <tr data-type="advance" data-status="paid" data-date="2025-01">
+                <td>
+                  <div class="payment-date">2025-01-31</td>
+                  <div class="payment-time">09:15 EAT</div>
+                </td>
+                <td>
+                  <strong>EC-2025-007</strong>
+                  <div class="contract-meta">Berlin Roasters</div>
+                </td>
+                <td>
+                  <strong>AB Lot 10</strong>
+                  <div class="lot-meta">Arabica, Grade AA</div>
+                </td>
+                <td><span class="payment-badge badge-advance">Advance</span></td>
+                <td>
+                  <div class="payment-amount">$8,400</div>
+                  <div class="payment-meta">40% of $21,000</div>
+                </td>
+                <td><span class="payment-badge badge-paid">Paid</span></td>
+                <td>
+                  <div class="payment-ref">M-Pesa 442109</div>
+                  <div class="payment-meta">Mobile money</div>
+                </td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="viewPaymentDetails(2)">
+                    <i class="fas fa-eye"></i> Details
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="downloadReceipt(2)">
+                    <i class="fas fa-receipt"></i> Receipt
+                  </button>
+                </td>
+              </tr>
+              <tr data-type="final" data-status="pending" data-date="2025-02">
+                <td>
+                  <div class="payment-date">2025-02-28</td>
+                  <div class="payment-time">Due date</div>
+                </td>
+                <td>
+                  <strong>EC-2025-012</strong>
+                  <div class="contract-meta">Nordic Import</div>
+                </td>
+                <td>
+                  <strong>PB Lot 5</strong>
+                  <div class="lot-meta">Peaberry, Grade AB</div>
+                </td>
+                <td><span class="payment-badge badge-final">Final</span></td>
+                <td>
+                  <div class="payment-amount">$4,800</div>
+                  <div class="payment-meta">60 bags × $80</div>
+                </td>
+                <td><span class="payment-badge badge-pending">Pending</span></td>
+                <td>
+                  <div class="payment-ref">—</div>
+                  <div class="payment-meta">Awaiting payment</div>
+                </td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="sendReminder(3)">
+                    <i class="fas fa-bell"></i> Remind
+                  </button>
+                </td>
+              </tr>
+              <tr data-type="bonus" data-status="paid" data-date="2025-01">
+                <td>
+                  <div class="payment-date">2025-01-15</td>
+                  <div class="payment-time">11:45 GMT</div>
+                </td>
+                <td>
+                  <strong>EC-2024-028</strong>
+                  <div class="contract-meta">UK Coffee Co.</div>
+                </td>
+                <td>
+                  <strong>Microlot 5</strong>
+                  <div class="lot-meta">Specialty, Grade AAA</div>
+                </td>
+                <td><span class="payment-badge" style="background-color: rgba(245, 158, 11, 0.1); color: #92400e; border-color: rgba(245, 158, 11, 0.2);">Bonus</span></td>
+                <td>
+                  <div class="payment-amount">$1,200</div>
+                  <div class="payment-meta">Quality premium</div>
+                </td>
+                <td><span class="payment-badge badge-paid">Paid</span></td>
+                <td>
+                  <div class="payment-ref">ACH 774332</div>
+                  <div class="payment-meta">Bank transfer</div>
+                </td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="viewPaymentDetails(4)">
+                    <i class="fas fa-eye"></i> Details
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="downloadReceipt(4)">
+                    <i class="fas fa-receipt"></i> Receipt
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- No Data State (hidden by default) -->
+          <div class="no-data hidden" id="no-data-state">
+            <div class="no-data-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <h3 class="no-data-title">No payments found</h3>
+            <p class="no-data-message">No payments match your current filter. Try selecting a different filter or check back later for new payments.</p>
+            <button class="btn btn-success" onclick="showAllPayments()">
+              <i class="fas fa-list"></i> Show All Payments
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Global functions for onclick handlers
+    function requestAdvance() {
+      alert('Advance payment request feature coming soon. Contact your buyer to discuss advance payments.');
+    }
+    
+    function exportPayments() {
+      alert('Export functionality coming soon. Your payment history will be exported as CSV.');
+    }
+    
+    function viewPaymentSchedule() {
+      alert('Payment schedule view coming soon.');
+    }
+    
+    function refreshPayments() {
+      location.reload();
+    }
+    
+    function showAllPayments() {
+      var filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(function(btn) { btn.classList.remove('active'); });
+      if (filterBtns.length) filterBtns[0].classList.add('active');
+      var rows = document.querySelectorAll('#payments-table tbody tr');
+      rows.forEach(function(row) { row.style.display = ''; });
+      var noData = document.getElementById('no-data-state');
+      if (noData) noData.classList.add('hidden');
+    }
+    
+    function viewPaymentDetails(id) {
+      alert('Payment details for payment #' + id + ' - Full details view coming soon.');
+    }
+    
+    function downloadReceipt(id) {
+      alert('Receipt download for payment #' + id + ' coming soon.');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize UI components
+      initSidebar();
+      initNotifications();
+      initCharts();
+      initFilters();
+      initModals();
+      initQuickActions();
+      
+      // Show welcome alert
+      setTimeout(() => {
+        showAlert('info', 'Welcome to Payments', 'You have $8,200 in pending payments and $32,400 received this season.');
+      }, 1000);
+    });
+
+    // Sidebar toggle for mobile
+    function initSidebar() {
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+        });
+      }
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth < 1024) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    // Notification system
+    function initNotifications() {
+      const notificationBell = document.getElementById('notification-bell');
+      const notificationDropdown = document.getElementById('notification-dropdown');
+      
+      if (notificationBell) {
+        notificationBell.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // In a real app, this would open the notification dropdown
+          showAlert('info', 'Notifications', 'You have 2 payment-related notifications.');
+        });
+      }
+    }
+
+    // Chart initialization
+    function initCharts() {
+      const chartContainer = document.getElementById('payment-chart');
+      const periodButtons = document.querySelectorAll('.period-btn');
+      
+      // Sample chart data for different periods
+      const chartData = {
+        month: [
+          { label: 'Feb 1-7', value: 4200 },
+          { label: 'Feb 8-14', value: 12600 },
+          { label: 'Feb 15-21', value: 0 },
+          { label: 'Feb 22-28', value: 4800 }
+        ],
+        quarter: [
+          { label: 'Jan', value: 12400 },
+          { label: 'Feb', value: 21600 },
+          { label: 'Mar', value: 0 }
+        ],
+        year: [
+          { label: 'Q1', value: 32400 },
+          { label: 'Q2', value: 0 },
+          { label: 'Q3', value: 0 },
+          { label: 'Q4', value: 0 }
+        ]
+      };
+      
+      // Render initial chart
+      renderChart('month');
+      
+      // Period button handlers
+      periodButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const period = this.getAttribute('data-period');
+          
+          // Update active button
+          periodButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Render chart for selected period
+          renderChart(period);
+        });
+      });
+      
+      function renderChart(period) {
+        const data = chartData[period] || chartData.month;
+        const maxValue = Math.max(...data.map(item => item.value));
+        
+        chartContainer.innerHTML = '';
+        
+        data.forEach(item => {
+          const height = maxValue > 0 ? (item.value / maxValue * 100) : 0;
+          const bar = document.createElement('div');
+          bar.className = 'chart-bar';
+          bar.style.height = `${height}%`;
+          bar.innerHTML = `
+            <div class="chart-bar-value">$${item.value.toLocaleString()}</div>
+            <div class="chart-bar-label">${item.label}</div>
+          `;
+          
+          // Add hover effect
+          bar.addEventListener('mouseenter', () => {
+            bar.style.opacity = '0.8';
+          });
+          
+          bar.addEventListener('mouseleave', () => {
+            bar.style.opacity = '1';
+          });
+          
+          chartContainer.appendChild(bar);
+        });
+      }
+    }
+
+    // Filter system for payments table
+    function initFilters() {
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const paymentRows = document.querySelectorAll('#payments-table tbody tr');
+      const noDataState = document.getElementById('no-data-state');
+      
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Update active tab
+          filterTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter rows
+          let visibleCount = 0;
+          paymentRows.forEach(row => {
+            const type = row.getAttribute('data-type');
+            const status = row.getAttribute('data-status');
+            const date = row.getAttribute('data-date');
+            
+            let shouldShow = false;
+            
+            switch(filter) {
+              case 'all':
+                shouldShow = true;
+                break;
+              case 'advance':
+                shouldShow = type === 'advance';
+                break;
+              case 'final':
+                shouldShow = type === 'final';
+                break;
+              case 'pending':
+                shouldShow = status === 'pending';
+                break;
+              case 'this-month':
+                shouldShow = date === '2025-02';
+                break;
+              default:
+                shouldShow = true;
+            }
+            
+            if (shouldShow) {
+              row.classList.remove('hidden');
+              visibleCount++;
+            } else {
+              row.classList.add('hidden');
+            }
+          });
+          
+          // Show no data state if no rows visible
+          if (visibleCount === 0) {
+            noDataState.classList.remove('hidden');
+          } else {
+            noDataState.classList.add('hidden');
+          }
+        });
+      });
+    }
+
+    // Modal system
+    function initModals() {
+      const paymentModal = document.getElementById('payment-details-modal');
+      
+      // Close buttons
+      document.querySelectorAll('.modal-close, #modal-close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          paymentModal.classList.remove('show');
+        });
+      });
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === paymentModal) paymentModal.classList.remove('show');
+      });
+      
+      // Receipt button
+      const receiptBtn = document.getElementById('modal-receipt-btn');
+      if (receiptBtn) {
+        receiptBtn.addEventListener('click', () => {
+          showAlert('success', 'Receipt Downloaded', 'Payment receipt has been downloaded to your device.');
+          paymentModal.classList.remove('show');
+        });
+      }
+    }
+
+    // Quick action handlers
+    function initQuickActions() {
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + R to refresh
+        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+          e.preventDefault();
+          refreshPayments();
+        }
+      });
+    }
+
+    // Alert system
+    function showAlert(type, title, message = '') {
+      const alertContainer = document.getElementById('alert-container');
+      
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <div class="alert-icon">
+          ${getAlertIcon(type)}
+        </div>
+        <div class="alert-content">
+          <div class="alert-title">${title}</div>
+          ${message ? `<div class="alert-message">${message}</div>` : ''}
+        </div>
+        <button class="alert-close">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      if (alertContainer) {
+        alertContainer.appendChild(alert);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (alert.parentNode) {
+            alert.remove();
+          }
+        }, 5000);
+        
+        // Close button
+        alert.querySelector('.alert-close').addEventListener('click', () => {
+          alert.remove();
+        });
+      }
+    }
+
+    function getAlertIcon(type) {
+      const icons = {
+        'success': '<i class="fas fa-check-circle"></i>',
+        'warning': '<i class="fas fa-exclamation-triangle"></i>',
+        'info': '<i class="fas fa-info-circle"></i>',
+        'error': '<i class="fas fa-times-circle"></i>'
+      };
+      return icons[type] || icons['info'];
+    }
+
+    // Payment management functions
+    function viewPaymentDetails(paymentId) {
+      const modal = document.getElementById('payment-details-modal');
+      const content = document.getElementById('payment-details-content');
+      
+      // Mock data for different payments
+      const paymentData = {
+        1: {
+          contract: 'EC-2025-009',
+          buyer: 'UK Coffee Co.',
+          lot: 'Microlot 7',
+          grade: 'Specialty, Grade AAA',
+          type: 'Final Payment',
+          amount: '$12,600',
+          date: 'February 14, 2025',
+          time: '14:30 GMT',
+          status: 'Paid',
+          method: 'SWIFT Bank Transfer',
+          reference: 'SWIFT 9812K',
+          notes: 'Full and final payment for 120 bags of Microlot 7.'
+        },
+        2: {
+          contract: 'EC-2025-007',
+          buyer: 'Berlin Roasters',
+          lot: 'AB Lot 10',
+          grade: 'Arabica, Grade AA',
+          type: 'Advance Payment',
+          amount: '$8,400',
+          date: 'January 31, 2025',
+          time: '09:15 EAT',
+          status: 'Paid',
+          method: 'M-Pesa Mobile Money',
+          reference: 'M-Pesa 442109',
+          notes: '40% advance payment as per contract terms.'
+        },
+        3: {
+          contract: 'EC-2025-012',
+          buyer: 'Nordic Import',
+          lot: 'PB Lot 5',
+          grade: 'Peaberry, Grade AB',
+          type: 'Final Payment',
+          amount: '$4,800',
+          date: 'February 28, 2025',
+          time: 'Due Date',
+          status: 'Pending',
+          method: 'Awaiting payment',
+          reference: 'Not yet provided',
+          notes: 'Final payment due upon delivery confirmation.'
+        },
+        4: {
+          contract: 'EC-2024-028',
+          buyer: 'UK Coffee Co.',
+          lot: 'Microlot 5',
+          grade: 'Specialty, Grade AAA',
+          type: 'Quality Bonus',
+          amount: '$1,200',
+          date: 'January 15, 2025',
+          time: '11:45 GMT',
+          status: 'Paid',
+          method: 'ACH Bank Transfer',
+          reference: 'ACH 774332',
+          notes: 'Quality premium for exceptional cupping score of 88.5.'
+        }
+      };
+      
+      const data = paymentData[paymentId];
+      
+      content.innerHTML = `
+        <div class="payment-detail">
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Contract:</span>
+            <span class="payment-detail-value">${data.contract}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Buyer:</span>
+            <span class="payment-detail-value">${data.buyer}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Lot:</span>
+            <span class="payment-detail-value">${data.lot} (${data.grade})</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Payment Type:</span>
+            <span class="payment-detail-value">${data.type}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Amount:</span>
+            <span class="payment-detail-value success">${data.amount}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Date & Time:</span>
+            <span class="payment-detail-value">${data.date} at ${data.time}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Status:</span>
+            <span class="payment-detail-value ${data.status === 'Paid' ? 'success' : 'warning'}">${data.status}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Payment Method:</span>
+            <span class="payment-detail-value">${data.method}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Reference:</span>
+            <span class="payment-detail-value">${data.reference}</span>
+          </div>
+          <div class="payment-detail-row">
+            <span class="payment-detail-label">Notes:</span>
+            <span class="payment-detail-value">${data.notes}</span>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.add('show');
+    }
+
+    function downloadReceipt(paymentId) {
+      showAlert('success', 'Receipt Downloading', 'Payment receipt is being generated and will download shortly.');
+      // In real implementation, this would generate and download a PDF receipt
+    }
+
+    function sendReminder(paymentId) {
+      showAlert('info', 'Reminder Sent', 'A payment reminder has been sent to the buyer.');
+      // In real implementation, this would send an email/SMS reminder
+    }
+
+    function requestAdvance() {
+      showAlert('info', 'Advance Request', 'Opening advance payment request form...');
+      // In real implementation, this would open a modal/form
+    }
+
+    function exportPayments() {
+      showAlert('success', 'Export Started', 'Your payment history is being prepared for download in CSV format.');
+      // In real implementation, this would trigger a CSV/PDF export
+    }
+
+    function viewPaymentSchedule() {
+      showAlert('info', 'Payment Schedule', 'Opening payment schedule calendar view...');
+      // In real implementation, this would navigate to a calendar view
+    }
+
+    function refreshPayments() {
+      showAlert('info', 'Refreshing Payments', 'Checking for new payments and updates...');
+      // In real implementation, this would make an API call to refresh data
+    }
+
+    function showAllPayments() {
+      const allTab = document.querySelector('[data-filter="all"]');
+      if (allTab) allTab.click();
+    }
+
+    // Simulate real-time payment updates
+    setInterval(() => {
+      // In a real app, this would check for new payments via WebSocket or API
+      const now = new Date();
+      if (now.getMinutes() % 5 === 0) {
+        // Every 5 minutes, simulate a potential update
+        console.log('Checking for payment updates...');
+      }
+    }, 60000); // Check every minute
+  </script>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

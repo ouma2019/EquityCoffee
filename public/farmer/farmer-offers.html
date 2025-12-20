@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Farmer Offers</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* Global improvements */
+    :root {
+      --primary-color: #10b981;
+      --primary-dark: #059669;
+      --secondary-color: #6366f1;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --light-bg: #f9fafb;
+      --border-color: #e5e7eb;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body.dashboard-body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-primary);
+    }
+    
+    /* Main layout improvements */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Enhanced sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      color: white;
+      width: 260px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: fixed;
+      height: 100vh;
+      z-index: 50;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logo-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    
+    .sidebar-logo > div {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .sidebar-role {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: #d1d5db;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .sidebar-link.active {
+      background: var(--primary-color);
+      color: white;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+    }
+    
+    .sidebar-link i {
+      width: 20px;
+      margin-right: 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .sidebar-footer {
+      position: absolute;
+      bottom: 1.5rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      width: calc(100% - 3rem);
+    }
+    
+    .dashboard-main {
+      flex: 1;
+      margin-left: 260px;
+      background-color: #f8fafc;
+      min-height: 100vh;
+    }
+    
+    /* Enhanced topbar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: white;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    
+    .topbar-left h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 0.25rem 0;
+    }
+    
+    .topbar-left p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    #sidebar-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    
+    .notification-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .notification-bell {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .notification-bell:hover {
+      background-color: var(--light-bg);
+      color: var(--primary-color);
+    }
+    
+    .notification-bell.active {
+      color: var(--primary-color);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background-color: var(--danger-color);
+      color: white;
+      font-size: 0.625rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    
+    .user-profile:hover {
+      background-color: var(--light-bg);
+      border-color: var(--border-color);
+    }
+    
+    .avatar {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .user-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Enhanced notification dropdown */
+    .notification-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 1.5rem;
+      width: 380px;
+      max-width: 90vw;
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+    }
+    
+    .notification-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .notification-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .mark-read-btn {
+      font-size: 0.75rem;
+      color: var(--secondary-color);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .notification-list {
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    
+    .notification-item {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    
+    .notification-item:hover {
+      background-color: var(--light-bg);
+    }
+    
+    .notification-item.unread {
+      background-color: rgba(99, 102, 241, 0.05);
+    }
+    
+    .notification-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+    
+    .notification-title i {
+      color: var(--secondary-color);
+    }
+    
+    .notification-message {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+    }
+    
+    .notification-time {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    
+    .notification-footer {
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+    
+    .view-all-btn {
+      font-size: 0.875rem;
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* Dashboard content improvements */
+    .dashboard-content {
+      padding: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Enhanced KPI cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    
+    .kpi-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .kpi-card:first-child {
+      border-top: 4px solid var(--warning-color);
+    }
+    
+    .kpi-card:nth-child(2) {
+      border-top: 4px solid var(--secondary-color);
+    }
+    
+    .kpi-card:nth-child(3) {
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .kpi-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    
+    .kpi-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Enhanced tab navigation */
+    .tab-nav {
+      display: flex;
+      background: white;
+      padding: 0.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    .tab-btn {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background-color: var(--light-bg);
+    }
+    
+    .tab-btn.active {
+      color: white;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      box-shadow: var(--shadow);
+    }
+    
+    .tab-btn.active::after {
+      content: attr(data-count);
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background-color: var(--danger-color);
+      color: white;
+      font-size: 0.625rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    /* Enhanced panel */
+    .panel {
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #f8fafc;
+    }
+    
+    .panel-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Enhanced table */
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .table thead {
+      background-color: #f8fafc;
+    }
+    
+    .table th {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    
+    .table td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+    
+    .table tbody tr {
+      transition: all 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+    
+    .table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    /* Enhanced badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    
+    .badge-warning {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .badge-info {
+      background-color: rgba(99, 102, 241, 0.1);
+      color: #3730a3;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    
+    .badge-success {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #065f46;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .badge-danger {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #991b1b;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    /* Enhanced price highlight */
+    .price-highlight {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 1.125rem;
+    }
+    
+    /* Enhanced action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      gap: 0.375rem;
+      white-space: nowrap;
+    }
+    
+    .btn-small {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .btn-success {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .btn-success:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-color);
+    }
+    
+    .btn-ghost:hover {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+    }
+    
+    .btn-ghost-small {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .btn-ghost-small:hover {
+      background-color: var(--light-bg);
+      color: var(--text-primary);
+    }
+    
+    /* Enhanced alert container */
+    .alert-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      max-width: 400px;
+      width: calc(100% - 2rem);
+    }
+    
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid;
+      animation: slideInRight 0.3s ease;
+    }
+    
+    .alert-success {
+      border-left-color: var(--primary-color);
+    }
+    
+    .alert-info {
+      border-left-color: var(--secondary-color);
+    }
+    
+    .alert-warning {
+      border-left-color: var(--warning-color);
+    }
+    
+    .alert-error {
+      border-left-color: var(--danger-color);
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .alert-icon {
+      font-size: 1.25rem;
+      margin-right: 0.75rem;
+      margin-top: 0.125rem;
+    }
+    
+    .alert-success .alert-icon {
+      color: var(--primary-color);
+    }
+    
+    .alert-info .alert-icon {
+      color: var(--secondary-color);
+    }
+    
+    .alert-warning .alert-icon {
+      color: var(--warning-color);
+    }
+    
+    .alert-error .alert-icon {
+      color: var(--danger-color);
+    }
+    
+    .alert-content {
+      flex: 1;
+    }
+    
+    .alert-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .alert-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .alert-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+      padding: 0;
+    }
+    
+    /* Offer details modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .dashboard-main {
+        margin-left: 0;
+      }
+      
+      #sidebar-toggle {
+        display: flex;
+      }
+      
+      .table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 1rem;
+      }
+      
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .action-buttons .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .notification-dropdown {
+        right: 0.5rem;
+        width: calc(100vw - 1rem);
+      }
+    }
+    
+    /* Hidden class */
+    .hidden {
+      display: none !important;
+    }
+    
+    /* Additional UI enhancements */
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    
+    .status-new .status-indicator {
+      background-color: var(--warning-color);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    
+    .status-negotiating .status-indicator {
+      background-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    .status-accepted .status-indicator {
+      background-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    
+    .offer-detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .offer-detail-label {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .offer-detail-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    /* Quick stats bar */
+    .quick-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .stat-chip i {
+      color: var(--primary-color);
+    }
+    
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    
+    .empty-icon {
+      font-size: 3rem;
+      color: var(--border-color);
+      margin-bottom: 1rem;
+    }
+    
+    .empty-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .empty-message {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-placeholder">
+          <i class="fas fa-coffee"></i>
+        </div>
+        <div>
+          Equity Coffee
+          <div class="sidebar-role">Farmer / Coop</div>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a class="sidebar-link" href="dashboard-farmer.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a class="sidebar-link" href="farmer-lots.html"><i class="fas fa-leaf"></i> My Farm / Lots</a></li>
+        <li><a class="sidebar-link active" href="farmer-offers.html"><i class="fas fa-tag"></i> Offers</a></li>
+        <li><a class="sidebar-link" href="farmer-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+        <li><a class="sidebar-link" href="farmer-payments.html"><i class="fas fa-credit-card"></i> Payments</a></li>
+        <li><a class="sidebar-link" href="farmer-logistics.html"><i class="fas fa-truck"></i> Logistics</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <i class="fas fa-headset"></i> Support: support@equitycoffee.com
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Offers</h1>
+          <p>Review and respond to offers from buyers.</p>
+        </div>
+        <div class="topbar-right">
+          <button id="sidebar-toggle" class="btn btn-ghost">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <!-- Notification Bell -->
+          <div class="notification-container">
+            <button class="notification-bell active" id="notification-bell">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </button>
+            
+            <!-- User Profile -->
+            <div class="user-profile" id="user-profile">
+              <div class="user-info">
+                <span class="user-name">Kirinyaga Coop</span>
+                <span class="user-role">Farmer / Coop</span>
+              </div>
+              <span class="avatar">KC</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Notification Dropdown -->
+      <div class="notification-dropdown" id="notification-dropdown">
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <button class="mark-read-btn" id="mark-all-read">Mark all as read</button>
+        </div>
+        <div class="notification-list">
+          <div class="notification-item unread">
+            <div class="notification-title">
+              <i class="fas fa-tag"></i>
+              New Offer Received
+            </div>
+            <div class="notification-message">Berlin Roasters made an offer on AB Lot 12</div>
+            <div class="notification-time">10 minutes ago</div>
+          </div>
+          <div class="notification-item unread">
+            <div class="notification-title">
+              <i class="fas fa-exchange-alt"></i>
+              Counter Offer Received
+            </div>
+            <div class="notification-message">Nordic Import countered your offer on PB Lot 3</div>
+            <div class="notification-time">2 hours ago</div>
+          </div>
+          <div class="notification-item">
+            <div class="notification-title">
+              <i class="fas fa-check-circle"></i>
+              Offer Accepted
+            </div>
+            <div class="notification-message">UK Coffee Co. accepted your counter offer</div>
+            <div class="notification-time">Yesterday</div>
+          </div>
+        </div>
+        <div class="notification-footer">
+          <a href="notifications.html" class="view-all-btn">View all notifications</a>
+        </div>
+      </div>
+
+      <!-- Alert Container (for toast notifications) -->
+      <div class="alert-container" id="alert-container"></div>
+
+      <!-- Offer Details Modal -->
+      <div class="modal" id="offer-details-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Offer Details</h3>
+            <button class="modal-close" id="modal-close">&times;</button>
+          </div>
+          <div class="modal-body" id="offer-details-content">
+            <!-- Content will be populated by JavaScript -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost" id="modal-close-btn">Close</button>
+            <button class="btn btn-success" id="modal-accept-btn">Accept Offer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Counter Offer Modal -->
+      <div class="modal" id="counter-offer-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Make Counter Offer</h3>
+            <button class="modal-close" id="counter-modal-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="offer-detail-row">
+              <span class="offer-detail-label">Current Offer:</span>
+              <span class="offer-detail-value">$4.20 / kg</span>
+            </div>
+            <div class="offer-detail-row">
+              <span class="offer-detail-label">Your Asking Price:</span>
+              <span class="offer-detail-value">$4.50 / kg</span>
+            </div>
+            <div class="form-group">
+              <label for="counter-price">Your Counter Offer ($/kg)</label>
+              <input type="number" id="counter-price" class="form-control" step="0.01" min="4.20" max="5.50" value="4.50">
+            </div>
+            <div class="form-group">
+              <label for="counter-message">Message to Buyer (Optional)</label>
+              <textarea id="counter-message" class="form-control" rows="3" placeholder="Explain your counter offer..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost" id="counter-modal-close-btn">Cancel</button>
+            <button class="btn btn-success" id="send-counter-btn">Send Counter Offer</button>
+          </div>
+        </div>
+      </div>
+
+      <main class="dashboard-content">
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+          <div class="stat-chip">
+            <i class="fas fa-bolt"></i>
+            <span>Quick Action: Respond within 48h for better rates</span>
+          </div>
+          <div class="stat-chip">
+            <i class="fas fa-chart-line"></i>
+            <span>Market Average: $4.05/kg</span>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">New offers</div>
+            <div class="kpi-value">3</div>
+            <div class="kpi-meta">Awaiting your response</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Negotiating</div>
+            <div class="kpi-value">4</div>
+            <div class="kpi-meta">Counter-offers sent</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Accepted this season</div>
+            <div class="kpi-value">9</div>
+            <div class="kpi-meta">Converted to contracts</div>
+          </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="new" data-count="1">New Offers</button>
+          <button class="tab-btn" data-tab="negotiating" data-count="1">Negotiating</button>
+          <button class="tab-btn" data-tab="accepted" data-count="1">Accepted</button>
+          <button class="tab-btn" data-tab="expired" data-count="0">Expired</button>
+          <button class="tab-btn" data-tab="all" data-count="3">All Offers</button>
+        </div>
+
+        <!-- Offers Table -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Offers Overview</h2>
+            <div class="panel-actions">
+              <button class="btn btn-ghost-small" onclick="refreshOffers()">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+              <button class="btn btn-ghost-small" onclick="exportOffers()">
+                <i class="fas fa-download"></i> Export
+              </button>
+            </div>
+          </div>
+
+          <table class="table" id="offers-table">
+            <thead>
+              <tr>
+                <th>Buyer</th>
+                <th>Lot</th>
+                <th>Price / kg</th>
+                <th>Volume</th>
+                <th>Status</th>
+                <th>Received</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="status-new" data-status="new" data-offer-id="1">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="status-indicator"></div>
+                    <strong>Berlin Roasters</strong>
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Premium Buyer</div>
+                </td>
+                <td>
+                  <strong>AB Lot 12</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Arabica, Grade AA</div>
+                </td>
+                <td><span class="price-highlight">$4.20</span></td>
+                <td>120 bags <div style="font-size: 0.75rem; color: var(--text-secondary);">2,400 kg</div></td>
+                <td><span class="badge badge-warning">New</span></td>
+                <td>10 min ago</td>
+                <td class="action-buttons">
+                  <button class="btn btn-success btn-small" onclick="viewOfferDetails(1)">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                  <button class="btn btn-success btn-small" onclick="acceptOffer(1)">
+                    <i class="fas fa-check"></i> Accept
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="openCounterOffer(1)">
+                    <i class="fas fa-exchange-alt"></i> Counter
+                  </button>
+                </td>
+              </tr>
+              <tr class="status-negotiating" data-status="negotiating" data-offer-id="2">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="status-indicator"></div>
+                    <strong>Nordic Import</strong>
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Regular Buyer</div>
+                </td>
+                <td>
+                  <strong>PB Lot 3</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Peaberry, Grade AB</div>
+                </td>
+                <td><span class="price-highlight">$3.95</span></td>
+                <td>40 bags <div style="font-size: 0.75rem; color: var(--text-secondary);">800 kg</div></td>
+                <td><span class="badge badge-info">Negotiating</span></td>
+                <td>2 h ago</td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="viewOfferDetails(2)">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="viewNegotiation(2)">
+                    <i class="fas fa-comments"></i> Thread
+                  </button>
+                </td>
+              </tr>
+              <tr class="status-accepted" data-status="accepted" data-offer-id="3">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="status-indicator"></div>
+                    <strong>UK Coffee Co.</strong>
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Premium Buyer</div>
+                </td>
+                <td>
+                  <strong>Microlot 7</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Specialty, Grade AAA</div>
+                </td>
+                <td><span class="price-highlight">$5.10</span></td>
+                <td>20 bags <div style="font-size: 0.75rem; color: var(--text-secondary);">400 kg</div></td>
+                <td><span class="badge badge-success">Accepted</span></td>
+                <td>Yesterday</td>
+                <td class="action-buttons">
+                  <button class="btn btn-ghost-small" onclick="viewOfferDetails(3)">
+                    <i class="fas fa-eye"></i> Details
+                  </button>
+                  <button class="btn btn-ghost-small" onclick="viewContract(3)">
+                    <i class="fas fa-file-contract"></i> Contract
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- Empty State (hidden by default) -->
+          <div class="empty-state hidden" id="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-tag"></i>
+            </div>
+            <h3 class="empty-title">No offers in this category</h3>
+            <p class="empty-message">When you receive new offers, they will appear here. Check back later or review your lots to attract more buyers.</p>
+            <button class="btn btn-success" onclick="viewAllOffers()">
+              <i class="fas fa-list"></i> View All Offers
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Global functions for onclick handlers
+    function refreshOffers() {
+      location.reload();
+    }
+    
+    function exportOffers() {
+      alert('Export functionality coming soon. Your offers will be exported as CSV.');
+    }
+    
+    function viewAllOffers() {
+      var tabs = document.querySelectorAll('.filter-tab');
+      tabs.forEach(function(tab) { tab.classList.remove('active'); });
+      if (tabs.length) tabs[0].classList.add('active');
+      var rows = document.querySelectorAll('#offers-table tbody tr');
+      rows.forEach(function(row) { row.style.display = ''; });
+      var empty = document.getElementById('empty-state');
+      if (empty) empty.classList.add('hidden');
+    }
+    
+    function viewOfferDetails(id) {
+      alert('Offer details for offer #' + id + ' - Full details view coming soon.');
+    }
+    
+    function viewContract(id) {
+      alert('Contract view for offer #' + id + ' coming soon.');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize UI components
+      initSidebar();
+      initNotifications();
+      initTabs();
+      initModals();
+      initQuickActions();
+    });
+
+    // Sidebar toggle for mobile
+    function initSidebar() {
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+        });
+      }
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth < 1024) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    // Notification system
+    function initNotifications() {
+      const notificationBell = document.getElementById('notification-bell');
+      const notificationDropdown = document.getElementById('notification-dropdown');
+      const markAllReadBtn = document.getElementById('mark-all-read');
+      
+      // Toggle dropdown
+      if (notificationBell) {
+        notificationBell.addEventListener('click', (e) => {
+          e.stopPropagation();
+          notificationDropdown.classList.toggle('show');
+        });
+      }
+      
+      // Mark all as read
+      if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', () => {
+          document.querySelectorAll('.notification-item.unread').forEach(item => {
+            item.classList.remove('unread');
+          });
+          
+          // Update badge count
+          const badge = document.querySelector('.notification-badge');
+          if (badge) badge.textContent = '0';
+          
+          showAlert('success', 'All notifications marked as read');
+        });
+      }
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!notificationBell.contains(e.target) && !notificationDropdown.contains(e.target)) {
+          notificationDropdown.classList.remove('show');
+        }
+      });
+    }
+
+    // Tab filtering system
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const offerRows = document.querySelectorAll('#offers-table tbody tr');
+      const emptyState = document.getElementById('empty-state');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const tab = this.getAttribute('data-tab');
+          
+          // Update active tab
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter rows
+          let visibleCount = 0;
+          offerRows.forEach(row => {
+            const status = row.getAttribute('data-status');
+            
+            if (tab === 'all' || tab === status) {
+              row.classList.remove('hidden');
+              visibleCount++;
+            } else {
+              row.classList.add('hidden');
+            }
+          });
+          
+          // Show empty state if no rows visible
+          if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+          } else {
+            emptyState.classList.add('hidden');
+          }
+        });
+      });
+    }
+
+    // Modal system
+    function initModals() {
+      const offerModal = document.getElementById('offer-details-modal');
+      const counterModal = document.getElementById('counter-offer-modal');
+      
+      // Close buttons
+      document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.closest('.modal').classList.remove('show');
+        });
+      });
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === offerModal) offerModal.classList.remove('show');
+        if (e.target === counterModal) counterModal.classList.remove('show');
+      });
+      
+      // Counter offer send button
+      const sendCounterBtn = document.getElementById('send-counter-btn');
+      if (sendCounterBtn) {
+        sendCounterBtn.addEventListener('click', () => {
+          const price = document.getElementById('counter-price').value;
+          const message = document.getElementById('counter-message').value;
+          
+          counterModal.classList.remove('show');
+          showAlert('success', 'Counter offer sent', `Your counter offer of $${price}/kg has been sent to the buyer.`);
+          
+          // Update UI
+          const negotiatingTab = document.querySelector('[data-tab="negotiating"]');
+          if (negotiatingTab) {
+            const count = parseInt(negotiatingTab.getAttribute('data-count')) + 1;
+            negotiatingTab.setAttribute('data-count', count);
+            negotiatingTab.textContent = `Negotiating (${count})`;
+          }
+        });
+      }
+    }
+
+    // Quick action buttons
+    function initQuickActions() {
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + R to refresh
+        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+          e.preventDefault();
+          refreshOffers();
+        }
+      });
+    }
+
+    // Alert system
+    function showAlert(type, title, message = '') {
+      const alertContainer = document.getElementById('alert-container');
+      
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <div class="alert-icon">
+          ${getAlertIcon(type)}
+        </div>
+        <div class="alert-content">
+          <div class="alert-title">${title}</div>
+          ${message ? `<div class="alert-message">${message}</div>` : ''}
+        </div>
+        <button class="alert-close">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      if (alertContainer) {
+        alertContainer.appendChild(alert);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (alert.parentNode) {
+            alert.remove();
+          }
+        }, 5000);
+        
+        // Close button
+        alert.querySelector('.alert-close').addEventListener('click', () => {
+          alert.remove();
+        });
+      }
+    }
+
+    function getAlertIcon(type) {
+      const icons = {
+        'success': '<i class="fas fa-check-circle"></i>',
+        'warning': '<i class="fas fa-exclamation-triangle"></i>',
+        'info': '<i class="fas fa-info-circle"></i>',
+        'error': '<i class="fas fa-times-circle"></i>'
+      };
+      return icons[type] || icons['info'];
+    }
+
+    // Offer management functions
+    function viewOfferDetails(offerId) {
+      const modal = document.getElementById('offer-details-modal');
+      const content = document.getElementById('offer-details-content');
+      
+      // Mock data for different offers
+      const offerData = {
+        1: {
+          buyer: 'Berlin Roasters',
+          lot: 'AB Lot 12',
+          grade: 'Arabica, Grade AA',
+          price: '$4.20',
+          volume: '120 bags (2,400 kg)',
+          status: 'New',
+          received: '10 minutes ago',
+          expiration: '3 days',
+          buyerRating: '4.8/5',
+          previousDeals: '12 transactions',
+          notes: 'Buyer is interested in a long-term partnership.'
+        },
+        2: {
+          buyer: 'Nordic Import',
+          lot: 'PB Lot 3',
+          grade: 'Peaberry, Grade AB',
+          price: '$3.95',
+          volume: '40 bags (800 kg)',
+          status: 'Negotiating',
+          received: '2 hours ago',
+          expiration: '2 days',
+          buyerRating: '4.5/5',
+          previousDeals: '5 transactions',
+          notes: 'Price negotiation in progress. Last offer was $4.10/kg.'
+        },
+        3: {
+          buyer: 'UK Coffee Co.',
+          lot: 'Microlot 7',
+          grade: 'Specialty, Grade AAA',
+          price: '$5.10',
+          volume: '20 bags (400 kg)',
+          status: 'Accepted',
+          received: 'Yesterday',
+          expiration: 'N/A',
+          buyerRating: '4.9/5',
+          previousDeals: '8 transactions',
+          notes: 'Contract signed. Delivery scheduled for next month.'
+        }
+      };
+      
+      const data = offerData[offerId];
+      
+      content.innerHTML = `
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Buyer:</span>
+          <span class="offer-detail-value">${data.buyer}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Lot:</span>
+          <span class="offer-detail-value">${data.lot} (${data.grade})</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Price:</span>
+          <span class="offer-detail-value">${data.price} / kg</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Volume:</span>
+          <span class="offer-detail-value">${data.volume}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Status:</span>
+          <span class="offer-detail-value">${data.status}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Received:</span>
+          <span class="offer-detail-value">${data.received}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Expires:</span>
+          <span class="offer-detail-value">${data.expiration}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Buyer Rating:</span>
+          <span class="offer-detail-value">${data.buyerRating}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Previous Deals:</span>
+          <span class="offer-detail-value">${data.previousDeals}</span>
+        </div>
+        <div class="offer-detail-row">
+          <span class="offer-detail-label">Notes:</span>
+          <span class="offer-detail-value">${data.notes}</span>
+        </div>
+      `;
+      
+      // Update accept button
+      const acceptBtn = document.getElementById('modal-accept-btn');
+      if (data.status === 'Accepted') {
+        acceptBtn.textContent = 'View Contract';
+        acceptBtn.onclick = () => {
+          modal.classList.remove('show');
+          viewContract(offerId);
+        };
+      } else {
+        acceptBtn.textContent = 'Accept Offer';
+        acceptBtn.onclick = () => {
+          modal.classList.remove('show');
+          acceptOffer(offerId);
+        };
+      }
+      
+      modal.classList.add('show');
+    }
+
+    function openCounterOffer(offerId) {
+      const modal = document.getElementById('counter-offer-modal');
+      modal.classList.add('show');
+    }
+
+    function acceptOffer(offerId) {
+      showAlert('success', 'Offer Accepted', 'The offer has been accepted. A contract is being generated and will be available shortly.');
+      
+      // Update UI
+      const row = document.querySelector(`tr[data-offer-id="${offerId}"]`);
+      if (row) {
+        row.setAttribute('data-status', 'accepted');
+        row.className = 'status-accepted';
+        row.querySelector('.badge').className = 'badge badge-success';
+        row.querySelector('.badge').textContent = 'Accepted';
+        
+        // Update counters
+        const newTab = document.querySelector('[data-tab="new"]');
+        const acceptedTab = document.querySelector('[data-tab="accepted"]');
+        
+        if (newTab) {
+          const newCount = Math.max(0, parseInt(newTab.getAttribute('data-count')) - 1);
+          newTab.setAttribute('data-count', newCount);
+          newTab.textContent = `New Offers${newCount > 0 ? ` (${newCount})` : ''}`;
+        }
+        
+        if (acceptedTab) {
+          const acceptedCount = parseInt(acceptedTab.getAttribute('data-count')) + 1;
+          acceptedTab.setAttribute('data-count', acceptedCount);
+          acceptedTab.textContent = `Accepted (${acceptedCount})`;
+        }
+      }
+    }
+
+    function viewNegotiation(offerId) {
+      showAlert('info', 'Negotiation Thread', 'Opening negotiation history...');
+      // In real implementation, this would open a negotiation thread modal
+    }
+
+    function viewContract(offerId) {
+      showAlert('success', 'Contract', 'Opening contract details...');
+      // In real implementation, this would navigate to contract page
+    }
+
+    function refreshOffers() {
+      showAlert('info', 'Refreshing offers...', 'Checking for new offers from buyers.');
+      // In real implementation, this would make an API call
+    }
+
+    function exportOffers() {
+      showAlert('success', 'Export Started', 'Your offers data is being prepared for download.');
+      // In real implementation, this would trigger a CSV/PDF export
+    }
+
+    function viewAllOffers() {
+      const allTab = document.querySelector('[data-tab="all"]');
+      if (allTab) allTab.click();
+    }
+
+    // Show welcome alert
+    setTimeout(() => {
+      showAlert('info', 'Welcome to Offers', 'You have 3 offers in total. 1 new offer requires your attention.');
+    }, 1500);
+  </script>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

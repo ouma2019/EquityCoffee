@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Lots | Equity Coffee</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body{background:#f8fafc}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#0f172a;color:#fff}
+    .topbar .brand{display:flex;align-items:center;gap:10px}
+    .topbar img{height:34px}
+    .topbar a{color:#fff;text-decoration:none;font-weight:800}
+    .wrap{max-width:1200px;margin:18px auto;padding:0 18px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e2e8f0;color:#0f172a;font-weight:800;cursor:pointer}
+    .btn.primary{background:#e9741e;border-color:#e9741e;color:#fff}
+    .btn:hover{border-color:#e9741e}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,.06);margin-top:12px}
+    th,td{padding:12px 12px;border-bottom:1px solid #eef2f7;text-align:left;font-size:.95rem}
+    th{background:#0f172a;color:#fff;font-weight:800}
+    .tag{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:800}
+    .tag.published{background:#ecfdf5;color:#065f46}
+    .tag.draft{background:#eff6ff;color:#1e40af}
+    .tag.hidden{background:#fff7ed;color:#9a3412}
+    .tag.sold{background:#f1f5f9;color:#334155}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    label{display:block;font-size:.82rem;font-weight:800;color:#334155;margin:10px 0 6px}
+    input,select,textarea{width:100%;padding:10px 10px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;background:#fff}
+    textarea{min-height:84px;resize:vertical}
+    .panel{background:#fff;border-radius:14px;padding:14px;box-shadow:0 6px 14px rgba(0,0,0,.06);margin-top:12px;display:none}
+    .panel.show{display:block}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .danger{background:#ef4444;border-color:#ef4444;color:#fff}
+    .muted{color:#64748b}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <img src="../images/logo.png" alt="Logo">
+      <a href="dashboard-farmer.html">Farmer</a>
+    </div>
+    <div class="actions">
+      <a class="btn" href="dashboard-farmer.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <button id="logoutBtn" class="btn primary"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="row">
+      <div>
+        <h2 style="margin:0;color:#0f172a">My Lots</h2>
+        <div class="muted">Create, edit, publish and manage your lots.</div>
+      </div>
+      <div class="actions">
+        <button id="btnOpen" class="btn primary"><i class="fa-solid fa-plus"></i> New lot</button>
+        <button id="btnRefresh" class="btn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+    </div>
+
+    <div id="panel" class="panel">
+      <div class="row" style="margin-bottom:8px">
+        <strong id="panelTitle">Create Lot</strong>
+        <button id="btnClose" class="btn"><i class="fa-solid fa-xmark"></i> Close</button>
+      </div>
+
+      <form id="lotForm">
+        <input type="hidden" id="lotId" />
+        <div class="grid">
+          <div>
+            <label>Lot name *</label>
+            <input id="lotName" required placeholder="Ethiopia Natural - Hamasho" />
+          </div>
+          <div>
+            <label>Crop year *</label>
+            <input id="cropYear" type="number" min="2000" max="2100" required value="2025" />
+          </div>
+          <div>
+            <label>Country *</label>
+            <input id="country" required placeholder="Ethiopia" />
+          </div>
+          <div>
+            <label>Region</label>
+            <input id="region" placeholder="Yirgacheffe" />
+          </div>
+
+          <div>
+            <label>Process</label>
+            <input id="process" placeholder="Natural / Washed / Anaerobic" />
+          </div>
+          <div>
+            <label>Variety</label>
+            <input id="variety" placeholder="Heirloom" />
+          </div>
+          <div>
+            <label>Cup score</label>
+            <input id="cupScore" type="number" step="0.1" min="0" max="100" placeholder="87.5" />
+          </div>
+          <div>
+            <label>Price per kg</label>
+            <input id="pricePerKg" type="number" step="0.01" min="0" placeholder="8.50" />
+          </div>
+
+          <div>
+            <label>Bags available</label>
+            <input id="bagsAvailable" type="number" min="0" value="10" />
+          </div>
+          <div>
+            <label>Bag size (kg)</label>
+            <input id="bagSizeKg" type="number" min="1" value="60" />
+          </div>
+          <div>
+            <label>Visibility</label>
+            <select id="visibility">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <div>
+            <label>Currency</label>
+            <input id="currency" value="USD" />
+          </div>
+        </div>
+
+        <label>Tasting notes</label>
+        <textarea id="tastingNotes" placeholder="Floral, stone fruit, chocolate..."></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <div class="muted" id="formHint"></div>
+          <div class="actions">
+            <button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lot</th>
+          <th>Origin</th>
+          <th>Score</th>
+          <th>Bags</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th style="width:260px">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <script src="../js/common-auth.js"></script>
+  <script>
+    if (!ECAuth.requireAuth({ redirectTo: "../login.html" })) {}
+    const user = ECAuth.getUser();
+    if (user && user.role && user.role !== "farmer" && user.role !== "admin") ECAuth.logoutAndRedirect("../login.html");
+
+    document.getElementById("logoutBtn").addEventListener("click", () => ECAuth.logoutAndRedirect("../login.html"));
+
+    const panel = document.getElementById("panel");
+    const btnOpen = document.getElementById("btnOpen");
+    const btnClose = document.getElementById("btnClose");
+    const btnRefresh = document.getElementById("btnRefresh");
+    const tbody = document.getElementById("tbody");
+
+    const form = document.getElementById("lotForm");
+    const panelTitle = document.getElementById("panelTitle");
+    const lotId = document.getElementById("lotId");
+
+    function openPanel(edit) {
+      panel.classList.add("show");
+      panelTitle.textContent = edit ? "Edit Lot" : "Create Lot";
+      document.getElementById("formHint").textContent = edit ? "Update your lot details and save." : "Create a draft lot, then publish when ready.";
+    }
+    function closePanel() {
+      panel.classList.remove("show");
+      form.reset();
+      lotId.value = "";
+      document.getElementById("cropYear").value = "2025";
+      document.getElementById("bagsAvailable").value = "10";
+      document.getElementById("bagSizeKg").value = "60";
+      document.getElementById("currency").value = "USD";
+      document.getElementById("visibility").value = "public";
+    }
+
+    btnOpen.addEventListener("click", () => { closePanel(); openPanel(false); });
+    btnClose.addEventListener("click", closePanel);
+    btnRefresh.addEventListener("click", loadLots);
+
+    function esc(s){return (s||"").toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+    function statusTag(status) {
+      const cls = (status || "draft").toLowerCase();
+      return `<span class="tag ${cls}">${esc(cls)}</span>`;
+    }
+
+    function rowHtml(lot) {
+      const price = lot.price_per_kg ? `${lot.price_per_kg} ${esc(lot.currency || "USD")}/kg` : "—";
+      const origin = `${esc(lot.country || "")}${lot.region ? " • " + esc(lot.region) : ""}`;
+      const score = lot.cup_score ?? "—";
+      const bags = `${lot.bags_available ?? 0} × ${lot.bag_size_kg ?? 60}kg`;
+      const actions = `
+        <div class="actions">
+          <button class="btn" data-act="edit" data-id="${lot.id}"><i class="fa-solid fa-pen"></i> Edit</button>
+          ${lot.status === "published"
+            ? `<button class="btn" data-act="unpublish" data-id="${lot.id}"><i class="fa-solid fa-eye-slash"></i> Unpublish</button>`
+            : `<button class="btn" data-act="publish" data-id="${lot.id}"><i class="fa-solid fa-eye"></i> Publish</button>`
+          }
+          <button class="btn danger" data-act="delete" data-id="${lot.id}"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      `;
+      return `
+        <tr>
+          <td><strong>${esc(lot.lot_name)}</strong><div class="muted">Crop ${esc(lot.crop_year)}</div></td>
+          <td>${origin}</td>
+          <td>${esc(score)}</td>
+          <td>${bags}</td>
+          <td>${price}</td>
+          <td>${statusTag(lot.status)}</td>
+          <td>${actions}</td>
+        </tr>
+      `;
+    }
+
+    async function loadLots() {
+      tbody.innerHTML = `<tr><td colspan="7" class="muted">Loading...</td></tr>`;
+      try {
+        const data = await ECAuth.apiFetch("/api/farmer/lots");
+        const lots = data.lots || [];
+        if (!lots.length) {
+          tbody.innerHTML = `<tr><td colspan="7" class="muted">No lots yet. Click "New lot" to create one.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = lots.map(rowHtml).join("");
+      } catch (e) {
+        console.error(e);
+        tbody.innerHTML = `<tr><td colspan="7" class="muted">Failed to load lots: ${esc(e.message || "error")}</td></tr>`;
+      }
+    }
+
+    function setFormFromLot(lot) {
+      lotId.value = lot.id;
+      document.getElementById("lotName").value = lot.lot_name || "";
+      document.getElementById("cropYear").value = lot.crop_year || 2025;
+      document.getElementById("country").value = lot.country || "";
+      document.getElementById("region").value = lot.region || "";
+      document.getElementById("process").value = lot.process || "";
+      document.getElementById("variety").value = lot.variety || "";
+      document.getElementById("cupScore").value = lot.cup_score ?? "";
+      document.getElementById("pricePerKg").value = lot.price_per_kg ?? "";
+      document.getElementById("bagsAvailable").value = lot.bags_available ?? 0;
+      document.getElementById("bagSizeKg").value = lot.bag_size_kg ?? 60;
+      document.getElementById("visibility").value = lot.visibility || "public";
+      document.getElementById("currency").value = lot.currency || "USD";
+      document.getElementById("tastingNotes").value = lot.tasting_notes || "";
+    }
+
+    function getFormPayload() {
+      return {
+        lotName: document.getElementById("lotName").value.trim(),
+        cropYear: document.getElementById("cropYear").value,
+        country: document.getElementById("country").value.trim(),
+        region: document.getElementById("region").value.trim(),
+        process: document.getElementById("process").value.trim(),
+        variety: document.getElementById("variety").value.trim(),
+        cupScore: document.getElementById("cupScore").value,
+        pricePerKg: document.getElementById("pricePerKg").value,
+        bagsAvailable: document.getElementById("bagsAvailable").value,
+        bagSizeKg: document.getElementById("bagSizeKg").value,
+        visibility: document.getElementById("visibility").value,
+        currency: document.getElementById("currency").value.trim(),
+        tastingNotes: document.getElementById("tastingNotes").value.trim()
+      };
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = getFormPayload();
+      if (!payload.lotName || !payload.cropYear || !payload.country) return alert("Lot name, crop year and country are required.");
+
+      try {
+        if (lotId.value) {
+          await ECAuth.apiFetch(`/api/farmer/lots/${lotId.value}`, { method: "PUT", body: payload });
+        } else {
+          await ECAuth.apiFetch("/api/farmer/lots", { method: "POST", body: payload });
+        }
+        closePanel();
+        await loadLots();
+      } catch (e2) {
+        console.error(e2);
+        alert(e2.message || "Save failed");
+      }
+    });
+
+    tbody.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      const act = btn.getAttribute("data-act");
+      const id = btn.getAttribute("data-id");
+
+      if (act === "edit") {
+        try {
+          const data = await ECAuth.apiFetch("/api/farmer/lots");
+          const lot = (data.lots || []).find(x => x.id === id);
+          if (!lot) return;
+          closePanel();
+          setFormFromLot(lot);
+          openPanel(true);
+        } catch (err) {
+          alert(err.message || "Failed to load lot");
+        }
+        return;
+      }
+
+      if (act === "delete") {
+        if (!confirm("Delete this lot?")) return;
+        try {
+          await ECAuth.apiFetch(`/api/farmer/lots/${id}`, { method: "DELETE" });
+          await loadLots();
+        } catch (err) {
+          alert(err.message || "Delete failed");
+        }
+        return;
+      }
+
+      if (act === "publish") {
+        try {
+          await ECAuth.apiFetch(`/api/farmer/lots/${id}/publish`, { method: "POST" });
+          await loadLots();
+        } catch (err) {
+          alert(err.message || "Publish failed");
+        }
+        return;
+      }
+
+      if (act === "unpublish") {
+        try {
+          await ECAuth.apiFetch(`/api/farmer/lots/${id}/unpublish`, { method: "POST" });
+          await loadLots();
+        } catch (err) {
+          alert(err.message || "Unpublish failed");
+        }
+        return;
+      }
+    });
+
+    loadLots();
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmer Dashboard | Equity Coffee</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#0f172a;color:#fff}
+    .topbar .brand{display:flex;align-items:center;gap:10px}
+    .topbar img{height:34px}
+    .topbar a{color:#fff;text-decoration:none;font-weight:700}
+    .wrap{max-width:1100px;margin:18px auto;padding:0 18px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
+    .card .k{color:#64748b;font-size:.85rem}
+    .card .v{font-size:1.6rem;font-weight:800;color:#0f172a;margin-top:6px}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e2e8f0;text-decoration:none;color:#0f172a;font-weight:700}
+    .btn:hover{border-color:#e9741e}
+    @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:520px){.cards{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <img src="../images/logo.png" alt="Logo">
+      <a href="../index.html">Equity Coffee</a>
+    </div>
+    <button id="logoutBtn" style="background:#e9741e;border:none;color:#fff;padding:10px 12px;border-radius:12px;font-weight:800;cursor:pointer;">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </div>
+
+  <div class="wrap">
+    <h2 style="margin:10px 0 6px;color:#0f172a">Farmer Dashboard</h2>
+    <div style="color:#64748b">Manage your lots and publish them to the marketplace.</div>
+
+    <div class="nav">
+      <a class="btn" href="farmer-lots.html"><i class="fa-solid fa-boxes-stacked"></i> My Lots</a>
+      <a class="btn" href="../marketplace.html"><i class="fa-solid fa-store"></i> Marketplace</a>
+      <a class="btn" href="../profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    </div>
+
+    <div class="cards">
+      <div class="card"><div class="k">Total lots</div><div id="kpiTotal" class="v">—</div></div>
+      <div class="card"><div class="k">Published</div><div id="kpiPublished" class="v">—</div></div>
+      <div class="card"><div class="k">Draft</div><div id="kpiDraft" class="v">—</div></div>
+      <div class="card"><div class="k">Hidden</div><div id="kpiHidden" class="v">—</div></div>
+    </div>
+  </div>
+
+  <script src="../js/common-auth.js"></script>
+  <script>
+    // Require auth
+    if (!ECAuth.requireAuth({ redirectTo: "../login.html" })) {}
+
+    const user = ECAuth.getUser();
+    if (user && user.role && user.role !== "farmer" && user.role !== "admin") {
+      ECAuth.logoutAndRedirect("../login.html");
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => ECAuth.logoutAndRedirect("../login.html"));
+
+    async function loadKpis() {
+      try {
+        const data = await ECAuth.apiFetch("/api/farmer/lots");
+        const lots = data.lots || [];
+        const total = lots.length;
+        const published = lots.filter(l => l.status === "published").length;
+        const draft = lots.filter(l => l.status === "draft").length;
+        const hidden = lots.filter(l => l.status === "hidden").length;
+
+        document.getElementById("kpiTotal").textContent = total;
+        document.getElementById("kpiPublished").textContent = published;
+        document.getElementById("kpiDraft").textContent = draft;
+        document.getElementById("kpiHidden").textContent = hidden;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    loadKpis();
+    setInterval(loadKpis, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Equity Coffee | Make a Difference</title>
+  <link rel="stylesheet" href="./css/modern-landing.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8B4513;
+      --primary-dark: #6B3410;
+      --primary-light: #A0522D;
+      --accent: #D4A574;
+      --success: #10B981;
+      --bg-dark: #1a1a2e;
+      --bg-light: #f8f9fa;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%);
+      min-height: 100vh;
+    }
+
+    .donate-header {
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #2d2d44 100%);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .back-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: white;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #2d2d44 100%);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-badge i {
+      color: var(--accent);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--accent) 0%, #e8c9a8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.125rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .trust-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.875rem;
+    }
+
+    .trust-item i {
+      color: var(--success);
+    }
+
+    .donation-container {
+      max-width: 1200px;
+      margin: -3rem auto 4rem;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 968px) {
+      .donation-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .donation-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 1.5rem 2rem;
+      color: white;
+    }
+
+    .card-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .amount-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label i {
+      color: var(--primary);
+    }
+
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .amount-btn {
+      padding: 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .amount-btn:hover {
+      border-color: var(--primary);
+      background: rgba(139, 69, 19, 0.05);
+    }
+
+    .amount-btn.selected {
+      border-color: var(--primary);
+      background: rgba(139, 69, 19, 0.1);
+    }
+
+    .amount-btn .amount {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .amount-btn .impact {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .custom-amount {
+      position: relative;
+    }
+
+    .custom-amount input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 2.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1.125rem;
+      transition: border-color 0.3s;
+    }
+
+    .custom-amount input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .custom-amount .currency {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .frequency-section {
+      margin-bottom: 2rem;
+    }
+
+    .frequency-toggle {
+      display: flex;
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 0.25rem;
+    }
+
+    .freq-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+    }
+
+    .freq-btn.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .donate-btn {
+      width: 100%;
+      padding: 1.25rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .donate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+    }
+
+    .donate-btn i {
+      font-size: 1.25rem;
+    }
+
+    .secure-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .secure-notice i {
+      color: var(--success);
+    }
+
+    .impact-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    .impact-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .impact-card h3 i {
+      color: var(--primary);
+    }
+
+    .impact-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .impact-item:last-child {
+      border-bottom: none;
+    }
+
+    .impact-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(139, 69, 19, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .impact-content h4 {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .impact-content p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .supporters-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .supporters-title {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .supporter-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .supporter-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      border: 2px solid white;
+      margin-left: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .supporter-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .supporter-count {
+      margin-left: 1rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .payment-methods {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .payment-icon {
+      width: 48px;
+      height: 30px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+    }
+
+    .faq-section {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      padding: 0 2rem;
+    }
+
+    .faq-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      background: white;
+      border: none;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question i {
+      color: var(--primary);
+      transition: transform 0.3s;
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem 1.25rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .footer {
+      background: var(--bg-dark);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer p {
+      opacity: 0.7;
+      font-size: 0.875rem;
+    }
+
+    .success-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .success-modal.show {
+      display: flex;
+    }
+
+    .success-content {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2.5rem;
+      color: white;
+    }
+
+    .success-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .success-content p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .close-btn {
+      padding: 0.75rem 2rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="donate-header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-coffee"></i>
+        </div>
+        <span class="logo-text">Equity Coffee</span>
+      </a>
+      <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-badge">
+      <i class="fas fa-heart"></i>
+      Support Our Mission
+    </div>
+    <h1 class="hero-title">
+      Help Us Build a More <span class="highlight">Equitable</span> Coffee Industry
+    </h1>
+    <p class="hero-subtitle">
+      Your contribution helps us connect more farmers to fair markets, develop new traceability tools, 
+      and create educational resources for sustainable coffee practices.
+    </p>
+    <div class="trust-indicators">
+      <div class="trust-item">
+        <i class="fas fa-shield-alt"></i>
+        <span>501(c)(3) Nonprofit</span>
+      </div>
+      <div class="trust-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Tax Deductible</span>
+      </div>
+      <div class="trust-item">
+        <i class="fas fa-lock"></i>
+        <span>Secure Payment</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="donation-container">
+    <div class="donation-card">
+      <div class="card-header">
+        <h2>Make a Donation</h2>
+        <p>Every contribution makes a difference</p>
+      </div>
+      <div class="card-body">
+        <div class="frequency-section">
+          <div class="section-label">
+            <i class="fas fa-calendar-alt"></i>
+            Donation Frequency
+          </div>
+          <div class="frequency-toggle">
+            <button class="freq-btn active" data-freq="once">One-time</button>
+            <button class="freq-btn" data-freq="monthly">Monthly</button>
+            <button class="freq-btn" data-freq="annual">Annual</button>
+          </div>
+        </div>
+
+        <div class="amount-section">
+          <div class="section-label">
+            <i class="fas fa-hand-holding-usd"></i>
+            Select Amount
+          </div>
+          <div class="amount-grid">
+            <button class="amount-btn" data-amount="25">
+              <div class="amount">$25</div>
+              <div class="impact">Support 1 farmer</div>
+            </button>
+            <button class="amount-btn selected" data-amount="50">
+              <div class="amount">$50</div>
+              <div class="impact">Train 5 farmers</div>
+            </button>
+            <button class="amount-btn" data-amount="100">
+              <div class="amount">$100</div>
+              <div class="impact">Fund equipment</div>
+            </button>
+            <button class="amount-btn" data-amount="250">
+              <div class="amount">$250</div>
+              <div class="impact">Sponsor community</div>
+            </button>
+            <button class="amount-btn" data-amount="500">
+              <div class="amount">$500</div>
+              <div class="impact">Launch program</div>
+            </button>
+            <button class="amount-btn" data-amount="1000">
+              <div class="amount">$1,000</div>
+              <div class="impact">Transform lives</div>
+            </button>
+          </div>
+          <div class="custom-amount">
+            <span class="currency">$</span>
+            <input type="number" id="customAmount" placeholder="Enter custom amount" min="5">
+          </div>
+        </div>
+
+        <button class="donate-btn" id="donateBtn" data-testid="button-donate">
+          <i class="fas fa-heart"></i>
+          Donate <span id="donateAmount">$50</span> <span id="donateFreq">Now</span>
+        </button>
+
+        <div class="secure-notice">
+          <i class="fas fa-lock"></i>
+          <span>Your payment is secure and encrypted</span>
+        </div>
+
+        <div class="payment-methods">
+          <div class="payment-icon"><i class="fab fa-cc-visa"></i></div>
+          <div class="payment-icon"><i class="fab fa-cc-mastercard"></i></div>
+          <div class="payment-icon"><i class="fab fa-cc-amex"></i></div>
+          <div class="payment-icon"><i class="fab fa-cc-paypal"></i></div>
+          <div class="payment-icon"><i class="fab fa-apple-pay"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="impact-card">
+      <h3><i class="fas fa-seedling"></i> Your Impact</h3>
+      
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="impact-content">
+          <h4>Empower Farmers</h4>
+          <p>Connect smallholder farmers to premium markets and ensure they receive fair compensation for their work.</p>
+        </div>
+      </div>
+
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="impact-content">
+          <h4>Education & Training</h4>
+          <p>Fund agricultural training, sustainable farming practices, and quality improvement workshops.</p>
+        </div>
+      </div>
+
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-laptop-code"></i>
+        </div>
+        <div class="impact-content">
+          <h4>Technology Development</h4>
+          <p>Support the development of our blockchain traceability system to ensure transparency throughout the supply chain.</p>
+        </div>
+      </div>
+
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <div class="impact-content">
+          <h4>Environmental Impact</h4>
+          <p>Help farmers adopt sustainable practices that protect biodiversity and combat climate change.</p>
+        </div>
+      </div>
+
+      <div class="supporters-section">
+        <div class="supporters-title">
+          <i class="fas fa-heart"></i>
+          Recent Supporters
+        </div>
+        <div class="supporter-avatars">
+          <div class="supporter-avatar">JM</div>
+          <div class="supporter-avatar">SA</div>
+          <div class="supporter-avatar">KT</div>
+          <div class="supporter-avatar">MR</div>
+          <div class="supporter-avatar">+</div>
+          <span class="supporter-count">+247 supporters this month</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="faq-section">
+    <h2 class="faq-title">Frequently Asked Questions</h2>
+    
+    <div class="faq-item active">
+      <button class="faq-question">
+        How is my donation used?
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="faq-answer">
+        85% of your donation goes directly to our programs: farmer training, technology development, 
+        and market access initiatives. The remaining 15% covers administrative costs and ensures the 
+        sustainability of our operations.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        Is my donation tax-deductible?
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="faq-answer">
+        Yes! Equity Coffee is a registered 501(c)(3) nonprofit organization. You will receive a 
+        tax receipt via email for your records. Please consult your tax advisor for specific 
+        deduction eligibility.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        Can I cancel my monthly donation?
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="faq-answer">
+        Absolutely. You can modify or cancel your recurring donation at any time by contacting 
+        our support team or through your donor dashboard. No questions asked.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        How do I know my donation is secure?
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="faq-answer">
+        We use industry-standard SSL encryption and partner with trusted payment processors 
+        like Stripe to ensure your financial information is always protected. We never store 
+        your complete payment details on our servers.
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2024 Equity Coffee. All rights reserved. | <a href="privacy.html" style="color: inherit;">Privacy Policy</a> | <a href="terms.html" style="color: inherit;">Terms of Service</a></p>
+  </footer>
+
+  <div class="success-modal" id="successModal">
+    <div class="success-content">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <h3>Thank You!</h3>
+      <p>Your generous contribution will help us create a more equitable coffee industry. A receipt has been sent to your email.</p>
+      <button class="close-btn" onclick="closeModal()">Continue</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedAmount = 50;
+    let selectedFrequency = 'once';
+
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedAmount = parseInt(this.dataset.amount);
+        document.getElementById('customAmount').value = '';
+        updateDonateButton();
+      });
+    });
+
+    document.getElementById('customAmount').addEventListener('input', function() {
+      if (this.value) {
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+        selectedAmount = parseInt(this.value) || 0;
+        updateDonateButton();
+      }
+    });
+
+    document.querySelectorAll('.freq-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedFrequency = this.dataset.freq;
+        updateDonateButton();
+      });
+    });
+
+    function updateDonateButton() {
+      document.getElementById('donateAmount').textContent = '$' + selectedAmount.toLocaleString();
+      const freqText = {
+        'once': 'Now',
+        'monthly': '/month',
+        'annual': '/year'
+      };
+      document.getElementById('donateFreq').textContent = freqText[selectedFrequency];
+    }
+
+    document.getElementById('donateBtn').addEventListener('click', function() {
+      if (selectedAmount < 5) {
+        alert('Minimum donation amount is $5');
+        return;
+      }
+      document.getElementById('successModal').classList.add('show');
+    });
+
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('show');
+    }
+
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const item = this.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>

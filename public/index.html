@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1220;color:#fff}
+    .wrap{max-width:1050px;margin:0 auto;padding:34px 18px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:42px}
+    .btn{display:inline-flex;align-items:center;gap:10px;background:#e9741e;color:#fff;padding:10px 14px;border-radius:14px;text-decoration:none;font-weight:900}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.2)}
+    h1{font-size:3rem;line-height:1.05;margin:30px 0 12px}
+    p{color:rgba(255,255,255,.75);font-size:1.1rem;max-width:720px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px}
+    .k{opacity:.75;font-weight:800;font-size:.9rem}
+    .v{margin-top:6px;font-weight:900;font-size:1.1rem}
+    @media(max-width:900px){h1{font-size:2.2rem}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="images/logo.png" alt="Equity Coffee">
+        <div style="font-weight:900">Equity Coffee</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <a class="btn secondary" href="login.html">Sign in</a>
+        <a class="btn" href="get-started.html">Create account</a>
+      </div>
+    </div>
+
+    <h1>Transparent coffee trading, from farm to cup.</h1>
+    <p>Equity Coffee is a role-based platform for farmers, traders, roasters and logistics partners to collaborate, publish lots, negotiate offers and track shipments.</p>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn" href="marketplace.html">Open Marketplace</a>
+      <a class="btn secondary" href="profile.html">Profile</a>
+    </div>
+
+    <div class="grid">
+      <div class="card"><div class="k">Farmer</div><div class="v">Create lots • Publish • Manage inventory</div></div>
+      <div class="card"><div class="k">Trader</div><div class="v">Browse marketplace • Send offers • Track shipments</div></div>
+      <div class="card"><div class="k">Roaster</div><div class="v">Manage contracts • Inventory • Delivery updates</div></div>
+    </div>
+
+    <div style="margin-top:26px;opacity:.6;font-size:.9rem">Tip: If backend is hosted separately on Render, open Developer Tools → Console and set API base: <code style="opacity:.9">ECAuth.setApiBase("https://your-backend.onrender.com")</code></div>
+  </div>
+
+  <script src="js/common-auth.js"></script>
+</body>
+</html>

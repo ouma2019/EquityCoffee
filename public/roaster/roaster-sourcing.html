@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sourcing – Equity Coffee Roaster</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+          <div class="logo-text">
+            <span class="logo-primary">Equity Coffee</span>
+            <span class="logo-secondary">Sourcing</span>
+          </div>
+        </div>
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="sidebar-nav">
+        <li>
+          <a class="sidebar-link" href="dashboard-roaster.html">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link active" href="roaster-sourcing.html">
+            <i class="fas fa-search"></i>
+            <span>Sourcing</span>
+            <span class="sidebar-badge" id="sidebar-open-briefs-count">4</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-inventory.html">
+            <i class="fas fa-boxes"></i>
+            <span>Inventory</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-traceability.html">
+            <i class="fas fa-qrcode"></i>
+            <span>Traceability</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" href="roaster-consumers.html">
+            <i class="fas fa-users"></i>
+            <span>Consumers</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">DC</div>
+          <div class="user-info">
+            <div class="user-name">Deep Concept Roastery</div>
+            <div class="user-email">sourcing@deepconcept.com</div>
+          </div>
+        </div>
+        <button class="btn-logout" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-header">
+            <h1>Sourcing Management</h1>
+            <p class="page-subtitle">Plan your menu, publish briefs and review offers from traders</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-actions">
+            <button class="btn-icon" title="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">5</span>
+            </button>
+            <button class="btn-icon" title="New Brief" id="new-brief-btn">
+              <i class="fas fa-plus"></i>
+            </button>
+            <button class="btn-icon" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+          <div class="topbar-divider"></div>
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <span class="stat-label">Active Sourcing</span>
+              <span class="stat-indicator active"></span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Sourcing Overview -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                <i class="fas fa-bullhorn"></i>
+              </div>
+              <div class="kpi-label">Open Briefs</div>
+            </div>
+            <div class="kpi-value" id="kpi-open-briefs">4</div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+1 this week</span>
+            </div>
+            <div class="kpi-meta">Origins you're actively sourcing</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                <i class="fas fa-list-check"></i>
+              </div>
+              <div class="kpi-label">Shortlisted Lots</div>
+            </div>
+            <div class="kpi-value">11</div>
+            <div class="kpi-trend">
+              <span>Ready for sample approval</span>
+            </div>
+            <div class="kpi-meta">Awaiting your decision</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                <i class="fas fa-file-contract"></i>
+              </div>
+              <div class="kpi-label">Confirmed Contracts</div>
+            </div>
+            <div class="kpi-value">6</div>
+            <div class="kpi-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>+2 this month</span>
+            </div>
+            <div class="kpi-meta">Covering next 6 months</div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="kpi-label">Pending Samples</div>
+            </div>
+            <div class="kpi-value">8</div>
+            <div class="kpi-trend">
+              <span>To be reviewed</span>
+            </div>
+            <div class="kpi-meta">Awaiting quality assessment</div>
+          </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="content-grid">
+          <!-- Left Column -->
+          <div class="content-column">
+            <!-- Sourcing Briefs -->
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2><i class="fas fa-file-alt"></i> Sourcing Briefs</h2>
+                  <p class="panel-subtitle">Tell traders what you're looking for by profile, volume and timing</p>
+                </div>
+                <div class="panel-actions">
+                  <button class="btn btn-primary" id="create-brief-btn">
+                    <i class="fas fa-plus"></i>
+                    New Brief
+                  </button>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="table-container">
+                  <table class="data-table" id="briefs-table">
+                    <thead>
+                      <tr>
+                        <th>Brief</th>
+                        <th>Origin</th>
+                        <th>Profile</th>
+                        <th>Volume</th>
+                        <th>Delivery</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="briefs-tbody">
+                      <!-- Existing sample briefs (still visible as initial data) -->
+                      <tr>
+                        <td>
+                          <div class="brief-info">
+                            <div class="brief-name">Filter Menu – Q2</div>
+                            <div class="brief-id">BRIEF-2024-FM02</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag kenya"></span>
+                            <span>Kenya / Ethiopia</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="profile-info">
+                            <span class="profile-badge">Juicy filter</span>
+                            <span class="profile-score">86+</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="volume-info">
+                            <span class="volume-value">120 bags</span>
+                            <span class="volume-meta">~2,400 kg</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="delivery-info">
+                            <span class="delivery-period">Apr–Jun</span>
+                            <span class="delivery-status pending">30 days</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge info">Collecting Offers</span>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            <button class="btn-icon-small" title="View Offers">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Edit Brief">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Download">
+                              <i class="fas fa-download"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          <div class="brief-info">
+                            <div class="brief-name">House Espresso – Refresh</div>
+                            <div class="brief-id">BRIEF-2024-HE01</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag brazil"></span>
+                            <span class="country-flag colombia"></span>
+                            <span>Brazil / Colombia</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="profile-info">
+                            <span class="profile-badge">Chocolate</span>
+                            <span class="profile-score">Low acidity</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="volume-info">
+                            <span class="volume-value">200 bags</span>
+                            <span class="volume-meta">~4,000 kg</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="delivery-info">
+                            <span class="delivery-period">Mar–May</span>
+                            <span class="delivery-status active">15 days</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge success">Samples Approved</span>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            <button class="btn-icon-small" title="View Offers">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Finalize">
+                              <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Download">
+                              <i class="fas fa-download"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          <div class="brief-info">
+                            <div class="brief-name">Seasonal Single Origin</div>
+                            <div class="brief-id">BRIEF-2024-SO03</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="origin-info">
+                            <span class="country-flag ethiopia"></span>
+                            <span>Ethiopia • Yirgacheffe</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="profile-info">
+                            <span class="profile-badge">Floral</span>
+                            <span class="profile-score">88+</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="volume-info">
+                            <span class="volume-value">80 bags</span>
+                            <span class="volume-meta">~1,600 kg</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="delivery-info">
+                            <span class="delivery-period">May–Jul</span>
+                            <span class="delivery-status future">45 days</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="status-badge warning">Draft</span>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            <button class="btn-icon-small" title="Edit">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon-small" title="Publish">
+                              <i class="fas fa-paper-plane"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Brief Creation -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-bolt"></i> Quick Brief Creation</h2>
+              </div>
+              <div class="panel-body">
+                <div class="brief-templates">
+                  <div class="template-grid">
+                    <button class="template-card" data-template="filter" type="button">
+                      <div class="template-icon">
+                        <i class="fas fa-filter"></i>
+                      </div>
+                      <div class="template-content">
+                        <div class="template-name">Filter Coffee</div>
+                        <div class="template-desc">Light roast, fruity profile</div>
+                      </div>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button class="template-card" data-template="espresso" type="button">
+                      <div class="template-icon">
+                        <i class="fas fa-coffee"></i>
+                      </div>
+                      <div class="template-content">
+                        <div class="template-name">Espresso Blend</div>
+                        <div class="template-desc">Balanced, chocolate notes</div>
+                      </div>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button class="template-card" data-template="single-origin" type="button">
+                      <div class="template-icon">
+                        <i class="fas fa-globe-americas"></i>
+                      </div>
+                      <div class="template-content">
+                        <div class="template-name">Single Origin</div>
+                        <div class="template-desc">Seasonal, traceable lots</div>
+                      </div>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button class="template-card" data-template="custom" type="button">
+                      <div class="template-icon">
+                        <i class="fas fa-sliders-h"></i>
+                      </div>
+                      <div class="template-content">
+                        <div class="template-name">Custom Profile</div>
+                        <div class="template-desc">Define your own specs</div>
+                      </div>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="content-column">
+            <!-- Active Offers -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-handshake"></i> Active Offers</h2>
+                <div class="panel-actions">
+                  <select class="select-filter" id="offers-filter">
+                    <option value="all">All Origins</option>
+                    <option value="kenya">Kenya</option>
+                    <option value="ethiopia">Ethiopia</option>
+                    <option value="brazil">Brazil</option>
+                  </select>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="offers-list" id="offers-list">
+                  <div class="offer-item highlight" data-origin="kenya">
+                    <div class="offer-header">
+                      <div class="offer-origin">
+                        <span class="country-flag kenya"></span>
+                        <div>
+                          <div class="offer-name">Kirinyaga AA Top Lot</div>
+                          <div class="offer-trader">Premium Traders Ltd.</div>
+                        </div>
+                      </div>
+                      <div class="offer-price">
+                        <div class="price-value">$8.45/kg</div>
+                        <div class="price-meta">FOB Mombasa</div>
+                      </div>
+                    </div>
+                    <div class="offer-details">
+                      <div class="offer-specs">
+                        <div class="spec-item">
+                          <span class="spec-label">Score</span>
+                          <span class="spec-value">87.5</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Quantity</span>
+                          <span class="spec-value">60 bags</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Process</span>
+                          <span class="spec-value">Washed</span>
+                        </div>
+                      </div>
+                      <div class="offer-actions">
+                        <button class="btn btn-outline" data-action="cupping-report">
+                          <i class="fas fa-file-pdf"></i>
+                          Cupping Report
+                        </button>
+                        <button class="btn btn-primary" data-action="request-sample">
+                          Request Sample
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="offer-item" data-origin="brazil">
+                    <div class="offer-header">
+                      <div class="offer-origin">
+                        <span class="country-flag brazil"></span>
+                        <div>
+                          <div class="offer-name">Cerrado Natural</div>
+                          <div class="offer-trader">Brazil Coffee Export</div>
+                        </div>
+                      </div>
+                      <div class="offer-price">
+                        <div class="price-value">$5.20/kg</div>
+                        <div class="price-meta">FOB Santos</div>
+                      </div>
+                    </div>
+                    <div class="offer-details">
+                      <div class="offer-specs">
+                        <div class="spec-item">
+                          <span class="spec-label">Score</span>
+                          <span class="spec-value">84.0</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Quantity</span>
+                          <span class="spec-value">120 bags</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Process</span>
+                          <span class="spec-value">Natural</span>
+                        </div>
+                      </div>
+                      <div class="offer-status">
+                        <span class="status-badge success">Sample Received</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="offer-item" data-origin="ethiopia">
+                    <div class="offer-header">
+                      <div class="offer-origin">
+                        <span class="country-flag ethiopia"></span>
+                        <div>
+                          <div class="offer-name">Gedeo Grade 1</div>
+                          <div class="offer-trader">ECX Licensed</div>
+                        </div>
+                      </div>
+                      <div class="offer-price">
+                        <div class="price-value">$9.80/kg</div>
+                        <div class="price-meta">EXW Addis</div>
+                      </div>
+                    </div>
+                    <div class="offer-details">
+                      <div class="offer-specs">
+                        <div class="spec-item">
+                          <span class="spec-label">Score</span>
+                          <span class="spec-value">88.0</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Quantity</span>
+                          <span class="spec-value">40 bags</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-label">Process</span>
+                          <span class="spec-value">Washed</span>
+                        </div>
+                      </div>
+                      <div class="offer-status">
+                        <span class="status-badge warning">Awaiting Response</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Sourcing Calendar -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fas fa-calendar-alt"></i> Sourcing Timeline</h2>
+              </div>
+              <div class="panel-body">
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-date">Mar 15</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Ethiopia Samples Due</div>
+                      <div class="timeline-description">Gedeo Natural cupping session</div>
+                    </div>
+                    <span class="status-badge warning">Pending</span>
+                  </div>
+                  
+                  <div class="timeline-item">
+                    <div class="timeline-date">Mar 22</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Brazil Shipment</div>
+                      <div class="timeline-description">Cerrado Estate departure</div>
+                    </div>
+                    <span class="status-badge info">Scheduled</span>
+                  </div>
+                  
+                  <div class="timeline-item">
+                    <div class="timeline-date">Apr 5</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">New Brief Launch</div>
+                      <div class="timeline-description">Q3 Seasonal Collection</div>
+                    </div>
+                    <span class="status-badge">Planned</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <footer class="dashboard-footer">
+        <div class="footer-content">
+          <span class="copyright">© 2024 Equity Coffee. All rights reserved.</span>
+          <div class="footer-links">
+            <a href="#">Sourcing Policy</a>
+            <a href="#">Trader Directory</a>
+            <a href="#">Quality Standards</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- New Brief Modal -->
+  <div id="brief-modal" class="modal-overlay" style="display: none;">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-alt"></i> Create New Sourcing Brief</h3>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="brief-form" class="form-grid">
+          <div class="form-group">
+            <label for="brief-name">Brief Name</label>
+            <input
+              type="text"
+              id="brief-name"
+              name="brief-name"
+              placeholder="e.g., Seasonal Espresso Blend"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="brief-origin">Target Origin(s)</label>
+            <select
+              id="brief-origin"
+              name="brief-origin"
+              multiple
+              required
+            >
+              <option value="kenya">Kenya</option>
+              <option value="ethiopia">Ethiopia</option>
+              <option value="brazil">Brazil</option>
+              <option value="colombia">Colombia</option>
+              <option value="guatemala">Guatemala</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="brief-profile">Flavor Profile</label>
+            <input
+              type="text"
+              id="brief-profile"
+              name="brief-profile"
+              placeholder="e.g., Chocolate, low acidity"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="brief-quality">Minimum Quality Score</label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="brief-quality"
+                name="brief-quality"
+                min="80"
+                max="95"
+                value="85"
+              >
+              <span class="range-value">85+</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="brief-volume">Volume Required</label>
+            <div class="volume-input">
+              <input
+                type="number"
+                id="brief-volume"
+                name="brief-volume"
+                min="1"
+                value="100"
+              >
+              <select id="brief-volume-unit" name="brief-volume-unit">
+                <option value="bags">Bags</option>
+                <option value="kg">Kilograms</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="brief-delivery">Delivery Window</label>
+            <div class="date-range">
+              <input
+                type="date"
+                id="brief-delivery-start"
+                name="brief-delivery-start"
+              >
+              <span>to</span>
+              <input
+                type="date"
+                id="brief-delivery-end"
+                name="brief-delivery-end"
+              >
+            </div>
+          </div>
+          
+          <div class="form-group full-width">
+            <label for="brief-notes">Additional Requirements</label>
+            <textarea
+              id="brief-notes"
+              name="brief-notes"
+              rows="3"
+              placeholder="Any specific processing methods, certifications, or other requirements..."
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+        <button type="submit" form="brief-form" class="btn btn-primary">Publish Brief</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/dashboard.js"></script>
+  <script>
+    // Sourcing Page JavaScript
+    class SourcingManager {
+      constructor() {
+        this.briefCounter = 4; // starting from existing 3 + 1 future
+        this.init();
+      }
+      
+      init() {
+        this.cacheElements();
+        this.setupEventListeners();
+        this.updateKpis();
+        this.loadSourcingData();
+      }
+
+      cacheElements() {
+        this.briefModal = document.getElementById('brief-modal');
+        this.briefForm = document.getElementById('brief-form');
+        this.briefsTbody = document.getElementById('briefs-tbody');
+        this.kpiOpenBriefs = document.getElementById('kpi-open-briefs');
+        this.sidebarOpenBriefs = document.getElementById('sidebar-open-briefs-count');
+        this.offersFilter = document.getElementById('offers-filter');
+        this.offersList = document.getElementById('offers-list');
+      }
+      
+      setupEventListeners() {
+        const createBriefBtn = document.getElementById('create-brief-btn');
+        const newBriefBtn = document.getElementById('new-brief-btn');
+        
+        if (createBriefBtn) {
+          createBriefBtn.addEventListener('click', () => this.openBriefModal());
+        }
+        
+        if (newBriefBtn) {
+          newBriefBtn.addEventListener('click', () => this.openBriefModal());
+        }
+        
+        // Template cards
+        document.querySelectorAll('.template-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const template = card.dataset.template;
+            this.useTemplate(template);
+          });
+        });
+        
+        // Offer actions
+        document.querySelectorAll('.offer-item .btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = btn.dataset.action;
+            this.handleOfferAction(action, btn.closest('.offer-item'));
+          });
+        });
+
+        // Offers filter
+        if (this.offersFilter) {
+          this.offersFilter.addEventListener('change', () => this.filterOffers());
+        }
+        
+        // Modal handling (close buttons)
+        document.querySelectorAll('.modal-close').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.closeBriefModal();
+          });
+        });
+
+        // Close modal when clicking overlay
+        if (this.briefModal) {
+          this.briefModal.addEventListener('click', (e) => {
+            if (e.target === this.briefModal) {
+              this.closeBriefModal();
+            }
+          });
+        }
+        
+        // Form submission
+        if (this.briefForm) {
+          this.briefForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.createBrief();
+          });
+        }
+        
+        // Quality score slider
+        const qualitySlider = document.getElementById('brief-quality');
+        const qualityValue = document.querySelector('.range-value');
+        
+        if (qualitySlider && qualityValue) {
+          qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value + '+';
+          });
+        }
+      }
+      
+      openBriefModal() {
+        if (this.briefModal) {
+          this.briefModal.style.display = 'flex';
+        }
+      }
+
+      closeBriefModal() {
+        if (this.briefModal) {
+          this.briefModal.style.display = 'none';
+        }
+      }
+      
+      useTemplate(template) {
+        const templates = {
+          filter: {
+            name: 'Filter Coffee Brief',
+            profile: 'Juicy, fruity, tea-like',
+            quality: '86',
+            volume: '80'
+          },
+          espresso: {
+            name: 'Espresso Blend Brief',
+            profile: 'Chocolate, caramel, balanced',
+            quality: '84',
+            volume: '150'
+          },
+          'single-origin': {
+            name: 'Single Origin Brief',
+            profile: 'Unique, terroir-driven',
+            quality: '87',
+            volume: '60'
+          },
+          custom: {
+            name: '',
+            profile: '',
+            quality: '85',
+            volume: '100'
+          }
+        };
+        
+        const data = templates[template];
+        if (!data) return;
+
+        const nameInput = document.getElementById('brief-name');
+        const profileInput = document.getElementById('brief-profile');
+        const qualityInput = document.getElementById('brief-quality');
+        const volumeInput = document.getElementById('brief-volume');
+        const rangeValue = document.querySelector('.range-value');
+
+        if (nameInput) nameInput.value = data.name;
+        if (profileInput) profileInput.value = data.profile;
+        if (qualityInput) {
+          qualityInput.value = data.quality;
+          if (rangeValue) {
+            rangeValue.textContent = data.quality + '+';
+          }
+        }
+        if (volumeInput) volumeInput.value = data.volume;
+
+        this.openBriefModal();
+      }
+      
+      async createBrief() {
+        if (!this.briefForm) return;
+
+        const formData = new FormData(this.briefForm);
+
+        const originsSelect = document.getElementById('brief-origin');
+        const qualityInput = document.getElementById('brief-quality');
+
+        const origins = originsSelect
+          ? Array.from(originsSelect.selectedOptions).map(o => o.value)
+          : [];
+
+        const briefData = {
+          name: formData.get('brief-name') || '',
+          origins,
+          profile: formData.get('brief-profile') || '',
+          quality: qualityInput ? qualityInput.value : '',
+          volumeValue: formData.get('brief-volume') || '',
+          volumeUnit: formData.get('brief-volume-unit') || 'bags',
+          deliveryStart: formData.get('brief-delivery-start') || '',
+          deliveryEnd: formData.get('brief-delivery-end') || '',
+          notes: formData.get('brief-notes') || ''
+        };
+
+        if (!briefData.name.trim()) {
+          this.showNotification('Please provide a brief name.', 'error');
+          return;
+        }
+
+        if (!briefData.origins.length) {
+          this.showNotification('Please select at least one origin.', 'error');
+          return;
+        }
+
+        const submitBtn = document.querySelector('#brief-modal .modal-footer .btn-primary');
+        let originalText = '';
+
+        if (submitBtn) {
+          originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+          submitBtn.disabled = true;
+        }
+
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          this.addBriefRow(briefData);
+          this.briefForm.reset();
+          
+          const rangeValue = document.querySelector('.range-value');
+          const qualityInput = document.getElementById('brief-quality');
+          if (qualityInput) qualityInput.value = 85;
+          if (rangeValue) rangeValue.textContent = '85+';
+
+          this.closeBriefModal();
+          this.showNotification('Sourcing brief created successfully!', 'success');
+          this.updateKpis();
+        } catch (error) {
+          console.error(error);
+          this.showNotification('Failed to create brief. Please try again.', 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }
+        }
+      }
+
+      addBriefRow(briefData) {
+        if (!this.briefsTbody) return;
+
+        this.briefCounter += 1;
+        const briefId = `BRIEF-NEW-${this.briefCounter.toString().padStart(3, '0')}`;
+        const originLabel = briefData.origins.join(' / ');
+        const volumeLabel = `${briefData.volumeValue || '0'} ${briefData.volumeUnit}`;
+        const deliveryLabel = briefData.deliveryStart && briefData.deliveryEnd
+          ? `${briefData.deliveryStart} – ${briefData.deliveryEnd}`
+          : 'TBD';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <div class="brief-info">
+              <div class="brief-name">${briefData.name}</div>
+              <div class="brief-id">${briefId}</div>
+            </div>
+          </td>
+          <td>
+            <div class="origin-info">
+              <span>${originLabel}</span>
+            </div>
+          </td>
+          <td>
+            <div class="profile-info">
+              <span class="profile-badge">${briefData.profile || 'Custom'}</span>
+              <span class="profile-score">${briefData.quality || ''}+</span>
+            </div>
+          </td>
+          <td>
+            <div class="volume-info">
+              <span class="volume-value">${volumeLabel}</span>
+              <span class="volume-meta">Projected</span>
+            </div>
+          </td>
+          <td>
+            <div class="delivery-info">
+              <span class="delivery-period">${deliveryLabel}</span>
+              <span class="delivery-status pending">Planned</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge info">Collecting Offers</span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon-small" title="View Offers">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-icon-small" title="Edit Brief">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn-icon-small" title="Download">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
+          </td>
+        `;
+
+        // Add new briefs at the top of the table
+        if (this.briefsTbody.firstChild) {
+          this.briefsTbody.insertBefore(tr, this.briefsTbody.firstChild);
+        } else {
+          this.briefsTbody.appendChild(tr);
+        }
+      }
+
+      updateKpis() {
+        if (!this.kpiOpenBriefs || !this.briefsTbody) return;
+        
+        const openBriefsCount = this.briefsTbody.querySelectorAll('tr').length;
+        this.kpiOpenBriefs.textContent = openBriefsCount;
+        if (this.sidebarOpenBriefs) {
+          this.sidebarOpenBriefs.textContent = openBriefsCount;
+        }
+      }
+
+      filterOffers() {
+        if (!this.offersFilter || !this.offersList) return;
+
+        const filterValue = this.offersFilter.value;
+        const items = this.offersList.querySelectorAll('.offer-item');
+
+        items.forEach(item => {
+          const origin = item.dataset.origin;
+          if (filterValue === 'all' || origin === filterValue) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+      
+      handleOfferAction(action, offerItem) {
+        if (!offerItem) return;
+        const offerName = offerItem.querySelector('.offer-name')?.textContent || 'this lot';
+        
+        const actions = {
+          'request-sample': () => {
+            this.showModal(
+              'Sample Request',
+              `Requesting sample for <strong>${offerName}</strong>. The trader will be notified with your sample request.`
+            );
+          },
+          'cupping-report': () => {
+            this.showModal(
+              'Cupping Report',
+              `Preparing cupping report download for <strong>${offerName}</strong>.`
+            );
+          }
+        };
+        
+        if (actions[action]) {
+          actions[action]();
+        }
+      }
+      
+      async loadSourcingData() {
+        // Placeholder for future API integration
+        console.log('Sourcing data ready.');
+      }
+      
+      showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+          <span>${message}</span>
+          <button class="notification-close" aria-label="Dismiss notification">&times;</button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        const removeNotification = () => {
+          notification.style.opacity = '0';
+          setTimeout(() => {
+            if (notification.parentNode) {
+              document.body.removeChild(notification);
+            }
+          }, 300);
+        };
+
+        setTimeout(removeNotification, 5000);
+        
+        notification.querySelector('.notification-close').addEventListener('click', removeNotification);
+      }
+      
+      showModal(title, message) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+          <div class="modal">
+            <div class="modal-header">
+              <h3>${title}</h3>
+              <button class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>${message}</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary modal-close-btn">OK</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const close = () => {
+          if (modal.parentNode) {
+            document.body.removeChild(modal);
+          }
+        };
+
+        modal.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
+          btn.addEventListener('click', close);
+        });
+
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) close();
+        });
+      }
+    }
+    
+    // Initialize sourcing manager
+    document.addEventListener('DOMContentLoaded', () => {
+      new SourcingManager();
+    });
+  </script>
+  
+  <style>
+    /* Sourcing Page Specific Styles */
+    
+    /* Brief Templates */
+    .brief-templates {
+      padding: 0.5rem;
+    }
+    
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .template-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      width: 100%;
+      text-align: left;
+    }
+    
+    .template-card:hover {
+      background: var(--bg-card);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .template-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      flex-shrink: 0;
+    }
+    
+    .template-content {
+      flex: 1;
+    }
+    
+    .template-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .template-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .template-card i.fa-chevron-right {
+      color: var(--text-light);
+      font-size: 0.825rem;
+    }
+    
+    /* Brief Info */
+    .brief-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    
+    .brief-name {
+      font-weight: 500;
+    }
+    
+    .brief-id {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .origin-info {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Profile Info */
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .profile-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: rgba(139, 69, 19, 0.08);
+      color: var(--primary-color);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .profile-score {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Volume Info */
+    .volume-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    
+    .volume-value {
+      font-weight: 500;
+    }
+    
+    .volume-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Delivery Info */
+    .delivery-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    
+    .delivery-period {
+      font-weight: 500;
+    }
+    
+    .delivery-status {
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 999px;
+      display: inline-block;
+      width: fit-content;
+    }
+    
+    .delivery-status.pending {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warning-color);
+    }
+    
+    .delivery-status.active {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success-color);
+    }
+    
+    .delivery-status.future {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--info-color);
+    }
+    
+    /* Offers List */
+    .offers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .offer-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: all 0.25s ease;
+    }
+    
+    .offer-item.highlight {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 1px rgba(139, 69, 19, 0.4);
+    }
+    
+    .offer-item:hover {
+      background: var(--bg-card);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .offer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .offer-origin {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .offer-name {
+      font-weight: 600;
+      margin-bottom: 0.125rem;
+    }
+    
+    .offer-trader {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .offer-price {
+      text-align: right;
+    }
+    
+    .price-value {
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--primary-color);
+    }
+    
+    .price-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .offer-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .offer-specs {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 70px;
+    }
+    
+    .spec-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .spec-value {
+      font-weight: 600;
+    }
+    
+    .offer-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    
+    .btn-outline:hover {
+      background: var(--bg-secondary);
+    }
+    
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      border-left: 3px solid var(--border-color);
+    }
+    
+    .timeline-date {
+      min-width: 60px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--primary-color);
+    }
+    
+    .timeline-content {
+      flex: 1;
+    }
+    
+    .timeline-title {
+      font-weight: 500;
+      margin-bottom: 0.125rem;
+    }
+    
+    .timeline-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Modal Styles */
+    .modal-lg {
+      max-width: 600px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+    }
+    
+    .range-input {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .range-input input[type="range"] {
+      flex: 1;
+    }
+    
+    .range-value {
+      min-width: 40px;
+      font-weight: 600;
+      color: var(--primary-color);
+      text-align: right;
+    }
+    
+    .volume-input {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .volume-input input {
+      flex: 1;
+    }
+    
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .date-range input {
+      flex: 1;
+    }
+    
+    .date-range span {
+      color: var(--text-secondary);
+    }
+    
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.9rem 1.2rem;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+      transition: opacity 0.3s ease;
+      max-width: 320px;
+    }
+    
+    .notification-success {
+      border-left: 4px solid var(--success-color);
+    }
+    
+    .notification-error {
+      border-left: 4px solid var(--danger-color);
+    }
+    
+    .notification i {
+      font-size: 1.25rem;
+    }
+    
+    .notification-success i {
+      color: var(--success-color);
+    }
+    
+    .notification-error i {
+      color: var(--danger-color);
+    }
+    
+    .notification-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      cursor: pointer;
+      margin-left: auto;
+      line-height: 1;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .offer-details {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .offer-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-item {
+        align-items: flex-start;
+      }
+      
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-lg {
+        width: 95%;
+        max-width: 95%;
+      }
+
+      .offer-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .offer-price {
+        text-align: left;
+      }
+    }
+  </style>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

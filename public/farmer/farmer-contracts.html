@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Coffee – Contracts Management</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Contracts Page Specific Styles - Enhanced */
+    :root {
+      --contract-active: #10b981;
+      --contract-active-light: #d1fae5;
+      --contract-pending: #f59e0b;
+      --contract-pending-light: #fef3c7;
+      --contract-completed: #3b82f6;
+      --contract-completed-light: #dbeafe;
+      --contract-cancelled: #ef4444;
+      --contract-cancelled-light: #fee2e2;
+      --contract-draft: #6b7280;
+      --contract-draft-light: #f3f4f6;
+      --contract-overdue: #8b5cf6;
+      --contract-overdue-light: #ede9fe;
+      
+      --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --transition-all: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Enhanced Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      border-right: none;
+    }
+
+    .nav-link.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-left: 3px solid var(--contract-active);
+    }
+
+    .nav-badge {
+      background: var(--contract-active);
+      color: white;
+    }
+
+    /* Enhanced Topbar */
+    .topbar {
+      background: white;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* Main Content Enhancements */
+    .dashboard-content {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 2rem;
+    }
+
+    /* Contracts Header - Enhanced */
+    .contracts-header {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .header-content {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-title-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .header-subtitle {
+      color: #6b7280;
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* Enhanced Stats Cards */
+    .contract-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--contract-active);
+    }
+
+    .stat-card.total::before { background: var(--primary-gradient); }
+    .stat-card.active::before { background: var(--contract-active); }
+    .stat-card.pending::before { background: var(--contract-pending); }
+    .stat-card.completed::before { background: var(--contract-completed); }
+
+    .stat-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.total {
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+      color: var(--contract-active);
+    }
+
+    .stat-icon.active {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+      color: var(--contract-active);
+    }
+
+    .stat-icon.pending {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.2) 100%);
+      color: var(--contract-pending);
+    }
+
+    .stat-icon.completed {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.2) 100%);
+      color: var(--contract-completed);
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .stat-trend {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-trend.positive {
+      background: var(--contract-active-light);
+      color: var(--contract-active);
+    }
+
+    .stat-trend.negative {
+      background: var(--contract-cancelled-light);
+      color: var(--contract-cancelled);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-subtext {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      background: #f3f4f6;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* Enhanced Filters */
+    .contracts-filters {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.625rem 1.25rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 8px;
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-all);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--contract-active);
+      color: var(--contract-active);
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+      background: var(--contract-active);
+      color: white;
+      border-color: var(--contract-active);
+      box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+    }
+
+    .filter-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      min-width: 20px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Enhanced Search */
+    .search-box {
+      position: relative;
+      min-width: 320px;
+      flex: 1;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.875rem 1rem 0.875rem 3rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      background: white;
+      font-size: 0.9375rem;
+      transition: var(--transition-all);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--contract-active);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 1.125rem;
+    }
+
+    /* Enhanced Table Container */
+    .contracts-table-container {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2rem;
+    }
+
+    .table-toolbar {
+      padding: 1.5rem;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(16, 185, 129, 0.02);
+    }
+
+    .table-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .table-count {
+      font-weight: 600;
+      color: #111827;
+      font-size: 1.125rem;
+    }
+
+    .table-summary {
+      font-size: 0.875rem;
+      color: #6b7280;
+      padding: 0.5rem 1rem;
+      background: #f3f4f6;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* Enhanced Table */
+    .contracts-table {
+      width: 100%;
+      min-width: 1200px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .contracts-table th {
+      background: #f8fafc;
+      padding: 1.25rem 1.5rem;
+      font-weight: 600;
+      color: #374151;
+      text-align: left;
+      border-bottom: 2px solid #e5e7eb;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .contracts-table th:first-child {
+      border-top-left-radius: 16px;
+    }
+
+    .contracts-table th:last-child {
+      border-top-right-radius: 16px;
+    }
+
+    .contracts-table td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+      transition: var(--transition-all);
+    }
+
+    .contracts-table tbody tr {
+      transition: var(--transition-all);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .contracts-table tbody tr::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      transition: var(--transition-all);
+    }
+
+    .contracts-table tbody tr:hover::before {
+      background: var(--contract-active);
+    }
+
+    .contracts-table tbody tr:hover {
+      background: rgba(16, 185, 129, 0.02);
+    }
+
+    .contracts-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Enhanced Contract Details Cell */
+    .contract-details {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .contract-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--contract-active);
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      transition: var(--transition-all);
+      position: relative;
+    }
+
+    .contract-icon.urgent {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+      color: #ef4444;
+    }
+
+    .contract-icon.completed {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+      color: var(--contract-completed);
+    }
+
+    .alert-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 24px;
+      height: 24px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .contract-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contract-id {
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .contract-id-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    .contract-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.8125rem;
+      color: #6b7280;
+      flex-wrap: wrap;
+    }
+
+    .contract-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Enhanced Buyer Cell */
+    .buyer-cell {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .buyer-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      flex-shrink: 0;
+      transition: var(--transition-all);
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+    }
+
+    .buyer-avatar.uk { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+    .buyer-avatar.ni { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+    .buyer-avatar.tl { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); }
+
+    .buyer-info {
+      min-width: 0;
+    }
+
+    .buyer-name {
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .buyer-location {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    /* Enhanced Status Badges */
+    .contract-status {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-all);
+    }
+
+    .status-active {
+      background: var(--contract-active-light);
+      color: var(--contract-active);
+      border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-pending {
+      background: var(--contract-pending-light);
+      color: var(--contract-pending);
+      border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-completed {
+      background: var(--contract-completed-light);
+      color: var(--contract-completed);
+      border: 2px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .status-cancelled {
+      background: var(--contract-cancelled-light);
+      color: var(--contract-cancelled);
+      border: 2px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Enhanced Progress Bar */
+    .progress-cell {
+      min-width: 200px;
+    }
+
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #f3f4f6;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill.active { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
+    .progress-fill.pending { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+    .progress-fill.completed { background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%); }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-value {
+      font-weight: 700;
+      color: #111827;
+      font-size: 1.125rem;
+    }
+
+    .progress-details {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: #6b7280;
+    }
+
+    /* Enhanced Actions Cell */
+    .contract-actions {
+      display: flex;
+      gap: 0.5rem;
+      opacity: 0.8;
+      transition: var(--transition-all);
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      position: relative;
+    }
+
+    .action-btn:hover {
+      background: var(--contract-active);
+      color: white;
+      border-color: var(--contract-active);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .action-btn-primary {
+      background: var(--contract-active);
+      color: white;
+      border-color: var(--contract-active);
+    }
+
+    .action-btn-primary:hover {
+      background: #059669;
+      border-color: #059669;
+    }
+
+    /* Enhanced Table Pagination */
+    .table-pagination {
+      padding: 1.5rem;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: white;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .pagination-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: var(--contract-active);
+      color: white;
+      border-color: var(--contract-active);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .page-number {
+      min-width: 40px;
+      height: 40px;
+      padding: 0 0.75rem;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      font-weight: 500;
+    }
+
+    .page-number:hover,
+    .page-number.active {
+      background: var(--contract-active);
+      color: white;
+      border-color: var(--contract-active);
+    }
+
+    /* Enhanced Cards View */
+    .contract-cards-view {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .contract-card {
+      background: white;
+      border-radius: 16px;
+      border: 2px solid #e5e7eb;
+      padding: 1.75rem;
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .contract-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--contract-active);
+    }
+
+    .contract-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--contract-active);
+    }
+
+    .contract-card.urgent::before { background: #ef4444; }
+    .contract-card.completed::before { background: var(--contract-completed); }
+    .contract-card.pending::before { background: var(--contract-pending); }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-body {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .detail-label {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #111827;
+      font-size: 1.125rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    /* Enhanced Quick Actions */
+    .quick-actions-panel {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .action-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: var(--transition-all);
+    }
+
+    .action-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--contract-active);
+      background: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    }
+
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .action-content {
+      flex: 1;
+    }
+
+    .action-title {
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.25rem;
+    }
+
+    .action-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    /* Enhanced Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 2px dashed #e5e7eb;
+    }
+
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: #9ca3af;
+    }
+
+    .empty-state-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state-description {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* Enhanced Tooltips */
+    .tooltip {
+      position: fixed;
+      background: #374151;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: tooltipFade 0.2s ease;
+      font-weight: 500;
+    }
+
+    @keyframes tooltipFade {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Enhanced Buttons */
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: var(--transition-all);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-ghost:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .contract-cards-view {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .contracts-header {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .header-actions {
+        width: 100%;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-content {
+        padding: 1.5rem;
+      }
+      
+      .contract-stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .contracts-filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-group {
+        justify-content: center;
+      }
+      
+      .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .contract-cards-view {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .card-body {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .contracts-table-container {
+        border-radius: 12px;
+        overflow: auto;
+      }
+      
+      .contracts-table {
+        min-width: 1000px;
+      }
+      
+      .contract-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .table-pagination {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Loading Animation */
+    .loading-shimmer {
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <!-- Enhanced Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-container">
+          <div class="logo-icon" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">Equity Coffee</span>
+            <span class="logo-subtitle">Farmer Dashboard</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard-farmer.html">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-link" href="farmer-lots.html">
+          <i class="fas fa-seedling"></i>
+          <span>My Farm / Lots</span>
+        </a>
+        <a class="nav-link" href="farmer-offers.html">
+          <i class="fas fa-handshake"></i>
+          <span>Offers</span>
+          <span class="nav-badge">5</span>
+        </a>
+        <a class="nav-link active" href="farmer-contracts.html">
+          <i class="fas fa-file-contract"></i>
+          <span>Contracts</span>
+        </a>
+        <a class="nav-link" href="farmer-payments.html">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Payments</span>
+        </a>
+        <a class="nav-link" href="farmer-logistics.html">
+          <i class="fas fa-truck"></i>
+          <span>Logistics</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="support-info">
+          <i class="fas fa-headset"></i>
+          <div>
+            <div>Need help?</div>
+            <div class="support-email">support@equitycoffee.com</div>
+          </div>
+        </div>
+        <a href="/profile.html" class="btn btn-ghost" style="width: 100%; justify-content: flex-start; margin-bottom: 0.5rem;">
+          <i class="fas fa-user-circle"></i>
+          <span>My Profile</span>
+        </a>
+        <button class="btn btn-ghost logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+      <!-- Enhanced Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebar-toggle" class="btn btn-ghost sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-title">
+            <h1>Contracts Management</h1>
+            <div class="page-subtitle">Track and manage all your coffee contracts</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="user-menu">
+            <div class="user-info">
+              <span class="user-name">Kirinyaga Coop</span>
+              <span class="user-role">Verified Farmer</span>
+            </div>
+            <div class="user-avatar" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">KC</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <!-- Enhanced Contracts Header -->
+        <div class="contracts-header">
+          <div class="header-content">
+            <div class="header-title">
+              <div class="header-title-icon">
+                <i class="fas fa-file-contract"></i>
+              </div>
+              <div>
+                <h2 style="margin: 0; font-size: inherit;">Contracts Management</h2>
+                <div class="header-subtitle">
+                  Manage, track, and review all your signed contracts with international buyers
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="header-actions">
+            <button class="btn btn-primary" id="new-contract-btn">
+              <i class="fas fa-plus"></i>
+              New Contract
+            </button>
+            
+            <div class="contracts-filters">
+              <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">
+                  <i class="fas fa-layer-group"></i>
+                  All
+                  <span class="filter-badge">8</span>
+                </button>
+                <button class="filter-btn" data-filter="active">
+                  <i class="fas fa-play-circle"></i>
+                  Active
+                  <span class="filter-badge">3</span>
+                </button>
+                <button class="filter-btn" data-filter="pending">
+                  <i class="fas fa-clock"></i>
+                  Pending
+                  <span class="filter-badge">2</span>
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                  <i class="fas fa-check-circle"></i>
+                  Completed
+                  <span class="filter-badge">3</span>
+                </button>
+              </div>
+              
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search contracts, buyers, or lot IDs..." id="contract-search">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Stats Cards -->
+        <div class="contract-stats-grid">
+          <div class="stat-card total">
+            <div class="stat-icon total">
+              <i class="fas fa-file-contract"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                8
+                <span class="stat-trend positive">
+                  <i class="fas fa-arrow-up"></i>
+                  12%
+                </span>
+              </div>
+              <div class="stat-label">
+                Total Contracts
+                <span class="stat-subtext">Last 30 days</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card active">
+            <div class="stat-icon active">
+              <i class="fas fa-play-circle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                3
+                <span class="stat-trend positive">
+                  <i class="fas fa-arrow-up"></i>
+                  20%
+                </span>
+              </div>
+              <div class="stat-label">
+                Active
+                <span class="stat-subtext">In progress</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card pending">
+            <div class="stat-icon pending">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                2
+                <span class="stat-trend negative">
+                  <i class="fas fa-arrow-down"></i>
+                  33%
+                </span>
+              </div>
+              <div class="stat-label">
+                Pending
+                <span class="stat-subtext">Awaiting action</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stat-card completed">
+            <div class="stat-icon completed">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">
+                3
+                <span class="stat-trend positive">
+                  <i class="fas fa-arrow-up"></i>
+                  50%
+                </span>
+              </div>
+              <div class="stat-label">
+                Completed
+                <span class="stat-subtext">Delivered & paid</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="contracts-table-container" id="table-view">
+          <div class="table-toolbar">
+            <div class="table-info">
+              <span class="table-count">Showing 8 contracts</span>
+              <span class="table-summary">
+                <i class="fas fa-sort-amount-down"></i>
+                Sorted by: Date (Newest first)
+              </span>
+            </div>
+            <div class="table-actions">
+              <button class="btn btn-ghost" id="export-btn" title="Export Data">
+                <i class="fas fa-download"></i>
+                Export
+              </button>
+              <button class="btn btn-ghost" id="print-btn" title="Print">
+                <i class="fas fa-print"></i>
+                Print
+              </button>
+              <button class="btn btn-ghost" id="refresh-btn" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+              </button>
+            </div>
+          </div>
+          
+          <div class="table-wrapper">
+            <table class="contracts-table">
+              <thead>
+                <tr>
+                  <th>
+                    Contract Details
+                  </th>
+                  <th>Buyer</th>
+                  <th>Lot</th>
+                  <th>Quantity</th>
+                  <th>Progress</th>
+                  <th>Total Value</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Contract 1 - Urgent -->
+                <tr data-id="EC-2025-014" data-status="active" data-priority="high" class="urgent">
+                  <td>
+                    <div class="contract-details">
+                      <div class="contract-icon urgent">
+                        <i class="fas fa-shipping-fast"></i>
+                        <div class="alert-badge">!</div>
+                      </div>
+                      <div class="contract-info">
+                        <div class="contract-id">
+                          EC-2025-014
+                          <span class="contract-id-badge">Urgent</span>
+                        </div>
+                        <div class="contract-meta">
+                          <span class="contract-date">
+                            <i class="far fa-calendar"></i>
+                            Signed: Feb 15, 2025
+                          </span>
+                          <span class="contract-deadline">
+                            <i class="far fa-clock"></i>
+                            Due: Mar 30, 2025
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="buyer-cell">
+                      <div class="buyer-avatar">BR</div>
+                      <div class="buyer-info">
+                        <div class="buyer-name">Berlin Roasters</div>
+                        <div class="buyer-location">
+                          <i class="fas fa-map-marker-alt"></i>
+                          Germany
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      AB Lot 12
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">Grade AA • Washed</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      120 bags
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">60kg each</div>
+                    </div>
+                  </td>
+                  <td class="progress-cell">
+                    <div class="progress-container">
+                      <div class="progress-bar">
+                        <div class="progress-fill active" style="width: 85%"></div>
+                      </div>
+                      <div class="progress-info">
+                        <span class="progress-value">85%</span>
+                        <span class="progress-details">
+                          <i class="fas fa-truck"></i>
+                          In transit
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="value-cell">
+                    <div style="font-weight: 700; color: #111827;">$28,800</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">$240/bag</div>
+                  </td>
+                  <td>
+                    <span class="contract-status status-active">
+                      <i class="fas fa-circle"></i>
+                      Active
+                    </span>
+                  </td>
+                  <td>
+                    <div class="contract-actions">
+                      <button class="action-btn" title="View Contract" data-id="EC-2025-014">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Edit" data-id="EC-2025-014">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="action-btn action-btn-primary" title="Track Shipment" data-id="EC-2025-014">
+                        <i class="fas fa-shipping-fast"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Contract 2 - Completed -->
+                <tr data-id="EC-2025-009" data-status="completed" data-priority="low">
+                  <td>
+                    <div class="contract-details">
+                      <div class="contract-icon completed">
+                        <i class="fas fa-check-circle"></i>
+                      </div>
+                      <div class="contract-info">
+                        <div class="contract-id">
+                          EC-2025-009
+                        </div>
+                        <div class="contract-meta">
+                          <span class="contract-date">
+                            <i class="far fa-calendar"></i>
+                            Signed: Jan 28, 2025
+                          </span>
+                          <span class="contract-deadline">
+                            <i class="far fa-check-circle"></i>
+                            Completed: Mar 10, 2025
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="buyer-cell">
+                      <div class="buyer-avatar uk">UK</div>
+                      <div class="buyer-info">
+                        <div class="buyer-name">UK Coffee Co.</div>
+                        <div class="buyer-location">
+                          <i class="fas fa-map-marker-alt"></i>
+                          United Kingdom
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      Microlot 7
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">Specialty Grade • Natural</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      20 bags
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">30kg each</div>
+                    </div>
+                  </td>
+                  <td class="progress-cell">
+                    <div class="progress-container">
+                      <div class="progress-bar">
+                        <div class="progress-fill completed" style="width: 100%"></div>
+                      </div>
+                      <div class="progress-info">
+                        <span class="progress-value">100%</span>
+                        <span class="progress-details">
+                          <i class="fas fa-check"></i>
+                          Delivered
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="value-cell">
+                    <div style="font-weight: 700; color: #111827;">$6,120</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">$306/bag</div>
+                  </td>
+                  <td>
+                    <span class="contract-status status-completed">
+                      <i class="fas fa-circle"></i>
+                      Completed
+                    </span>
+                  </td>
+                  <td>
+                    <div class="contract-actions">
+                      <button class="action-btn" title="View Contract" data-id="EC-2025-009">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Download" data-id="EC-2025-009">
+                        <i class="fas fa-download"></i>
+                      </button>
+                      <button class="action-btn" title="Add Review" data-id="EC-2025-009">
+                        <i class="fas fa-star"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Contract 3 - Pending -->
+                <tr data-id="EC-2025-015" data-status="pending" data-priority="medium">
+                  <td>
+                    <div class="contract-details">
+                      <div class="contract-icon">
+                        <i class="fas fa-clock"></i>
+                      </div>
+                      <div class="contract-info">
+                        <div class="contract-id">
+                          EC-2025-015
+                        </div>
+                        <div class="contract-meta">
+                          <span class="contract-date">
+                            <i class="far fa-calendar"></i>
+                            Signed: Feb 20, 2025
+                          </span>
+                          <span class="contract-deadline">
+                            <i class="far fa-clock"></i>
+                            Due: Apr 15, 2025
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="buyer-cell">
+                      <div class="buyer-avatar ni">NI</div>
+                      <div class="buyer-info">
+                        <div class="buyer-name">Nordic Import</div>
+                        <div class="buyer-location">
+                          <i class="fas fa-map-marker-alt"></i>
+                          Sweden
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      PB Lot 3
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">Grade PB • Washed</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      60 bags
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">50kg each</div>
+                    </div>
+                  </td>
+                  <td class="progress-cell">
+                    <div class="progress-container">
+                      <div class="progress-bar">
+                        <div class="progress-fill pending" style="width: 30%"></div>
+                      </div>
+                      <div class="progress-info">
+                        <span class="progress-value">30%</span>
+                        <span class="progress-details">
+                          <i class="fas fa-cog"></i>
+                          Processing
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="value-cell">
+                    <div style="font-weight: 700; color: #111827;">$14,400</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">$240/bag</div>
+                  </td>
+                  <td>
+                    <span class="contract-status status-pending">
+                      <i class="fas fa-circle"></i>
+                      Pending
+                    </span>
+                  </td>
+                  <td>
+                    <div class="contract-actions">
+                      <button class="action-btn" title="View Contract" data-id="EC-2025-015">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Edit" data-id="EC-2025-015">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="action-btn" title="Send Reminder" data-id="EC-2025-015">
+                        <i class="fas fa-bell"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Contract 4 - Active -->
+                <tr data-id="EC-2025-011" data-status="active" data-priority="medium">
+                  <td>
+                    <div class="contract-details">
+                      <div class="contract-icon">
+                        <i class="fas fa-truck-loading"></i>
+                      </div>
+                      <div class="contract-info">
+                        <div class="contract-id">
+                          EC-2025-011
+                        </div>
+                        <div class="contract-meta">
+                          <span class="contract-date">
+                            <i class="far fa-calendar"></i>
+                            Signed: Feb 10, 2025
+                          </span>
+                          <span class="contract-deadline">
+                            <i class="far fa-clock"></i>
+                            Due: Mar 25, 2025
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="buyer-cell">
+                      <div class="buyer-avatar tl">TL</div>
+                      <div class="buyer-info">
+                        <div class="buyer-name">Tokyo Coffee Lab</div>
+                        <div class="buyer-location">
+                          <i class="fas fa-map-marker-alt"></i>
+                          Japan
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      Microlot 4
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">Specialty Grade • Honey</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="detail-value">
+                      30 bags
+                      <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">30kg each</div>
+                    </div>
+                  </td>
+                  <td class="progress-cell">
+                    <div class="progress-container">
+                      <div class="progress-bar">
+                        <div class="progress-fill active" style="width: 60%"></div>
+                      </div>
+                      <div class="progress-info">
+                        <span class="progress-value">60%</span>
+                        <span class="progress-details">
+                          <i class="fas fa-anchor"></i>
+                          At port
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="value-cell">
+                    <div style="font-weight: 700; color: #111827;">$9,600</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">$320/bag</div>
+                  </td>
+                  <td>
+                    <span class="contract-status status-active">
+                      <i class="fas fa-circle"></i>
+                      Active
+                    </span>
+                  </td>
+                  <td>
+                    <div class="contract-actions">
+                      <button class="action-btn" title="View Contract" data-id="EC-2025-011">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn" title="Upload Document" data-id="EC-2025-011">
+                        <i class="fas fa-upload"></i>
+                      </button>
+                      <button class="action-btn" title="Message Buyer" data-id="EC-2025-011">
+                        <i class="fas fa-envelope"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Table Pagination -->
+          <div class="table-pagination">
+            <div style="color: #6b7280; font-size: 0.875rem;">
+              Showing 1-4 of 8 contracts
+            </div>
+            <div class="pagination-controls">
+              <button class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="page-number active">1</button>
+                <button class="page-number">2</button>
+              </div>
+              <button class="pagination-btn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards View -->
+        <div class="contract-cards-view" id="cards-view">
+          <!-- Cards will be dynamically generated -->
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fas fa-th-large"></i>
+            </div>
+            <h3 class="empty-state-title">Cards View</h3>
+            <p class="empty-state-description">
+              Switch to table view for detailed contract management. Cards view provides a visual overview of your contracts.
+            </p>
+            <button class="btn btn-primary" id="switch-to-table">
+              <i class="fas fa-table"></i>
+              Switch to Table View
+            </button>
+          </div>
+        </div>
+
+        <!-- Enhanced Quick Actions Panel -->
+        <div class="quick-actions-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h3 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #111827;">Quick Actions</h3>
+            <button class="btn btn-ghost" id="show-all-actions">
+              View All <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="action-grid">
+            <div class="action-card" id="create-contract-action">
+              <div class="action-icon">
+                <i class="fas fa-plus-circle"></i>
+              </div>
+              <div class="action-content">
+                <div class="action-title">Create New Contract</div>
+                <div class="action-description">Start a new contract with a buyer</div>
+              </div>
+            </div>
+            <div class="action-card" id="import-contracts-action">
+              <div class="action-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <i class="fas fa-file-import"></i>
+              </div>
+              <div class="action-content">
+                <div class="action-title">Import Contracts</div>
+                <div class="action-description">Upload contracts from external sources</div>
+              </div>
+            </div>
+            <div class="action-card" id="bulk-actions-action">
+              <div class="action-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div class="action-content">
+                <div class="action-title">Bulk Actions</div>
+                <div class="action-description">Manage multiple contracts at once</div>
+              </div>
+            </div>
+            <div class="action-card" id="generate-reports-action">
+              <div class="action-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div class="action-content">
+                <div class="action-title">Generate Reports</div>
+                <div class="action-description">Create detailed contract reports</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Enhanced Contract Modal -->
+  <div class="modal" id="contract-modal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="header-title-icon">
+            <i class="fas fa-file-contract"></i>
+          </div>
+          <div>
+            <h3 id="modal-title" style="margin: 0; font-size: 1.5rem; font-weight: 700;">Contract Details</h3>
+            <div id="modal-subtitle" style="font-size: 0.875rem; color: #6b7280;"></div>
+          </div>
+        </div>
+        <button class="modal-close" id="modal-close" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280;">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Contract details will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">Close</button>
+        <button class="btn btn-primary" id="modal-confirm">View Full Contract</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced Contracts Management JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize UI components
+      initViewToggle();
+      initFilters();
+      initSearch();
+      initActions();
+      initModal();
+      initTooltips();
+      
+      // Show welcome notification
+      setTimeout(() => {
+        showNotification('Welcome to Contracts Management', 'You have 3 active contracts and 2 pending actions.');
+      }, 1000);
+    });
+
+    // View Toggle
+    function initViewToggle() {
+      const viewToggle = document.createElement('div');
+      viewToggle.className = 'view-toggle';
+      viewToggle.innerHTML = `
+        <button class="view-btn active" data-view="table" title="Table View">
+          <i class="fas fa-table"></i>
+          Table
+        </button>
+        <button class="view-btn" data-view="cards" title="Cards View">
+          <i class="fas fa-th-large"></i>
+          Cards
+        </button>
+      `;
+      
+      const headerActions = document.querySelector('.header-actions');
+      if (headerActions) {
+        headerActions.insertBefore(viewToggle, headerActions.firstChild);
+      }
+      
+      const viewButtons = document.querySelectorAll('.view-btn');
+      const tableView = document.getElementById('table-view');
+      const cardsView = document.getElementById('cards-view');
+      
+      viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const view = this.dataset.view;
+          
+          viewButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          if (view === 'table') {
+            tableView.style.display = 'block';
+            cardsView.style.display = 'none';
+          } else {
+            tableView.style.display = 'none';
+            cardsView.style.display = 'grid';
+            generateCardsView();
+          }
+          
+          localStorage.setItem('contracts-view', view);
+        });
+      });
+      
+      // Restore saved view
+      const savedView = localStorage.getItem('contracts-view') || 'table';
+      const savedViewButton = document.querySelector(`.view-btn[data-view="${savedView}"]`);
+      if (savedViewButton) savedViewButton.click();
+    }
+
+    // Filter System
+    function initFilters() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const contractRows = document.querySelectorAll('.contracts-table tbody tr');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const filter = this.dataset.filter;
+          
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          let visibleCount = 0;
+          contractRows.forEach(row => {
+            const status = row.dataset.status;
+            
+            if (filter === 'all' || status === filter) {
+              row.style.display = '';
+              visibleCount++;
+            } else {
+              row.style.display = 'none';
+            }
+          });
+          
+          // Update count
+          const countElement = document.querySelector('.table-count');
+          if (countElement) {
+            countElement.textContent = `Showing ${visibleCount} contracts`;
+          }
+          
+          // Update URL for sharing
+          const url = new URL(window.location);
+          url.searchParams.set('filter', filter);
+          window.history.replaceState({}, '', url);
+        });
+      });
+      
+      // Apply initial filter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialFilter = urlParams.get('filter');
+      if (initialFilter) {
+        const filterButton = document.querySelector(`.filter-btn[data-filter="${initialFilter}"]`);
+        if (filterButton) filterButton.click();
+      }
+    }
+
+    // Enhanced Search with Debounce
+    function initSearch() {
+      const searchInput = document.getElementById('contract-search');
+      let searchTimeout;
+      
+      searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const searchTerm = this.value.toLowerCase().trim();
+          const contractRows = document.querySelectorAll('.contracts-table tbody tr');
+          let visibleCount = 0;
+          
+          contractRows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const matches = searchTerm === '' || text.includes(searchTerm);
+            
+            row.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+          
+          document.querySelector('.table-count').textContent = `Showing ${visibleCount} contracts`;
+        }, 300);
+      });
+      
+      // Add clear button
+      const clearButton = document.createElement('button');
+      clearButton.innerHTML = '<i class="fas fa-times"></i>';
+      clearButton.style.cssText = `
+        position: absolute;
+        right: '1rem';
+        top: '50%';
+        transform: 'translateY(-50%)';
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        display: none;
+      `;
+      
+      const searchBox = document.querySelector('.search-box');
+      if (searchBox) {
+        searchBox.style.position = 'relative';
+        searchBox.appendChild(clearButton);
+        
+        clearButton.addEventListener('click', function() {
+          searchInput.value = '';
+          clearButton.style.display = 'none';
+          searchInput.dispatchEvent(new Event('input'));
+        });
+        
+        searchInput.addEventListener('input', function() {
+          clearButton.style.display = this.value ? 'block' : 'none';
+        });
+      }
+    }
+
+    // Actions System
+    function initActions() {
+      // New Contract Button
+      document.getElementById('new-contract-btn').addEventListener('click', function() {
+        showContractModal('new');
+      });
+      
+      // Quick Actions
+      document.getElementById('create-contract-action').addEventListener('click', function() {
+        showContractModal('new');
+      });
+      
+      document.getElementById('import-contracts-action').addEventListener('click', function() {
+        showNotification('Import Contracts', 'Please select files to import (CSV, JSON, or Excel format).');
+      });
+      
+      document.getElementById('bulk-actions-action').addEventListener('click', function() {
+        showNotification('Bulk Actions', 'Select multiple contracts to perform bulk operations.');
+      });
+      
+      document.getElementById('generate-reports-action').addEventListener('click', function() {
+        showNotification('Generate Reports', 'Select report type and date range to generate.');
+      });
+      
+      // Export Button
+      document.getElementById('export-btn').addEventListener('click', function() {
+        showNotification('Export Started', 'Your contracts data is being prepared for download.');
+        // Simulate export process
+        setTimeout(() => {
+          showNotification('Export Complete', 'Contracts data has been downloaded.');
+        }, 2000);
+      });
+      
+      // Print Button
+      document.getElementById('print-btn').addEventListener('click', function() {
+        window.print();
+      });
+      
+      // Refresh Button
+      document.getElementById('refresh-btn').addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        icon.classList.add('fa-spin');
+        
+        setTimeout(() => {
+          icon.classList.remove('fa-spin');
+          showNotification('Data Refreshed', 'Contracts data has been updated.');
+        }, 1000);
+      });
+      
+      // Row Click Handlers
+      document.querySelectorAll('.contracts-table tbody tr').forEach(row => {
+        row.addEventListener('click', function(e) {
+          if (!e.target.closest('.action-btn')) {
+            const contractId = this.dataset.id;
+            showContractModal(contractId);
+          }
+        });
+      });
+      
+      // Action Buttons in Table
+      document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const contractId = this.dataset.id || this.closest('tr')?.dataset.id;
+          const action = this.getAttribute('title');
+          
+          switch(action) {
+            case 'View Contract':
+              showContractModal(contractId);
+              break;
+            case 'Edit':
+              showNotification('Edit Contract', `Editing contract ${contractId}`);
+              break;
+            case 'Track Shipment':
+              showNotification('Track Shipment', `Tracking shipment for ${contractId}`);
+              break;
+            case 'Download':
+              showNotification('Download', `Downloading contract ${contractId}`);
+              break;
+            case 'Add Review':
+              showNotification('Add Review', `Adding review for ${contractId}`);
+              break;
+            case 'Send Reminder':
+              showNotification('Reminder Sent', `Reminder sent for ${contractId}`);
+              break;
+            case 'Upload Document':
+              showNotification('Upload Document', `Uploading document for ${contractId}`);
+              break;
+            case 'Message Buyer':
+              showNotification('Message Buyer', `Opening message interface for ${contractId}`);
+              break;
+          }
+        });
+      });
+      
+      // Switch to Table View
+      const switchToTableBtn = document.getElementById('switch-to-table');
+      if (switchToTableBtn) {
+        switchToTableBtn.addEventListener('click', function() {
+          const tableBtn = document.querySelector('.view-btn[data-view="table"]');
+          if (tableBtn) tableBtn.click();
+        });
+      }
+    }
+
+    // Modal System
+    function initModal() {
+      const modal = document.getElementById('contract-modal');
+      const modalClose = document.getElementById('modal-close');
+      const modalCancel = document.getElementById('modal-cancel');
+      
+      // Close modal
+      modalClose.addEventListener('click', () => modal.style.display = 'none');
+      modalCancel.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+      
+      // Confirm button
+      document.getElementById('modal-confirm').addEventListener('click', function() {
+        const contractId = this.dataset.contractId;
+        showNotification('Opening Contract', `Opening full contract view for ${contractId}`);
+        modal.style.display = 'none';
+      });
+    }
+
+    // Show Contract Modal
+    function showContractModal(contractId) {
+      const modal = document.getElementById('contract-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalSubtitle = document.getElementById('modal-subtitle');
+      const modalBody = document.getElementById('modal-body');
+      const modalConfirm = document.getElementById('modal-confirm');
+      
+      if (contractId === 'new') {
+        modalTitle.textContent = 'Create New Contract';
+        modalSubtitle.textContent = 'Start a new contract with a buyer';
+        modalConfirm.textContent = 'Create Contract';
+        modalConfirm.dataset.contractId = 'new';
+        
+        modalBody.innerHTML = `
+          <div style="display: grid; gap: 1.5rem;">
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Select Buyer</label>
+              <select style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white;">
+                <option value="">Choose a buyer...</option>
+                <option value="berlin">Berlin Roasters</option>
+                <option value="uk">UK Coffee Co.</option>
+                <option value="nordic">Nordic Import</option>
+                <option value="tokyo">Tokyo Coffee Lab</option>
+              </select>
+            </div>
+            
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Select Lot</label>
+              <select style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white;">
+                <option value="">Choose a lot...</option>
+                <option value="ab12">AB Lot 12 (120 bags)</option>
+                <option value="ml7">Microlot 7 (20 bags)</option>
+                <option value="pb3">PB Lot 3 (60 bags)</option>
+                <option value="ml4">Microlot 4 (30 bags)</option>
+              </select>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Price per Bag</label>
+                <input type="number" placeholder="$240" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #111827;">Delivery Date</label>
+                <input type="date" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        modalTitle.textContent = `Contract ${contractId}`;
+        modalSubtitle.textContent = 'View contract details and progress';
+        modalConfirm.textContent = 'View Full Contract';
+        modalConfirm.dataset.contractId = contractId;
+        
+        // Mock contract data
+        const contractData = {
+          'EC-2025-014': {
+            buyer: 'Berlin Roasters',
+            lot: 'AB Lot 12',
+            quantity: '120 bags',
+            value: '$28,800',
+            status: 'Active',
+            progress: 85,
+            signedDate: 'Feb 15, 2025',
+            dueDate: 'Mar 30, 2025',
+            lastUpdated: 'Mar 10, 2025'
+          },
+          'EC-2025-009': {
+            buyer: 'UK Coffee Co.',
+            lot: 'Microlot 7',
+            quantity: '20 bags',
+            value: '$6,120',
+            status: 'Completed',
+            progress: 100,
+            signedDate: 'Jan 28, 2025',
+            dueDate: 'Mar 10, 2025',
+            lastUpdated: 'Mar 10, 2025'
+          }
+        };
+        
+        const data = contractData[contractId] || {
+          buyer: 'Unknown Buyer',
+          lot: 'Unknown Lot',
+          quantity: '0 bags',
+          value: '$0',
+          status: 'Unknown',
+          progress: 0,
+          signedDate: 'Unknown',
+          dueDate: 'Unknown',
+          lastUpdated: 'Unknown'
+        };
+        
+        modalBody.innerHTML = `
+          <div style="display: grid; gap: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Buyer</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.buyer}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Contract Value</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.value}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Lot</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.lot}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Quantity</div>
+                <div style="font-weight: 600; color: #111827; font-size: 1.125rem;">${data.quantity}</div>
+              </div>
+            </div>
+            
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="font-size: 0.875rem; color: #6b7280;">Progress</div>
+                <div style="font-weight: 700; color: #111827;">${data.progress}%</div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill ${data.status.toLowerCase()}" style="width: ${data.progress}%"></div>
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; background: #f8fafc; padding: 1.5rem; border-radius: 12px;">
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Signed Date</div>
+                <div style="font-weight: 600; color: #111827;">${data.signedDate}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Due Date</div>
+                <div style="font-weight: 600; color: #111827;">${data.dueDate}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; color: #6b7280;">Last Updated</div>
+                <div style="font-weight: 600; color: #111827;">${data.lastUpdated}</div>
+              </div>
+            </div>
+            
+            <div>
+              <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">Contract Status</div>
+              <span class="contract-status status-${data.status.toLowerCase()}">
+                <i class="fas fa-circle"></i>
+                ${data.status}
+              </span>
+            </div>
+          </div>
+        `;
+      }
+      
+      modal.style.display = 'flex';
+    }
+
+    // Generate Cards View
+    function generateCardsView() {
+      const cardsView = document.getElementById('cards-view');
+      const contractRows = document.querySelectorAll('.contracts-table tbody tr');
+      
+      cardsView.innerHTML = '';
+      
+      contractRows.forEach(row => {
+        if (row.style.display !== 'none') {
+          const contractId = row.dataset.id;
+          const status = row.dataset.status;
+          const priority = row.dataset.priority;
+          
+          const buyerName = row.querySelector('.buyer-name')?.textContent || 'Unknown';
+          const lotName = row.querySelector('.detail-value')?.textContent || 'Unknown';
+          const quantity = row.querySelectorAll('.detail-value')[1]?.textContent || '0 bags';
+          const value = row.querySelector('.value-cell div:first-child')?.textContent || '$0';
+          const progress = row.querySelector('.progress-value')?.textContent || '0%';
+          
+          const card = document.createElement('div');
+          card.className = `contract-card ${priority} ${status}`;
+          card.innerHTML = `
+            <div class="card-header">
+              <div>
+                <div class="card-title">Contract ${contractId}</div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+                  <span class="contract-status status-${status}">
+                    <i class="fas fa-circle"></i>
+                    ${status.charAt(0).toUpperCase() + status.slice(1)}
+                  </span>
+                  ${priority === 'high' ? '<span class="contract-id-badge">Urgent</span>' : ''}
+                </div>
+              </div>
+              <div class="buyer-avatar">${buyerName.substring(0, 2)}</div>
+            </div>
+            <div class="card-body">
+              <div class="card-detail">
+                <div class="detail-label">Buyer</div>
+                <div class="detail-value">${buyerName}</div>
+              </div>
+              <div class="card-detail">
+                <div class="detail-label">Lot</div>
+                <div class="detail-value">${lotName}</div>
+              </div>
+              <div class="card-detail">
+                <div class="detail-label">Quantity</div>
+                <div class="detail-value">${quantity}</div>
+              </div>
+              <div class="card-detail">
+                <div class="detail-label">Value</div>
+                <div class="detail-value">${value}</div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="font-size: 0.875rem; color: #6b7280;">Progress</div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                  <div class="progress-bar" style="flex: 1;">
+                    <div class="progress-fill ${status}" style="width: ${progress}"></div>
+                  </div>
+                  <div style="font-weight: 700; color: #111827;">${progress}</div>
+                </div>
+              </div>
+              <div class="contract-actions">
+                <button class="action-btn" title="View Contract" data-id="${contractId}">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          
+          cardsView.appendChild(card);
+        }
+      });
+      
+      // Add click handlers to card buttons
+      cardsView.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const contractId = this.dataset.id;
+          showContractModal(contractId);
+        });
+      });
+      
+      // Add click handlers to cards
+      cardsView.querySelectorAll('.contract-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const contractId = this.querySelector('.card-title').textContent.replace('Contract ', '');
+          showContractModal(contractId);
+        });
+      });
+    }
+
+    // Tooltips
+    function initTooltips() {
+      const tooltipTriggers = document.querySelectorAll('[title]');
+      
+      tooltipTriggers.forEach(trigger => {
+        trigger.addEventListener('mouseenter', function(e) {
+          const title = this.getAttribute('title');
+          if (!title) return;
+          
+          const tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.textContent = title;
+          document.body.appendChild(tooltip);
+          
+          const rect = this.getBoundingClientRect();
+          const tooltipRect = tooltip.getBoundingClientRect();
+          
+          let left = rect.left + (rect.width - tooltipRect.width) / 2;
+          let top = rect.top - tooltipRect.height - 10;
+          
+          left = Math.max(10, Math.min(left, window.innerWidth - tooltipRect.width - 10));
+          top = Math.max(10, top);
+          
+          tooltip.style.left = left + 'px';
+          tooltip.style.top = top + 'px';
+          
+          this._tooltip = tooltip;
+        });
+        
+        trigger.addEventListener('mouseleave', function() {
+          if (this._tooltip) {
+            this._tooltip.remove();
+            this._tooltip = null;
+          }
+        });
+      });
+    }
+
+    // Notification System
+    function showNotification(title, message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #10b981;
+        min-width: 300px;
+        max-width: 400px;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+        font-family: inherit;
+      `;
+      
+      notification.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+          <div style="width: 40px; height: 40px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.25rem;">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">${title}</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">${message}</div>
+          </div>
+          <button style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 1.125rem;">&times;</button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      notification.querySelector('button').addEventListener('click', () => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      });
+      
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }
+      }, 5000);
+      
+      // Add animation styles
+      if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Initialize with sample data
+    function initializeSampleData() {
+      // Add some sample data for demonstration
+      const sampleContracts = [
+        {
+          id: 'EC-2025-016',
+          buyer: 'Paris Roastery',
+          lot: 'AA Lot 8',
+          quantity: '80 bags',
+          value: '$16,000',
+          status: 'active',
+          progress: 45,
+          priority: 'medium'
+        },
+        {
+          id: 'EC-2025-017',
+          buyer: 'Amsterdam Coffee',
+          lot: 'Microlot 9',
+          quantity: '15 bags',
+          value: '$5,250',
+          status: 'pending',
+          progress: 10,
+          priority: 'low'
+        }
+      ];
+      
+      // In a real app, this would load data from an API
+      console.log('Loaded contracts data:', sampleContracts);
+    }
+
+    // Initialize everything
+    initializeSampleData();
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl/Cmd + F to focus search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        const searchInput = document.getElementById('contract-search');
+        if (searchInput) searchInput.focus();
+      }
+      
+      // Ctrl/Cmd + N for new contract
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        showContractModal('new');
+      }
+    });
+  </script>
+  <script src="../js/common-auth.js"></script>
+</body>
+</html>

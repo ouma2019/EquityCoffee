@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Shipments | Equity Coffee</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/images/logo.png" alt="Equity Coffee Logo" class="logo-image">
+                <div>
+                    Equity Coffee
+                    <div class="sidebar-role">Trader / Exporter</div>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a class="sidebar-link" href="dashboard-trader.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a class="sidebar-link" href="trader-marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                <li><a class="sidebar-link" href="trader-negotiations.html"><i class="fas fa-handshake"></i> Negotiations</a></li>
+                <li><a class="sidebar-link" href="trader-contracts.html"><i class="fas fa-file-contract"></i> Contracts</a></li>
+                <li><a class="sidebar-link active" href="trader-shipments.html"><i class="fas fa-shipping-fast"></i> Shipments</a></li>
+                <li><a class="sidebar-link" href="trader-partners.html"><i class="fas fa-users"></i> Partners</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <i class="fas fa-clock"></i> Last login: 2h ago
+            </div>
+        </aside>
+
+        <div class="dashboard-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1><i class="fas fa-shipping-fast"></i> Shipments</h1>
+                    <p>Track and manage your coffee shipments worldwide</p>
+                </div>
+                <div class="topbar-right">
+                    <button id="sidebar-toggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+                    <div class="user-info">
+                        <span>Global Coffee Traders Ltd</span>
+                        <div class="avatar">GT</div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard-content">
+                <div class="content-header">
+                    <div class="filters-card">
+                        <div class="filter-group">
+                            <div class="search-input">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchShipments" placeholder="Search shipments...">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <select id="shipmentStatusFilter" class="modern-select">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in-transit">In Transit</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <button id="newShipmentBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Shipment
+                        </button>
+                    </div>
+                </div>
+
+                <div class="shipments-grid">
+                    <div class="shipment-card status-pending">
+                        <div class="shipment-header">
+                            <h4>SHIP-2024-001</h4>
+                            <span class="shipment-status badge badge-warning">Pending</span>
+                        </div>
+                        <div class="shipment-body">
+                            <div class="shipment-route">
+                                <div class="route-origin">
+                                    <div class="route-label">From</div>
+                                    <div class="route-city">Mombasa, Kenya</div>
+                                </div>
+                                <div class="route-arrow">
+                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                </div>
+                                <div class="route-destination">
+                                    <div class="route-label">To</div>
+                                    <div class="route-city">Hamburg, Germany</div>
+                                </div>
+                            </div>
+                            <div class="shipment-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-coffee"></i>
+                                    <span>120 bags • SL28 Washed</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>ETD: Mar 08, 2024</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-file-contract"></i>
+                                    <span>Contract: EC-2024-001</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shipment-footer">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%"></div>
+                            </div>
+                            <div class="shipment-actions">
+                                <button class="btn btn-ghost-small"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shipment-card status-in-transit">
+                        <div class="shipment-header">
+                            <h4>SHIP-2024-002</h4>
+                            <span class="shipment-status badge badge-info">In Transit</span>
+                        </div>
+                        <div class="shipment-body">
+                            <div class="shipment-route">
+                                <div class="route-origin">
+                                    <div class="route-label">From</div>
+                                    <div class="route-city">Santos, Brazil</div>
+                                </div>
+                                <div class="route-arrow">
+                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                </div>
+                                <div class="route-destination">
+                                    <div class="route-label">To</div>
+                                    <div class="route-city">Rotterdam, Netherlands</div>
+                                </div>
+                            </div>
+                            <div class="shipment-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-coffee"></i>
+                                    <span>200 bags • Cerrado Natural</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-ship"></i>
+                                    <span>Vessel: Maersk Sealand</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Location: Mid-Atlantic</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shipment-footer">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                            <div class="shipment-actions">
+                                <button class="btn btn-ghost-small"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-map"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shipment-card status-delivered">
+                        <div class="shipment-header">
+                            <h4>SHIP-2024-003</h4>
+                            <span class="shipment-status badge badge-success">Delivered</span>
+                        </div>
+                        <div class="shipment-body">
+                            <div class="shipment-route">
+                                <div class="route-origin">
+                                    <div class="route-label">From</div>
+                                    <div class="route-city">Addis Ababa, Ethiopia</div>
+                                </div>
+                                <div class="route-arrow">
+                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                </div>
+                                <div class="route-destination">
+                                    <div class="route-label">To</div>
+                                    <div class="route-city">Seattle, USA</div>
+                                </div>
+                            </div>
+                            <div class="shipment-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-coffee"></i>
+                                    <span>40 bags • Heirloom Natural</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>Delivered: Feb 28, 2024</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Quality: Approved</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shipment-footer">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <div class="shipment-actions">
+                                <button class="btn btn-ghost-small"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-file-invoice"></i></button>
+                                <button class="btn btn-ghost-small"><i class="fas fa-redo"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/common-auth.js"></script>
+    <script src="../js/trader.js"></script>
+    <style>
+        .shipments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .shipment-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .shipment-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        
+        .shipment-card.status-pending {
+            border-left-color: #ff9800;
+        }
+        
+        .shipment-card.status-in-transit {
+            border-left-color: #2196f3;
+        }
+        
+        .shipment-card.status-delivered {
+            border-left-color: #4caf50;
+        }
+        
+        .shipment-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #f8f4f0 0%, #fff 100%);
+        }
+        
+        .shipment-header h4 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .shipment-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+        }
+        
+        .shipment-body {
+            padding: 1.5rem;
+        }
+        
+        .shipment-route {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .route-origin, .route-destination {
+            flex: 1;
+        }
+        
+        .route-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .route-city {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .route-arrow {
+            color: #8B4513;
+            padding: 0 1rem;
+        }
+        
+        .shipment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #555;
+        }
+        
+        .detail-item i {
+            width: 20px;
+            color: #8B4513;
+        }
+        
+        .shipment-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B4513, #D2691E);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .shipment-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .filters-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modern-select {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            min-width: 180px;
+        }
+        
+        .btn-ghost-small {
+            padding: 0.5rem;
+            min-width: auto;
+        }
+    </style>
+</body>
+</html>
