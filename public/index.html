@@ -3,55 +3,533 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Equity Coffee</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap">
+  <title>Equity Coffee | Transparent Trade, From Farm to Cup</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1220;color:#fff}
-    .wrap{max-width:1050px;margin:0 auto;padding:34px 18px}
-    .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    :root{
+      --bg0:#070b14;
+      --bg1:#0b1220;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --accent:#e9741e;
+      --accent2:#b54714;
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 26px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 12% 12%, rgba(233,116,30,.18), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(255,255,255,.10), transparent 55%),
+                  radial-gradient(900px 600px at 70% 90%, rgba(233,116,30,.10), transparent 60%),
+                  linear-gradient(180deg, var(--bg0), var(--bg1));
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:18px 18px 46px}
+
+    /* Navbar */
+    .nav{
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
     .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:42px}
-    .btn{display:inline-flex;align-items:center;gap:10px;background:#e9741e;color:#fff;padding:10px 14px;border-radius:14px;text-decoration:none;font-weight:900}
-    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.2)}
-    h1{font-size:3rem;line-height:1.05;margin:30px 0 12px}
-    p{color:rgba(255,255,255,.75);font-size:1.1rem;max-width:720px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px}
-    .k{opacity:.75;font-weight:800;font-size:.9rem}
-    .v{margin-top:6px;font-weight:900;font-size:1.1rem}
-    @media(max-width:900px){h1{font-size:2.2rem}.grid{grid-template-columns:1fr}}
+    .brand img{height:42px;width:auto}
+    .brand b{font-family:Poppins,Inter,sans-serif;font-weight:800;letter-spacing:.2px}
+
+    .nav-links{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+    .link{
+      font-weight:700; font-size:.95rem; color: rgba(255,255,255,.8);
+      padding:10px 10px; border-radius:12px;
+      transition:.2s;
+    }
+    .link:hover{background: rgba(255,255,255,.06); color: #fff}
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border-radius:14px;
+      font-weight:900; border: 1px solid transparent;
+      transition:.2s;
+      white-space:nowrap;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 25px rgba(233,116,30,.25);
+    }
+    .btn.primary:hover{transform: translateY(-1px)}
+    .btn.secondary{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.14);
+    }
+    .btn.secondary:hover{background: rgba(255,255,255,.09)}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      background: rgba(233,116,30,.14);
+      border: 1px solid rgba(233,116,30,.35);
+      color: rgba(255,255,255,.88);
+      font-weight:800; font-size:.82rem;
+    }
+
+    /* Hero */
+    .hero{
+      padding: 36px 0 22px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .hero-card{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding: 26px;
+      position: relative;
+      overflow:hidden;
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute; inset:-120px -120px auto auto;
+      width: 260px; height:260px;
+      background: radial-gradient(circle, rgba(233,116,30,.35), transparent 65%);
+      transform: rotate(20deg);
+      pointer-events:none;
+    }
+
+    h1{
+      font-family:Poppins,Inter,sans-serif;
+      font-weight:900;
+      font-size: 3.1rem;
+      line-height:1.05;
+      letter-spacing:-.6px;
+      margin-top:12px;
+    }
+    .sub{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 56ch;
+      line-height:1.6;
+    }
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+    /* Side panel */
+    .side{
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .mini{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      padding: 18px;
+      box-shadow: 0 14px 24px rgba(0,0,0,.24);
+    }
+    .mini h3{font-family:Poppins,Inter,sans-serif;font-weight:800;font-size:1.05rem}
+    .mini p{margin-top:8px;color:var(--muted);font-size:.96rem;line-height:1.55}
+    .mini .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+    /* Sections */
+    .section{margin-top: 18px}
+    .section-head{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .section-head h2{
+      font-family:Poppins,Inter,sans-serif;font-weight:900;
+      letter-spacing:-.2px; font-size:1.55rem;
+    }
+    .section-head .hint{color:var(--muted);font-weight:700;font-size:.95rem}
+
+    /* Cards grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .card{
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 16px;
+      transition:.2s;
+      position: relative;
+      overflow:hidden;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(233,116,30,.35);
+      background: rgba(255,255,255,.07);
+    }
+    .card .icon{
+      height:40px;width:40px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      background: rgba(233,116,30,.14);
+      border:1px solid rgba(233,116,30,.28);
+      color: rgba(255,255,255,.92);
+      margin-bottom: 10px;
+    }
+    .card h3{font-family:Poppins,Inter,sans-serif;font-weight:900;font-size:1.12rem}
+    .card p{margin-top:8px;color:var(--muted);font-size:.95rem;line-height:1.55}
+    .card .go{
+      margin-top: 12px;
+      display:inline-flex;align-items:center;gap:10px;
+      color: rgba(255,255,255,.88);
+      font-weight:900;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .card .go:hover{background: rgba(255,255,255,.09)}
+
+    /* Stats */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .stat{
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 14px;
+    }
+    .stat .k{color:var(--muted);font-weight:800;font-size:.82rem}
+    .stat .v{margin-top:6px;font-weight:900;font-size:1.15rem}
+
+    /* Footer */
+    .footer{
+      margin-top: 22px;
+      border-top:1px solid rgba(255,255,255,.10);
+      padding-top: 18px;
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      color: rgba(255,255,255,.65);
+      font-size:.95rem;
+    }
+    .footer .cols{display:flex;gap:18px;flex-wrap:wrap}
+    .footer a{color: rgba(255,255,255,.78); font-weight:800}
+    .footer a:hover{color:#fff}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns: 1fr}
+      h1{font-size:2.35rem}
+      .grid{grid-template-columns: 1fr}
+      .stats{grid-template-columns: 1fr 1fr}
+    }
+    @media (max-width: 520px){
+      .stats{grid-template-columns: 1fr}
+      .nav-links{gap:8px}
+      .brand b{display:none}
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="brand">
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Equity Coffee Home">
         <img src="images/logo.png" alt="Equity Coffee">
-        <div style="font-weight:900">Equity Coffee</div>
+        <b>Equity Coffee</b>
+      </a>
+
+      <div class="nav-links">
+        <a class="link" href="marketplace.html"><i class="fa-solid fa-store"></i> Marketplace</a>
+        <a class="link" href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+        <a class="link" href="donate.html"><i class="fa-solid fa-hand-holding-heart"></i> Donate</a>
+        <a id="adminLink" class="link" href="admin-dashboard.html" style="display:none"><i class="fa-solid fa-shield"></i> Admin</a>
+
+        <a id="btnProfile" class="btn secondary" href="profile.html" style="display:none">
+          <i class="fa-solid fa-user"></i> Profile
+        </a>
+
+        <a id="btnLogin" class="btn secondary" href="login.html">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign in
+        </a>
+        <a id="btnCreate" class="btn primary" href="get-started.html">
+          <i class="fa-solid fa-bolt"></i> Create account
+        </a>
+
+        <a id="btnLogout" class="btn secondary" href="#" style="display:none">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </a>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
-        <a class="btn secondary" href="login.html">Sign in</a>
-        <a class="btn" href="get-started.html">Create account</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-card">
+        <div class="pill"><i class="fa-solid fa-leaf"></i> Transparent trade • Verified supply chain</div>
+        <h1>Transparent coffee trading,<br>from farm to cup.</h1>
+        <p class="sub">
+          Equity Coffee connects farmers, traders, roasters and logistics partners in one role-based platform —
+          publish lots, negotiate offers, track shipments, and build trust through data.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="marketplace.html"><i class="fa-solid fa-magnifying-glass"></i> Explore Marketplace</a>
+          <a class="btn secondary" href="get-started.html"><i class="fa-solid fa-user-plus"></i> Get Started</a>
+          <a class="btn secondary" href="donate.html"><i class="fa-solid fa-hand-holding-heart"></i> Support the Mission</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Roles supported</div>
+            <div class="v">Farmer • Trader • Roaster • Logistics</div>
+          </div>
+          <div class="stat">
+            <div class="k">Marketplace</div>
+            <div class="v">Published lots</div>
+          </div>
+          <div class="stat">
+            <div class="k">Negotiations</div>
+            <div class="v">Offers & contracts</div>
+          </div>
+          <div class="stat">
+            <div class="k">Tracking</div>
+            <div class="v">Shipments status</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="mini">
+          <h3><i class="fa-solid fa-chart-line"></i> For Buyers & Investors</h3>
+          <p>
+            Built for transparency: data-backed sourcing, supply visibility, and scalable workflows.
+            Explore the marketplace or request a platform demo.
+          </p>
+          <div class="row">
+            <a class="btn primary" href="marketplace.html"><i class="fa-solid fa-store"></i> Marketplace</a>
+            <a class="btn secondary" href="about.html"><i class="fa-solid fa-circle-info"></i> About us</a>
+          </div>
+        </div>
+
+        <div class="mini">
+          <h3><i class="fa-solid fa-lock"></i> Access Your Dashboard</h3>
+          <p id="accessText">Sign in to continue or create an account to unlock your role dashboard.</p>
+          <div class="row">
+            <a id="quickLogin" class="btn secondary" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Sign in</a>
+            <a id="quickStart" class="btn primary" href="get-started.html"><i class="fa-solid fa-bolt"></i> Create account</a>
+            <a id="quickDash" class="btn primary" href="#" style="display:none"><i class="fa-solid fa-gauge"></i> Open Dashboard</a>
+          </div>
+        </div>
+
+        <div class="mini">
+          <h3><i class="fa-solid fa-hand-holding-heart"></i> Support the mission</h3>
+          <p>
+            Donations help expand access, improve traceability tools, and support farmer-first transparency.
+          </p>
+          <div class="row">
+            <a class="btn primary" href="donate.html"><i class="fa-solid fa-heart"></i> Donate</a>
+            <a class="btn secondary" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+          </div>
+        </div>
       </div>
     </div>
 
-    <h1>Transparent coffee trading, from farm to cup.</h1>
-    <p>Equity Coffee is a role-based platform for farmers, traders, roasters and logistics partners to collaborate, publish lots, negotiate offers and track shipments.</p>
+    <!-- ROLES -->
+    <div class="section">
+      <div class="section-head">
+        <h2>What you can do on Equity Coffee</h2>
+        <div class="hint">Role-based dashboards + real marketplace activity</div>
+      </div>
 
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
-      <a class="btn" href="marketplace.html">Open Marketplace</a>
-      <a class="btn secondary" href="profile.html">Profile</a>
+      <div class="grid">
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Farmer</h3>
+          <p>Create coffee lots, manage availability, publish to marketplace, and respond to offers with confidence.</p>
+          <a class="go" href="farmer-dashboard.html"><i class="fa-solid fa-arrow-right"></i> Farmer Dashboard</a>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-handshake"></i></div>
+          <h3>Trader</h3>
+          <p>Browse lots, send offers, generate contracts, and coordinate shipments with a full audit trail.</p>
+          <a class="go" href="trader-dashboard.html"><i class="fa-solid fa-arrow-right"></i> Trader Dashboard</a>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-mug-hot"></i></div>
+          <h3>Roaster</h3>
+          <p>Manage contracts, inventory, and delivery updates while keeping quality and sourcing transparent.</p>
+          <a class="go" href="roaster-dashboard.html"><i class="fa-solid fa-arrow-right"></i> Roaster Dashboard</a>
+        </div>
+      </div>
     </div>
 
-    <div class="grid">
-      <div class="card"><div class="k">Farmer</div><div class="v">Create lots • Publish • Manage inventory</div></div>
-      <div class="card"><div class="k">Trader</div><div class="v">Browse marketplace • Send offers • Track shipments</div></div>
-      <div class="card"><div class="k">Roaster</div><div class="v">Manage contracts • Inventory • Delivery updates</div></div>
+    <!-- QUICK LINKS -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Quick access</h2>
+        <div class="hint">Marketplace • About • Donate • Admin (role-based)</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-store"></i></div>
+          <h3>Marketplace</h3>
+          <p>View published lots from farmers and filter by origin, score, process, and availability.</p>
+          <a class="go" href="marketplace.html"><i class="fa-solid fa-arrow-right"></i> Open Marketplace</a>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-circle-info"></i></div>
+          <h3>About Us</h3>
+          <p>Learn why Equity Coffee exists and how we’re building a better, more transparent supply chain.</p>
+          <a class="go" href="about.html"><i class="fa-solid fa-arrow-right"></i> Read About</a>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+          <h3>Donate</h3>
+          <p>Support tools that help increase transparency, traceability, and fair outcomes across the chain.</p>
+          <a class="go" href="donate.html"><i class="fa-solid fa-arrow-right"></i> Donate</a>
+        </div>
+      </div>
     </div>
 
-    <div style="margin-top:26px;opacity:.6;font-size:.9rem">Tip: If backend is hosted separately on Render, open Developer Tools → Console and set API base: <code style="opacity:.9">ECAuth.setApiBase("https://your-backend.onrender.com")</code></div>
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <img src="images/logo.png" alt="Equity Coffee" style="height:34px">
+          <div style="font-weight:900">Equity Coffee</div>
+        </div>
+        <div style="max-width:58ch;line-height:1.55">
+          Building a trusted coffee trade network — transparency, traceability, and collaboration from farm to cup.
+        </div>
+        <div style="margin-top:10px;opacity:.8;font-size:.9rem">
+          Tip (Render): If backend is hosted separately, set API base in console:
+          <code style="opacity:.9">ECAuth.setApiBase("https://your-backend.onrender.com")</code>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div>
+          <div style="font-weight:900;margin-bottom:8px">Platform</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="marketplace.html">Marketplace</a>
+            <a href="get-started.html">Create account</a>
+            <a href="login.html">Sign in</a>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:900;margin-bottom:8px">Company</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="donate.html">Donate</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/common-auth.js"></script>
+  <script>
+    // ----- Auth-aware nav (works even if ECAuth is missing) -----
+    function safeGetUser() {
+      try {
+        if (window.ECAuth && typeof ECAuth.getUser === "function") return ECAuth.getUser();
+      } catch (_) {}
+      // fallback keys (some versions use these)
+      try {
+        const u1 = localStorage.getItem("ec_user");
+        if (u1) return JSON.parse(u1);
+      } catch (_) {}
+      try {
+        const u2 = localStorage.getItem("equity_user");
+        if (u2) return JSON.parse(u2);
+      } catch (_) {}
+      return null;
+    }
+
+    function logout() {
+      try { if (window.ECAuth && typeof ECAuth.logout === "function") ECAuth.logout(); } catch (_) {}
+      localStorage.removeItem("ec_token"); localStorage.removeItem("ec_user");
+      localStorage.removeItem("equity_token"); localStorage.removeItem("equity_user");
+      location.href = "index.html";
+    }
+
+    function dashboardFor(role) {
+      const map = {
+        farmer: "farmer-dashboard.html",
+        trader: "trader-dashboard.html",
+        roaster: "roaster-dashboard.html",
+        logistics: "logistics-dashboard.html",
+        admin: "admin-dashboard.html",
+        educator: "educator-dashboard.html"
+      };
+      return map[role] || "index.html";
+    }
+
+    (function initNav(){
+      const user = safeGetUser();
+
+      const btnLogin = document.getElementById("btnLogin");
+      const btnCreate = document.getElementById("btnCreate");
+      const btnProfile = document.getElementById("btnProfile");
+      const btnLogout = document.getElementById("btnLogout");
+      const adminLink = document.getElementById("adminLink");
+
+      const accessText = document.getElementById("accessText");
+      const quickLogin = document.getElementById("quickLogin");
+      const quickStart = document.getElementById("quickStart");
+      const quickDash  = document.getElementById("quickDash");
+
+      if (user && user.role) {
+        btnLogin.style.display = "none";
+        btnCreate.style.display = "none";
+        btnProfile.style.display = "inline-flex";
+        btnLogout.style.display = "inline-flex";
+
+        quickLogin.style.display = "none";
+        quickStart.style.display = "none";
+        quickDash.style.display = "inline-flex";
+        quickDash.href = dashboardFor(user.role);
+
+        if (accessText) {
+          accessText.textContent = `Welcome back. You are signed in as ${user.role}.`;
+        }
+
+        if (user.role === "admin") {
+          adminLink.style.display = "inline-flex";
+        }
+      } else {
+        adminLink.style.display = "none";
+      }
+
+      btnLogout.addEventListener("click", (e) => {
+        e.preventDefault();
+        logout();
+      });
+    })();
+  </script>
 </body>
 </html>
