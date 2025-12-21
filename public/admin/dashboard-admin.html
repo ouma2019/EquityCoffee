@@ -1325,5 +1325,23 @@ tr:hover {
       });
     });
   </script>
+
+<script src="../js/common-auth.js"></script>
+<script>
+  (function(){
+    function getUserSafe(){
+      try { if (window.ECAuth && typeof ECAuth.getUser === "function") return ECAuth.getUser(); } catch(_) {}
+      try { const u = localStorage.getItem("ec_user"); return u ? JSON.parse(u) : null; } catch(_) {}
+      try { const u = localStorage.getItem("equity_user"); return u ? JSON.parse(u) : null; } catch(_) {}
+      return null;
+    }
+    const user = getUserSafe();
+    const token = localStorage.getItem("ec_token") || localStorage.getItem("equity_token");
+    if (!token || !user || (user.role || "").toLowerCase() !== "admin") {
+      location.href = "login-admin.html";
+    }
+  })();
+</script>
+
 </body>
 </html>

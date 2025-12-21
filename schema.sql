@@ -226,3 +226,19 @@ CREATE TABLE notifications (
 );
 
 CREATE INDEX idx_notifications_user_read ON notifications(user_id, is_read);
+
+
+-- Contact messages (public contact form)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name       TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  reason     TEXT,
+  phone      TEXT,
+  message    TEXT NOT NULL,
+  ip         TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at DESC);

@@ -1,6 +1,5 @@
 import express from 'express';
 import { query } from '../db.js';
-import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
@@ -9,7 +8,7 @@ const router = express.Router();
  * Published & public lots
  * Optional filters: country, minScore, maxPrice
  */
-router.get('/lots', authenticateToken, async (req, res) => {
+router.get('/lots', async (req, res) => {
   try {
     const { country, minScore, maxPrice } = req.query;
 

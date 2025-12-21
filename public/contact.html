@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Equity Coffee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1220;color:#fff}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    a{color:#fff;text-decoration:none;font-weight:900;opacity:.85}
+    a:hover{opacity:1}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:18px}
+    h1{font-family:Poppins,Inter,sans-serif;font-weight:800;margin:0 0 10px}
+    p{opacity:.75;line-height:1.6;margin:0 0 16px}
+    label{display:block;font-weight:800;margin:12px 0 8px}
+    input,textarea,select{
+      width:100%;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.25);color:#fff;font-size:1rem;outline:none
+    }
+    textarea{min-height:140px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      background:#e9741e;color:#fff;padding:12px 14px;border-radius:14px;
+      border:none;font-weight:900;cursor:pointer;margin-top:14px
+    }
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.18)}
+    .status{margin-top:12px;display:none;padding:10px 12px;border-radius:14px;border:1px solid transparent}
+    .status.show{display:block}
+    .ok{background:#0b2b1a;border-color:#1c6b42}
+    .err{background:#2b0b0b;border-color:#7a1c1c}
+    @media(max-width:820px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a href="index.html">← Home</a>
+      <a href="marketplace.html">Marketplace</a>
+    </div>
+
+    <div class="card">
+      <h1>Contact Equity Coffee</h1>
+      <p>Send us a message. We’ll reply as soon as possible.</p>
+
+      <form id="contactForm">
+        <div class="row">
+          <div>
+            <label>Name</label>
+            <input id="name" required placeholder="Your name" />
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" required placeholder="name@company.com" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Reason</label>
+            <select id="reason">
+              <option>General inquiry</option>
+              <option>Platform demo</option>
+              <option>Investor / acquisition</option>
+              <option>Support</option>
+              <option>Partnership</option>
+            </select>
+          </div>
+          <div>
+            <label>Phone (optional)</label>
+            <input id="phone" placeholder="+971..." />
+          </div>
+        </div>
+
+        <label>Message</label>
+        <textarea id="message" required placeholder="Write your message..."></textarea>
+
+        <button class="btn" type="submit">Send Message</button>
+        <a class="btn secondary" href="donate.html" style="display:inline-flex;margin-left:8px">Donate</a>
+
+        <div id="status" class="status"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/common-auth.js"></script>
+  <script>
+    function getApiBase() {
+      try { if (window.ECAuth && typeof ECAuth.getApiBase === "function") return ECAuth.getApiBase() || ""; } catch (_) {}
+      return "";
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const status = document.getElementById("status");
+
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        reason: document.getElementById("reason").value,
+        phone: document.getElementById("phone").value.trim(),
+        message: document.getElementById("message").value.trim()
+      };
+
+      try {
+        const base = getApiBase();
+        const res = await fetch(`${base}/api/contact`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.message || "Failed to send message");
+
+        status.className = "status show ok";
+        status.textContent = "Message sent successfully.";
+        e.target.reset();
+      } catch (err) {
+        status.className = "status show err";
+        status.textContent = err.message || "Failed to send message.";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,270 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login | Equity Coffee</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Sign In | Equity Coffee</title>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 20px;
+    :root{
+      --bg:#0b1220; --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.14);
+      --text:#fff; --muted:rgba(255,255,255,.7);
+      --accent:#e9741e; --accent2:#b54714;
     }
-    
-    .login-container {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-      width: 100%;
-      max-width: 420px;
-      overflow: hidden;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(900px 600px at 10% 10%, rgba(233,116,30,.18), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(255,255,255,.10), transparent 55%),
+                  linear-gradient(180deg, #070b14, var(--bg));
+      font-family:Inter,system-ui,sans-serif; color:var(--text);
+      padding: 18px;
     }
-    
-    .login-header {
-      background: linear-gradient(135deg, #8B4513 0%, #6B3410 100%);
-      padding: 2rem;
-      text-align: center;
-      color: white;
+    .wrap{width:100%;max-width:980px;display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+    .panel,.form{
+      background:var(--card); border:1px solid var(--border); border-radius:24px; padding:18px;
+      backdrop-filter: blur(10px);
     }
-    
-    .login-header i {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+    .panel{padding:22px; position:relative; overflow:hidden}
+    .panel::after{
+      content:""; position:absolute; inset:-120px -120px auto auto; width:260px; height:260px;
+      background: radial-gradient(circle, rgba(233,116,30,.35), transparent 65%);
+      transform: rotate(20deg); pointer-events:none;
     }
-    
-    .login-header h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0.25rem;
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:40px}
+    .brand b{font-family:Poppins,Inter,sans-serif;font-weight:800}
+    h1{font-family:Poppins,Inter,sans-serif;font-size:2.1rem;line-height:1.1;margin:16px 0 10px}
+    p{color:var(--muted);line-height:1.55}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      font-weight:800;font-size:.85rem;color:rgba(255,255,255,.88)
     }
-    
-    .login-header p {
-      opacity: 0.9;
-      font-size: 0.9rem;
+    .form h2{font-family:Poppins,Inter,sans-serif;font-weight:800;margin-bottom:10px}
+    label{display:block;font-weight:900;margin:12px 0 8px}
+    input{
+      width:100%;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.22); color:#fff; font-size:1rem; outline:none;
     }
-    
-    .login-form {
-      padding: 2rem;
+    input:focus{border-color:rgba(233,116,30,.6); box-shadow:0 0 0 4px rgba(233,116,30,.12)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 14px;border-radius:14px;
+      font-weight:900;border:1px solid transparent; cursor:pointer;
+      color:#fff; text-decoration:none;
     }
-    
-    .form-group {
-      margin-bottom: 1.25rem;
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 12px 25px rgba(233,116,30,.22)}
+    .btn.secondary{background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.14)}
+    .btn:disabled{opacity:.7; cursor:not-allowed}
+    .status{
+      display:none; margin-top:12px; padding:10px 12px; border-radius:14px;
+      border:1px solid transparent; font-weight:700; line-height:1.4;
     }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #333;
-      font-size: 0.9rem;
-    }
-    
-    .form-group input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-    }
-    
-    .form-group input:focus {
-      outline: none;
-      border-color: #8B4513;
-    }
-    
-    .submit-btn {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #8B4513 0%, #6B3410 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
-    }
-    
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .error-msg, .success-msg {
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      display: none;
-    }
-    
-    .error-msg {
-      background: #fee2e2;
-      color: #dc2626;
-      border: 1px solid #fecaca;
-    }
-    
-    .success-msg {
-      background: #dcfce7;
-      color: #16a34a;
-      border: 1px solid #bbf7d0;
-    }
-    
-    .error-msg.show, .success-msg.show {
-      display: block;
-    }
-    
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #666;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    
-    .back-link:hover {
-      color: #8B4513;
-    }
-    
-    .credentials-hint {
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.85rem;
-      color: #0369a1;
-    }
-    
-    .credentials-hint strong {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
+    .status.show{display:block}
+    .ok{background:#0b2b1a;border-color:#1c6b42}
+    .err{background:#2b0b0b;border-color:#7a1c1c}
+    .small{margin-top:10px;color:rgba(255,255,255,.65);font-size:.9rem;line-height:1.5}
+    code{opacity:.9}
+    @media(max-width:920px){.wrap{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="login-header">
-      <i class="fas fa-shield-alt"></i>
-      <h1>Admin Portal</h1>
-      <p>Secure administrator access</p>
+  <div class="wrap">
+    <div class="panel">
+      <div class="brand">
+        <img src="../images/logo.png" alt="Equity Coffee">
+        <b>Equity Coffee</b>
+      </div>
+
+      <h1>Admin Access</h1>
+      <p>
+        This area is restricted. Only verified <b>admin</b> accounts can sign in.
+        Marketplace remains public, but administrative tools require authentication.
+      </p>
+
+      <div class="chips">
+        <div class="chip"><i class="fa-solid fa-shield"></i> Role verification</div>
+        <div class="chip"><i class="fa-solid fa-lock"></i> Token-based access</div>
+        <div class="chip"><i class="fa-solid fa-signal"></i> Backend health test</div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <a class="btn secondary" href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a class="btn secondary" href="../marketplace.html"><i class="fa-solid fa-store"></i> Marketplace</a>
+        <a class="btn secondary" href="../contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+      </div>
+
+      <div class="small" style="margin-top:12px">
+        If backend is hosted separately (Render), set it here:
+        <br><code>https://your-backend.onrender.com</code>
+      </div>
     </div>
-    
-    <form class="login-form" id="adminLoginForm">
-      <div class="credentials-hint">
-        <strong>Demo Credentials:</strong>
-        Email: admin@equitycoffee.com<br>
-        Password: admin123
-      </div>
-      
-      <div id="errorMsg" class="error-msg"></div>
-      <div id="successMsg" class="success-msg"></div>
-      
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="admin@equitycoffee.com" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-      </div>
-      
-      <button type="submit" class="submit-btn" id="submitBtn">
-        <i class="fas fa-sign-in-alt"></i>
-        <span id="btnText">Sign In</span>
+
+    <div class="form">
+      <h2><i class="fa-solid fa-right-to-bracket"></i> Sign in</h2>
+
+      <div id="healthStatus" class="status"></div>
+
+      <label for="backend">Backend Base (optional)</label>
+      <input id="backend" placeholder="Leave empty if same domain" />
+
+      <label for="email">Admin Email</label>
+      <input id="email" type="email" placeholder="admin@company.com" autocomplete="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+
+      <button id="btnLogin" class="btn primary" style="width:100%;margin-top:14px">
+        <i class="fa-solid fa-shield"></i> Sign in as Admin
       </button>
-      
-      <a href="/login.html" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to regular login
-      </a>
-    </form>
+
+      <div id="status" class="status"></div>
+
+      <div class="small">
+        Connection check: <code>/api/health</code><br>
+        Login endpoint: <code>/api/auth/login</code>
+      </div>
+    </div>
   </div>
 
+  <script src="../js/common-auth.js"></script>
   <script>
-    const form = document.getElementById('adminLoginForm');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const errorMsg = document.getElementById('errorMsg');
-    const successMsg = document.getElementById('successMsg');
+    let BACKEND_BASE = "";
 
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      // Hide previous messages
-      errorMsg.classList.remove('show');
-      successMsg.classList.remove('show');
-      
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-      
-      if (!email || !password) {
-        errorMsg.textContent = 'Please enter both email and password';
-        errorMsg.classList.add('show');
+    const healthEl = document.getElementById("healthStatus");
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("btnLogin");
+
+    function setBox(el, type, msg){ el.className = "status show " + type; el.textContent = msg; }
+    function clearBox(el){ el.className = "status"; el.textContent = ""; }
+
+    function normalizeBase(s){
+      s = (s || "").trim();
+      if (!s) return "";
+      return s.endsWith("/") ? s.slice(0,-1) : s;
+    }
+
+    function saveAuth(token, user){
+      localStorage.setItem("ec_token", token);
+      localStorage.setItem("ec_user", JSON.stringify(user));
+      localStorage.setItem("equity_token", token);
+      localStorage.setItem("equity_user", JSON.stringify(user));
+      try { if (window.ECAuth && typeof ECAuth.setApiBase === "function") ECAuth.setApiBase(BACKEND_BASE); } catch (_) {}
+    }
+
+    async function tryJson(url, init){
+      const res = await fetch(url, init);
+      const data = await res.json().catch(() => ({}));
+      return { res, data };
+    }
+
+    async function checkHealth(){
+      clearBox(healthEl);
+      const base = normalizeBase(document.getElementById("backend").value);
+      BACKEND_BASE = base;
+      const url = `${base}/api/health`;
+      try{
+        const { res, data } = await tryJson(url, { method: "GET" });
+        if (res.ok) setBox(healthEl, "ok", `Backend OK: ${url}`);
+        else setBox(healthEl, "err", `Backend responded but not OK: ${url}`);
+      }catch(e){
+        setBox(healthEl, "err", `Backend not reachable: ${url} (CORS/URL?)`);
+      }
+    }
+
+    document.getElementById("backend").addEventListener("change", checkHealth);
+    checkHealth();
+
+    btn.addEventListener("click", async () => {
+      clearBox(statusEl);
+
+      BACKEND_BASE = normalizeBase(document.getElementById("backend").value);
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password){
+        setBox(statusEl, "err", "Email and password are required.");
         return;
       }
-      
-      // Show loading state
-      submitBtn.disabled = true;
-      btnText.textContent = 'Signing in...';
-      
-      try {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+
+      try{
+        const url = `${BACKEND_BASE}/api/auth/login`;
+        const { res, data } = await tryJson(url, {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
           body: JSON.stringify({ email, password })
         });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Login failed');
-        }
-        
-        // Success - store token and redirect
-        if (data.token) {
-          localStorage.setItem('ec_token', data.token);
-        }
-        if (data.user) {
-          localStorage.setItem('ec_user', JSON.stringify(data.user));
-        }
-        
-        successMsg.textContent = 'Login successful! Redirecting...';
-        successMsg.classList.add('show');
-        
-        // Redirect to admin dashboard
-        setTimeout(() => {
-          window.location.href = '/admin/dashboard-admin.html';
-        }, 1000);
-        
-      } catch (err) {
-        errorMsg.textContent = err.message || 'Network error. Please try again.';
-        errorMsg.classList.add('show');
-        submitBtn.disabled = false;
-        btnText.textContent = 'Sign In';
+
+        if (!res.ok) throw new Error(data.message || "Login failed.");
+        if (!data.token || !data.user) throw new Error("Invalid login response.");
+        if ((data.user.role || "").toLowerCase() !== "admin") throw new Error("Access denied: not an admin account.");
+
+        saveAuth(data.token, data.user);
+        setBox(statusEl, "ok", "Admin login successful. Redirecting...");
+        setTimeout(() => location.href = "dashboard-admin.html", 600);
+      }catch(err){
+        setBox(statusEl, "err", err.message || "Login failed.");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-shield"></i> Sign in as Admin';
       }
     });
   </script>

@@ -15,6 +15,7 @@ import logisticsRouter from './routes/logistics.js';
 import roasterRouter from './routes/roaster.js';
 import educatorRouter from './routes/educator.js';
 import marketplaceRouter from './routes/marketplace.js';
+import contactRouter from './routes/contact.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,6 +41,7 @@ app.use('/api/logistics', logisticsRouter);
 app.use('/api/roaster', roasterRouter);
 app.use('/api/educator', educatorRouter);
 app.use('/api/marketplace', marketplaceRouter);
+app.use('/api/contact', contactRouter);
 
 // --- Health check ---
 app.get('/api/health', (req, res) => {

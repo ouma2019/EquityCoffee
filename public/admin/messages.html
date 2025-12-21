@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Messages | Equity Coffee</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1220;color:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:22px 18px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    a{color:#fff;text-decoration:none;font-weight:900;opacity:.85}
+    a:hover{opacity:1}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:14px}
+    h1{font-family:Poppins,Inter,sans-serif;margin:0;font-weight:800}
+    .muted{opacity:.7}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top;text-align:left}
+    th{font-size:.85rem;opacity:.8}
+    td{font-size:.95rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;background:rgba(233,116,30,.14);border:1px solid rgba(233,116,30,.3);font-weight:900}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;font-weight:900;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+    .btn:hover{background:rgba(255,255,255,.09)}
+    .status{margin-top:10px;display:none;padding:10px 12px;border-radius:14px;border:1px solid transparent}
+    .status.show{display:block}
+    .err{background:#2b0b0b;border-color:#7a1c1c}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="pill"><i class="fa-solid fa-inbox"></i> Admin Messages</div>
+        <div class="muted" style="margin-top:8px">Contact form submissions stored in database.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <a class="btn" href="dashboard-admin.html"><i class="fa-solid fa-gauge"></i> Admin Dashboard</a>
+        <a class="btn" href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a class="btn" id="logoutBtn" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <h1 style="font-size:1.35rem">Latest messages</h1>
+        <button class="btn" id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:160px">Date</th>
+            <th style="width:180px">From</th>
+            <th style="width:180px">Email</th>
+            <th style="width:160px">Reason</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../js/common-auth.js"></script>
+  <script>
+    function getApiBase(){ try { if (window.ECAuth && typeof ECAuth.getApiBase==="function") return ECAuth.getApiBase()||""; } catch(_){} return ""; }
+    function getToken(){ return localStorage.getItem("ec_token") || localStorage.getItem("equity_token") || ""; }
+    function getUser(){
+      try { if (window.ECAuth && typeof ECAuth.getUser==="function") return ECAuth.getUser(); } catch(_) {}
+      try { const u=localStorage.getItem("ec_user"); return u?JSON.parse(u):null; } catch(_) {}
+      try { const u=localStorage.getItem("equity_user"); return u?JSON.parse(u):null; } catch(_) {}
+      return null;
+    }
+    function setStatus(msg){
+      const el=document.getElementById("status");
+      el.className="status show err";
+      el.textContent=msg;
+    }
+
+    function requireAdmin(){
+      const u=getUser();
+      const t=getToken();
+      if(!t || !u || (u.role||"").toLowerCase()!=="admin"){
+        location.href="login-admin.html";
+        return false;
+      }
+      return true;
+    }
+
+    function logout(){
+      try { if (window.ECAuth && typeof ECAuth.logout==="function") ECAuth.logout(); } catch(_) {}
+      localStorage.removeItem("ec_token"); localStorage.removeItem("ec_user");
+      localStorage.removeItem("equity_token"); localStorage.removeItem("equity_user");
+      location.href="login-admin.html";
+    }
+
+    async function load(){
+      if(!requireAdmin()) return;
+      const base=getApiBase();
+      const token=getToken();
+      const tbody=document.getElementById("rows");
+      tbody.innerHTML="";
+      document.getElementById("status").className="status";
+      try{
+        const res=await fetch(`${base}/api/contact/messages?limit=200`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok) throw new Error(data.message || "Failed to load messages");
+        const items=data.items || [];
+        if(items.length===0){
+          tbody.innerHTML = `<tr><td colspan="5" class="muted">No messages yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = items.map(it => {
+          const d = new Date(it.created_at).toLocaleString();
+          return `<tr>
+            <td>${d}</td>
+            <td>${escapeHtml(it.name || "")}${it.phone ? `<div class="muted" style="margin-top:4px">${escapeHtml(it.phone)}</div>`:""}</td>
+            <td>${escapeHtml(it.email || "")}</td>
+            <td>${escapeHtml(it.reason || "")}</td>
+            <td>${escapeHtml(it.message || "")}</td>
+          </tr>`;
+        }).join("");
+      }catch(e){
+        setStatus(e.message || "Failed to load messages.");
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", load);
+    document.getElementById("logoutBtn").addEventListener("click", (e)=>{e.preventDefault(); logout();});
+    load();
+  </script>
+</body>
+</html>
